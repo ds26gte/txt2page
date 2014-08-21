@@ -1,0 +1,224 @@
+# last modified 2014-06-21
+# ds26gte@yahoo.com
+
+opts=""
+while test $# -gt 1
+do
+    opts="$opts $1"
+    shift
+done
+
+f=$1
+
+g=${f##*/}
+
+ext=${g##*.}
+test "$ext" = "$g" && ext=""
+
+g=${g%.*}
+
+h=$g.txt.so
+
+echo .mso txt2page.tmac > $h
+soelim $f >> $h
+
+ex $h <<EOF
+
+func! Troff_recognize_urls()
+    " evalwhen.com
+    " -- check not preceded by @
+    s#\%(@\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|se\)\>#FAKEHTTP://&#g
+
+    " URL
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#@tzp_Url_begin@&@tzp_Url_end@#g
+
+    s#FAKEHTTP://##g
+
+    " ./pathname
+    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#@tzp_Url_begin@\1@tzp_Url_end@#g
+
+endfunc
+
+func! Troff_find_urlhs()
+    v/^@tzp_Preformatted@/ s/^@tzp_Url_begin@/@tzp_Possible_urlh@&/
+
+    g/^@tzp_Possible_urlh@/ -1s/\*\$/&@tzp_Urlh_continuation_line@/
+
+    %s/^@tzp_Possible_urlh@//
+
+    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+
+    %s/@tzp_Urlh_continuation_line@//
+
+    v/^@tzp_Preformatted@/ s/^[^*]\+\*\s\+@tzp_Url_begin@/@tzp_Possible_urlh@&/
+
+    g/^@tzp_Possible_urlh@/ -1s/\*[^*]\+\$/&@tzp_Urlh_continuation_line@/
+
+    %s/^@tzp_Possible_urlh@//
+
+    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+
+    %s/@tzp_Urlh_continuation_line@//
+
+    v/^@tzp_Preformatted@/ s:\*\([^*]\+\)\*\s\+@tzp_Url_begin@.\{-}@tzp_Url_end@:\1:g
+
+    v/^@tzp_Preformatted@/ s:@tzp_Url_begin@\(.\{-}\)@tzp_Url_end@:\1:g
+endfunc
+
+func! Troff_palatable()
+    "s:\*\([^*]\+\)\*\s\+\./[^[:space:]()<>&]\+\%([[:punct:]]\)\@<!:\1:g
+
+    s:\`\@<!\^\^\[\([^[:space:]]\+\)\]:\\\\*{\1\\\\*}:g
+
+    s:\`\`\(.\{-1,}\)\`\`:\\\\fC\1\\\\fP:g
+
+    s:\`\(.\{-1,}\)\`:\\\\fC\1\\\\fP:g
+
+    s:\(^\|\s\|(\|^\*\|\s\*\)":\1\\\\[u201C]:g
+
+    s:\(^\|\s\|(\|^\*\|\s\*\)':\1\\\\[u2018]:g
+
+    s:":\\\\[u201D]:g
+
+    s:':\\\\[u2019]:g
+
+    s:\(^\|\s\)--\(\s\|,\|\\\\\[u2\|\$\):\1\\\\[u2014]\2:g
+
+    s:--\(\\\\\[u20\):\\\\[u2014]\1:g
+
+    s:\(^\|\s\)-\(>\|\s*\.\?[0-9]\):\1\\\\[u2212]\2:g
+
+    s:^\.[/]:\\\\\&\0:
+endfunc
+
+func! Troff_tables()
+    g/^|\s/,/^[^|]/-1 s#|\s*\$##
+
+    g/^|\s/,/^[^|]/-1 s#^|\s# @tzp_Table_line@#
+
+    g/^ @tzp_Table_line@/,/^\%(\$\|[^ ]\)/-1 j
+
+    v/@tzp_Preformatted@/ s/ \(@tzp_Table_line@\)/\1/g
+
+    %s#^@tzp_Table_line@.*\$#.TS\rtab(|),center,allbox;\r@tzp_Table_first_line@&\r.TE#
+
+    %s#^\(@tzp_Table_first_line@\)@tzp_Table_line@#\1#
+
+    v/@tzp_Preformatted@/ s#@tzp_Table_line@#\r#g
+
+    %s#^@tzp_Table_first_line@\(.*\)#@tzp_Table_preamble@\1@tzp_Table_space@.\r\1#
+
+    g/^@tzp_Table_preamble@/ s/|/@tzp_Table_space@/g
+
+    g/@tzp_Table_space@/ s/.\{-}\(@tzp_Table_space@\)/c\1/g
+
+    v/@tzp_Preformatted@/ s/@tzp_Table_space@/ /g
+
+endfunc
+
+func! Txt2pdf()
+
+%s/\s\+\$//
+
+\$a
+@tzp_Bogus_end_of_file_line@
+.
+
+let lastline = line('$')
+0
+while 1
+    let m = search('^\`\`\`')
+    if m == 0
+        break
+    endif
+    s#.*#.EX#
+    norm j
+    while 1
+        if match(getline('.'), '^\`\`\`\$') > -1
+            s#.*#.EE#
+            break
+        endif
+        if line('.') == lastline
+            break
+        endif
+        norm j
+    endwhile
+endwhile
+
+g/^\.EX\$/+1,/^\.EE\$/-1 s/^/@tzp_Preformatted@/
+
+g/^\.\s*\\\"/d
+
+%s/^\s*-\{5,}\$//
+
+%s:\\\\":@tzp_Backslash@@tzp_Doublequote@:g
+
+%s:\\\\:@tzp_Backslash@@tzp_Backslash@:g
+
+%s:^\.TH\s\+"\(.*\)"\$:.TH @tzp_Doublequote@\1@tzp_Doublequote@:
+
+g/^#\s\+.\{-}\s*##\$/d
+
+%s:^#\s\+\(.\{-}\)\s*#*\$:.SEC 1 \1:
+%s:^##\s\+\(.\{-}\)\s*#*\$:.SEC 2 \1:
+%s:^###\s\+\(.\{-}\)\s*#*\$:.SEC 3 \1:
+%s:^####\s\+\(.\{-}\)\s*#*\$:.SEC 4 \1:
+%s:^#####\s\+\(.\{-}\)\s*#*\$:.SEC 5 \1:
+%s:^######\s\+\(.\{-}\)\s*#*\$:.SEC 6 \1:
+
+%s:^\.SH\s\+:.SEC 1 :
+%s:^\.SS\s\+:.SEC 2 :
+
+%s:^\.+\$:.FS:
+%s:^\.+ \(.\):.FS \1:
+%s:^\.++\$:.FE:
+
+%s:^\.!!\s:.JPEG :
+
+%s:^\.LI\s\+\(.\+\)\$:.LI\r\1:
+
+%s:^\.%%%\s\+\(.*\)\$:.LP\r[\1]\r.br:
+g/^\.%%/d
+
+"bullet items
+
+g/^\*\s\+\(.*\)/ -1s/^\$/@tzp_Delete_blank_line@/
+
+g/^@tzp_Delete_blank_line@\$/d
+
+%s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr next_graf_without_indent 1\r\1/
+
+g/^@tzp_Preformatted@/ s:\\\\:@tzp_Backslash_e@:g
+
+v/^@tzp_Preformatted@/ call Troff_recognize_urls()
+
+call Troff_tables()
+
+call Troff_find_urlhs()
+
+v/^@tzp_Preformatted@/ call Troff_palatable()
+
+%s:@tzp_Backslash@:\\\\:g
+
+%s:@tzp_Backslash_e@:\\e:g
+
+%s:@tzp_Doublequote@:":g
+
+%s:^@tzp_Preformatted@\.:\\\\\&.:
+
+%s:^@tzp_Preformatted@::
+
+g/^@tzp_Bogus_end_of_file_line@/d
+
+endfunc
+
+call Txt2pdf()
+w
+EOF
+
+groff -t $opts $h > $g.ps
+#rm $h
+ps2pdf $g.ps $g.pdf
+rm $g.ps
+
+# vi:ft=vim:tw=0

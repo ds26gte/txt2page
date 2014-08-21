@@ -1,0 +1,221 @@
+2014 Aug 21
+
+Call ex with -u NONE
+
+2014 Jun 25
+
+Use HTML5 doctype
+
+2014 Jun 12
+
+Use .!! for inserting jpegs (.JPEG deprecated)
+
+2014 Jun 17
+
+Use .+/.++ for inserting footnotes (.FS/.FE deprecated)
+
+2014 Jun 16
+
+... shouldn't cause lisphilite to choke
+
+< > & should be verbatimized in subfiles (.so'd files) too
+
+2014 Apr 11
+
+& inside URLs should not be HTMLized
+
+2013 Sep 9
+
+# ... ## produces just HTML title, nothing in text
+
+2013 Apr 1
+
+Shunt pdf part into a subscript txt2page_pdf
+
+2013 Mar 31
+
+| tables also translated for pdf
+
+2013 Mar 23
+
+# introduces doc title if single # closes it.  Otherwise regular
+section title.
+
+2013 Mar 19
+
+Insert a &nbsp; for a blank line within a listing; this is only
+for lynx, which compresses successive <br/>s into one.
+
+2013 Mar 18
+
+lisphilite.rkt
+
+2013 Mar 15
+
+lisphilite.lisp a standalone filter, doesn't depend on tex2page.
+
+2013 Mar 13
+
+'^\*\s' for top-level bulleted grafs.
+
+2013 Mar 12
+
+For an input file f.txt tack on any f__*.txt files that exist.
+This is to add navigation-bar info without hardcoding it into the
+main file. (Of course you can put the nav bar in the main file
+too if you want.  But I'd like to be able to rearrange chapters
+without modifying the main text.) Use _ as placeholder in navbar
+for greyed-out parts (e.g., for first and last page).
+
+Allow *...* URL to be split across (2 or 3?) lines.
+
+.%%% creates visible anchors.
+
+2013 Mar 11
+
+.%% to create anchors (HTML node names).  Refer to them as
+./#anchor for anchor in own file, and ./anotherfile#anchor for
+anchors in another file.
+
+Make sure that hrefs convert from source
+extension to .html.  Source document can keep source extension to
+facilitate file navigaton (vim gf) entirely in source.
+
+Leading .'s inside ``` are automatically escaped.
+
+Added lisphilite.sh (which depends on tex2page for now).
+Highlights any annotated ``` as lisp. Any additional lisp symbols
+to be recognized as keywords should be put in ./.lispwords.
+
+syntaxhl.css.
+
+2013 Mar 10
+
+Added GFM-style sections (with leading & possible trailing #'s) and
+listings (```).
+
+``...`` -- this allows ` to be enclosed.
+
+2013 Feb 17
+
+Convert some -'s to minus signs. E.g. 3 - 2, -2, ->, but not
+123-4567 or 980-123-4567.
+
+2012 Nov 16
+
+Incorporated PDF conversion capability into txt2page.  The -Tpdf
+option creates a PDF page
+
+2012 Nov 14
+
+txt2pdffile: a leading period that isn't part of a command gets
+an implicit \& prefix
+
+txtpage: -s option (previously -soelim): so named to share syntax
+with groff.  With -s, any .so files within the document is
+immediately inserted (and recursively), instead of being treated
+as a link to another HTML file (presumably created with another
+call to txt2page).  Thus, one comprehensive HTML output page is
+created.
+
+txt2page: don't allow .txt extension of argument filename to be
+optional.  This is less TeX-like but more troff-like
+
+Simplify footnote mark syntax: ^^[sym]
+
+Allow \ (except for \"comment) to show up as itself in PDF
+
+2012 Nov 9
+
+Corrected indentation and lineskip errors caused if very first
+line is indented.
+
+2012 Sep 28
+
+Links to files with same extension as source are treated as links
+to corresponding HTML files and displayed as such.
+
+2012 Sep 7
+
+call pdf-generator txt2pdffile. Do not assume a suitable
+~/troffrc, have script include txt2page.tmac explicitly
+
+2012 Sep 3
+
+-- that starts a line within a nofill env is eligible for
+conversion to em-dash
+
+.HTL for HTML-only title
+
+2012 Aug 9
+
+Added script t2pdf.sh that generates (single-file) PDF.
+
+.\" treated as comment.
+
+2012 Aug 8
+
+.JPEG's position argument treated correctly for HTML, instead of
+always being centred.
+
+2012 Jul 24
+
+convert @twitterhandle to hyperlink
+
+2012 Jun 29
+
+Add <!doctype ... "...loose.dtd">.  Otherwise css is not read
+properly.
+
+2011 Dec 30
+
+added .**
+
+2011 Dec 29
+
+added .*
+
+2011 Dec 27
+
+added .SSS .SIV .SV .SVI
+
+when determining <title>, remove any hrefs
+
+2011 Dec 16
+
+added a -soelim option.  With -soelim, any .so <file> <text> is
+treated as an immediately sourceable file, and not as a
+hyperlink.  Also, .NAV bars are ignored.  This option can be used
+to generate from a ToC-style txt (i.e. with many calls to .so
+<file> <text> that point to other files for the various chapters)
+the entire document as a single HTML file (which can later be
+converted to a single PDF, using wkhtmltopdf, say).
+
+.TOC <text> gets converted to <text> in general mode, and to
+nothing in -soelim mode.  Use .TOC <text> to set a Table of
+Contents title, e.g.  .TOC .SH Contents.  For print, define .TOC
+appropriately: In addition to setting the ToC title, it could
+slurp in the actual ToC.
+
+2011 Nov 24
+
+a bit more documentation
+
+2011 Nov 19
+
+recognize protocol-less URIs whose first component ends in
+co.[[:alpha:]]\{2}
+
+2011 Nov 18
+
+./pathname, "./pathname" converted to links
+
+2011 Nov 14
+
+.EX/.EE
+
+nav bars should not show in print
+
+2011 Nov 13
+
+.JPEG

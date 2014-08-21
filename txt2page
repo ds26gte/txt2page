@@ -1,0 +1,604 @@
+ver=2014-08-21 # last modified
+
+# ds26gte@yahoo.com
+
+test $# -ge 1 || { echo error: no argument provided; exit; }
+
+opts=""
+pdf=0
+soelim=0
+while test $# -gt 1
+do
+    if test "$1" = "-s"
+    then soelim=1
+    elif test "$1" = "-Tpdf"
+    then pdf=1
+    else opts="$opts $1"
+    fi
+    shift
+done
+
+f=$1
+
+test "$f" = "--version" && { echo txt2page $ver; exit; }
+
+test "$f" = "--help" && { echo txt2page "[-s] [-Tpdf [groff_options]] [--version|--help|<file>]"; exit; }
+
+test -f $f || { echo error: $f does not exist; exit; }
+
+g=${f##*/}
+ext=${g##*.}
+
+# above sets ext=$g if there is no extension, so...
+
+test "$ext" = "$g" && ext=""
+
+test "$ext" != "html" -a "$ext" != "ps" -a "$ext" != "pdf" ||
+    { echo error: $f is a $ext file; exit; }
+
+test "$pdf" = 1 && { exec txt2page_pdf $opts $f; exit; }
+
+# the exit above shouldn't be needed: just being careful
+
+g=${g%.*}
+
+h=$g.html
+cp -p $f $h
+
+for fn in ${g}__*.${ext}; do
+    if test -f $fn
+    then cat $fn >> $h
+    fi
+done
+
+if test -f default.css
+then cssf=default.css
+else
+    cssf=$(ls -1 .*.css *.css 2>/dev/null|head -1)
+    #cssf=$(ls -x .*.css *.css 2>/dev/null|sed -e 's/^\([^ ]*\) *.*/\1/'|head -1)
+    if test -z $cssf
+    then
+        echo '/* insert style here */' > default.css
+        cssf=default.css
+    fi
+fi
+
+ex -u NONE $h <<EOF
+
+func! Smart_quotes()
+    "opening " becomes #x201c
+
+    s:\(^\|\s\|(\|^\*\|\s\*\)":\1\&#x201c;:g
+
+    "opening ' becomes #x2018
+
+    s:\(^\|\s\|(\|^\*\|\s\*\)':\1\&#x2018;:g
+
+    "closing " becomes #x201d
+
+    s:":\&#x201d;:g
+
+    "closing ' becomes #x2019
+
+    s:':\&#x2019;:g
+
+    " -- preceded by {bol, space} and
+    "followed by {space, comma-and-closing-quote, eol}
+    "becomes emdash
+
+    s:\(^\|\s\|nbsp;\)--\(\s\|,\|&#x201[d9]\|\$\):\1\&#x2014;\2:g
+
+    " -- followed by closing quote becomes emdash
+
+    s:--\(&#x201[d9];\):\&#x2014;\1:g
+
+    s:\(^\|\s\)-\(&\|\s*\.\?[0-9]\):\1\&#x2212;\2:g
+endfunc
+
+func! Recognize_urls()
+
+    s#\\\\\*\[::\s\+\(\S\{-}\)\s*\]#<a href="\1"><code>\1</code></a>#g
+
+    s_\\\\\*\[::\s\+\(\S\{-}\)\s\+&#x201c;\(.\{-}\)&#x201d;\s*\]_<a href="\1">\2</a>_g
+
+    s#\\\\\*\[::\s\+\(\S\{-}\)\s\+\(\S\{-}\)\s*\]#<a href="\1">\2</a>#g
+
+    " someone@gmail.com becomes mailto:someone@gmail.com
+    " -- check not already preceded by mailto:
+    s#\%(mailto:\)\@<!\<[[:alnum:]]\+@[[:alnum:].]\+\.\%(ca\|com\|edu\|gov\|in\|net\|org\|us\)\>#mailto:&#g
+
+    " evalwhen.com becomes FAKEHTTP://evalwhen.com
+    " -- check not preceded by @ or ://
+    s#\%(@\|://\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|se\)\>#FAKEHTTP://&#g
+
+    " mailto:addr becomes <a href="mailto:addr">mailto:addr</a>
+    s#\<mailto:\([[:alnum:]]\+@[[:alnum:].]\+[[:alpha:]]\)\>#<a href="&"><code>\1</code></a>#g
+
+    " @twitterhandles
+    s#\%([[:alnum:]]\)\@<!@\([[:alnum:]_]\{1,15}\)#*<code>@\1</code>* https://twitter.com/\1#g
+
+    " URL becomes <a href="URL">URL</a>
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#<a\r@tzp_Href@href="&"\r><code>&</code></a>#g
+
+    " "./sth" becomes <a href="sth">sth</a>
+    s_&#x201c;\./\(.\{-}\)&#x201d;_<a href="\1"><code>\1</code></a>_g
+
+    " ./pathname becomes <a href="pathname">pathname</a>
+    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><code>\1</code></a>#g
+
+    " FAKEHTTP has done its job by now -- remove it
+    "s#FAKEHTTP://##g
+
+    s#^\(\.!!\)\s\+\([^-[:space:]]\)#\1 -center \2#
+
+    s#^\(\.!!\)\s\+-L\s#\1 -left #
+    s#^\(\.!!\)\s\+-C\s#\1 -center #
+    s#^\(\.!!\)\s\+-R\s#\1 -right #
+
+    s#^\(\.!!\s\+-[leftcnrigh]\+\s\+[^[:space:]]\+\)\s*\$#\1 50#
+
+    s#^\.!!\s\+-\([leftcnrigh]\+\)\s\+\([^[:space:]]\+\)\s\+\([0-9]\+\)#<div class=figure align="\1"><img src="\2" width="\3%" border="0" alt=""></div>#
+
+    exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '"><code>\(.\{-}\)\.' . g:fileExtension . '</code></a>:<a href="\1.html"><code>\2.html</code></a>:g'
+
+    exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '">:<a href="\1.html">:g'
+
+    exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '#\(.\{-}\)"><code>\%(.\{-}\)\.' . g:fileExtension . '#\(.\{-}\)</code></a>:<a href="\1.html#\2">\3</a>:g'
+
+    s:\(<a href="#.\{-}">\)<code>#\(.\{-}\)</code>:\1\2:g
+
+endfunc
+
+func! Clean_up_urls()
+    s/&amp;/\&/g
+    s/@tzp_Href@href/href/
+    -1,+1 jo
+    s#href="FAKEHTTP://#href="http://#
+    s#FAKEHTTP://##g
+endfunc
+
+func! Find_urlhs()
+    " a line that starts with <a href is a possible urlh
+    v/^@tzp_Preformatted@/ s/^<a href/@tzp_Possible_urlh@&/
+
+    " its previous line would contain the link text
+    g/^@tzp_Possible_urlh@/ -1s/\*\$/&@tzp_Urlh_continuation_line@/
+
+    %s/^@tzp_Possible_urlh@//
+
+    " unite link text and url
+    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+
+    %s/@tzp_Urlh_continuation_line@//
+
+    " a line that contains an unmatched * followed by <a href is a possible urlh
+    v/^@tzp_Preformatted@/ s/^[^*]\+\*\s\+<a href/@tzp_Possible_urlh@&/
+
+    " if its previous line contains a *, it contains (part of) the link text
+    g/^@tzp_Possible_urlh@/ -1s/\*[^*]\+\$/&@tzp_Urlh_continuation_line@/
+
+    %s/^@tzp_Possible_urlh@//
+
+    " unite link text and url
+    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+
+    %s/@tzp_Urlh_continuation_line@//
+
+    " replace previous link text with true link text
+    v/^@tzp_Preformatted@/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)"\s*>.\{-}</a>#<a href="\2">\1</a>#g
+endfunc
+
+func! Txt2page()
+
+while 1
+    0
+    "s/^\.\s*so/@tzp_So_toc@/
+    "norm W
+    "call Txt2page(expand("<cfile>"))
+    "exec "b " . g
+    if (!$soelim)
+        %s/^\.\s*so\s\+\(\S\+\s\+\S\)/@tzp_So_toc@ \1/
+    endif
+    let m = search('^\.\s*so\s')
+    if (m == 0)
+        break
+    endif
+    s/^\.\s*so/@tzp_So_done@/
+    norm W
+    r <cfile>
+endwhile
+
+g/^@tzp_So_done@/d
+
+\$a
+@tzp_Bogus_end_of_file_line@
+.
+
+%s/&/\&amp;/g
+%s/</\&lt;/g
+%s/>/\&gt;/g
+
+%s/\s\+\$//
+
+let titleText = "$g"
+let fileStem = "$g"
+
+let g:fileExtension = "$ext"
+if g:fileExtension == ""
+    let g:fileExtension = "LetsNotMatchAnythingAgainstThis"
+endif
+
+0
+let lastline = line('$')
+while 1
+    let linenum = line('.')
+    if linenum > 100 || linenum == lastline
+        break
+    endif
+    let linestr = getline('.')
+    if match(linestr, '^\.\s*TH\s\+".\{-}"') > -1
+        s/^\.\s*TH\s\+"\(.\{-}\)".*/.TH \1/
+        break
+    elseif match(linestr, '^\.\s*TH\s\+\(\S\+\)\s\+\S') > -1
+        s/^\.\s*TH\s\+\(\S\+\).*/.TH \1/
+        break
+    endif
+    norm j
+endwhile
+
+let ln = 0
+while ln < 100 && ln < lastline
+    let x = getline(ln)
+    if match(x, '^\%(\.\s*\%(HTL\|TH\|SH\|SS\)\|#\+\)\s*\S') > -1
+        let titleText = substitute(x, '^\%(\.\s*\%(HTL\|TH\|SH\|SS\)\|#\+\)\s*\(.\{-}\)\s*#*\$', '\1', '')
+        if match(titleText, '.*\\\*\[::\s.\{-}\].*') > -1
+            let titleText = substitute(titleText, '\(.\{-}\)\s*\\\\\*\[::\s.\{-}\]\(.*\)', '\1\2', '')
+        endif
+        break
+    endif
+    let ln+=1
+endwhile
+
+if $soelim
+    g/^\.\s*TOC/ d
+    g/^\.\s*NAV/ d
+endif
+
+%s/^\.\s*TOC\s*//
+
+0
+while 1
+    let m = search('^\.\(uu\|nf\)\$')
+    if m == 0
+        break
+    endif
+    .d
+    let lastline = line('$')
+    while 1
+        if match(getline('.'), '^\.fi\$') > -1
+            .d
+            break
+        endif
+        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
+            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
+        endwhile
+        s#\$#<br/>#
+        if line('.') == lastline
+            break
+        endif
+        norm j
+    endwhile
+endwhile
+0
+while 1
+    let m = search('^\.\~\$')
+    if m == 0
+        break
+    endif
+    .d
+    let lastline = line('$')
+    while 1
+        if match(getline('.'), '^\$') > -1
+            break
+        endif
+        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
+            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
+        endwhile
+        s#\$#<br/>#
+        if line('.') == lastline
+            break
+        endif
+        norm j
+    endwhile
+endwhile
+
+if executable('lisphilite')
+    g/^\`\`\`./+1,/^\`\`\`\$/-1 s/&lt;/</g
+    g/^\`\`\`./+1,/^\`\`\`\$/-1 s/&gt;/>/g
+    g/^\`\`\`./+1,/^\`\`\`\$/-1 s/&amp;/\&/g
+    g/^\`\`\`./+1,/^\`\`\`\$/-1 !lisphilite
+endif
+
+%s/^\.EX\$/\`\`\`/
+%s/^\.EE\$/\`\`\`/
+
+"would like to use 0 instead of $ here, but
+"misses backticks in very first line
+\$
+while 1
+    let m = search('^\`\`\`')
+    if m == 0
+        break
+    endif
+    s#^\`\`\`..*#@tzp_Listing@ scheme#
+    s#^\`\`\`.*#@tzp_Listing@#
+    s#^@tzp_Listing@\(.*\)#</p>\r@tzp_Preformatted@<div class="listing\1"><code>#
+    norm j
+    let lastline = line('$')
+    while 1
+        if match(getline('.'), '^\`\`\`') > -1
+            s#.*#</code></div>\r<p class=noindent>#
+            break
+        endif
+        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
+            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
+        endwhile
+        s/^\$/\&nbsp;/
+        s/^/@tzp_Preformatted@/
+        s#\$#<br/>#
+        if line('.') == lastline
+            break
+        endif
+        norm j
+    endwhile
+endwhile
+0
+let lastline = line('$')
+while 1
+    let currline = line('.')
+    if currline == 1
+        if match(getline('.'), '^\s') > -1
+            let m = 1
+        else
+            let m = search('^\s')
+        endif
+    else
+        let m = search('^\s')
+    endif
+    if m == 0
+        break
+    endif
+    while 1
+        if match(getline('.'), '^\$') > -1
+            break
+        endif
+        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
+            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
+        endwhile
+        s#\$#<br/>#
+        if line('.') == lastline
+            break
+        endif
+        norm j
+    endwhile
+endwhile
+
+g/^\.\s*\\\"/d
+g/^\.\s*HTL/d
+g/^#\s\+.\{-}\s*##\$/d
+
+v/^@tzp_Preformatted@/ call Smart_quotes()
+
+"bullet items
+
+%s:^\*\s\+:</p><p class=bulleted><span class=bullet>\&bull;\&nbsp;</span>:
+
+"Tables
+
+"for every line starting with |\s, replace it with <space>@tzp_Table_line@
+
+g/^|\s/,/^[^|]/-1 s#^|\s# @tzp_Table_line@#
+
+"collapse successive @tzp_Table_line@s together
+
+g/^ @tzp_Table_line@/,/^\%(\$\|[^ ]\)/-1 j
+
+"remove single space before @tzp_Table_line@
+
+%s/ \(@tzp_Table_line@\)/\1/g
+
+"enclose the collapsed @tzp_Table_line@ with <table> tags
+
+%s#^@tzp_Table_line@.*\$#</p>\r<div align="center">\r<table border="1" cellpadding="4">&\r</table>\r</div>\r<p>#
+
+"precede each @tzp_Table_line@ with a CR
+
+%s#@tzp_Table_line@#\r&#g
+
+"chomp the last | in each table line
+
+g/^@tzp_Table_line@/ s#\s|\$##
+
+"replace every other | with a table-cell separator
+
+g/^@tzp_Table_line@/ s#\s|\s#</td><td>#g
+
+"wrap each table-line with a <tr>
+
+%s#^@tzp_Table_line@\(.*\)\$#<tr><td>\1</td></tr>#
+
+"g/^@tzp_Bogus_end_of_file_line@/d
+
+"invisible anchor
+%s:^\.%%\s\+\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
+
+"visible anchor
+%s:^\.%%%\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]\&nbsp;</span>:
+
+g/^\.\s*\%(SH\|SS\|#\+\|SSS\|SIV\|SV\|SVI\|:=:\$\|\*\*\$\|\*\$\)/,/./-1 j!
+
+%s:^\.\s*TH\s\+\(.\{-}\)\$:</p>\r<h1 class=title>\1</h1>\r<p class=noindent>:
+%s:^\.\s*SH\s\+\(.\{-}\)\$:</p>\r<h1 class=section>\1</h1>\r<p class=noindent>:
+%s:^\.\s*SS\s\+\(.\{-}\)\$:</p>\r<h2 class=section>\1</h2>\r<p class=noindent>:
+%s:^\.\s*SSS\s\+\(.\{-}\)\$:</p>\r<h3 class=section>\1</h3>\r<p class=noindent>:
+%s:^\.\s*SIV\s\+\(.\{-}\)\$:</p>\r<h4 class=section>\1</h4>\r<p class=noindent>:
+%s:^\.\s*SV\s\+\(.\{-}\)\$:</p>\r<h5 class=section>\1</h5>\r<p class=noindent>:
+%s:^\.\s*SVI\s\+\(.\{-}\)\$:</p>\r<h6 class=section>\1</h6>\r<p class=noindent>:
+
+%s:^#\s\+\(.\{-}\)\s*#\$:</p>\r<h1 class=title>\1</h1>\r<p class=noindent>:
+%s:^#\s\+\(.\{-}\)\s*#*\$:</p>\r<h1 class=section>\1</h1>\r<p class=noindent>:
+%s:^##\s\+\(.\{-}\)\s*#*\$:</p>\r<h2 class=section>\1</h2>\r<p class=noindent>:
+%s:^###\s\+\(.\{-}\)\s*#*\$:</p>\r<h3 class=section>\1</h3>\r<p class=noindent>:
+%s:^####\s\+\(.\{-}\)\s*#*\$:</p>\r<h4 class=section>\1</h4>\r<p class=noindent>:
+%s:^#####\s\+\(.\{-}\)\s*#*\$:</p>\r<h5 class=section>\1</h5>\r<p class=noindent>:
+%s:^######\s\+\(.\{-}\)\s*#*\$:</p>\r<h6 class=section>\1</h6>\r<p class=noindent>:
+
+%s_^\.\s*\*\*\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
+%s_^\.\s*:=:\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
+%s_^\.\.\.\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
+" possible ornaments: * &#x203b &#x2217
+
+%s_^\.\s*:=\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\$_</p>\r<p class=noindent><span class=dropcap><font color="\3">\1</font></span>\2_
+
+%s_^\.\s*:=\s\+\(\S\+\)\s*_</p>\r<p class=noindent><span class=dropcap>\1</span>_
+
+v/^@tzp_Preformatted@/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 @tzp_Continuation_line@/
+
+g/\\\*\[\%(\^\|::\)\s*[^]]\{-}@tzp_Continuation_line@\$/ .,+1 j!
+
+%s/@tzp_Continuation_line@//
+
+v/^@tzp_Preformatted@/ s:\`\@<!\^\^\[\([^[:space:]]\+\)\]:<sup><a name="call_footnote_\1" href="#footnote_\1">\1</a></sup>:g
+
+%s:^\.FS\$:.+:
+%s:^\.FS \(.\):.+ \1:
+%s:^\.FE\$:.++:
+
+"use distinctive start and end markers for each footnote
+%s:^\.++:@tzp_FE@:
+%s:^\.+:@tzp_FS@:
+
+%s:^@tzp_FS@\$:@tzp_FS@ @tzp_Unmarked_footnote@:
+
+"put a @tzp_Footnote@ before every footnote line
+g/^@tzp_FS@/ .,/^@tzp_FE@\$/ s/^/@tzp_Footnote@/
+
+"wrap all footnote lines from one footnote into one combined line
+g/^@tzp_Footnote@@tzp_FS@/ .,/^@tzp_Footnote@@tzp_FE@\$/ j!
+
+"move all the footnote combilines to the file's end
+g/^@tzp_Footnote@@tzp_FS@/ m\$
+
+"put a @tzp_Start_footnotes@ ahead of the first footnote combiline
+/^@tzp_Footnote@@tzp_FS@/ s/^/@tzp_Start_footnotes@\r\1/
+
+"put a @tzp_End_footnotes@ after the last footnote combiline
+\$ s/^\(@tzp_Footnote@@tzp_FS@.*\)\$/\1\r\@tzp_End_footnotes@/
+
+"use @tzp_{Start,End}_footnotes to wrap a <div>
+%s#^@tzp_Start_footnotes@\$#</p>\r<div class=footnotes>\r<hr align=left width="40%"/><p>#
+%s#^@tzp_End_footnotes@\$#</p>\r</div><p>#
+
+"use @tzp_Footnote@ to un-combine the combilines into individual lines again
+%s/\(.\)\(@tzp_Footnote@\)/\1\r\2/g
+
+"throw away each footnote's end marker: its job is done
+%s/^@tzp_Footnote@@tzp_FE@\$//
+
+"use each footnote's start marker to typeset its symbol (if any)
+
+%s:^@tzp_Footnote@@tzp_FS@\s\+@tzp_Unmarked_footnote@\$:\r:
+
+%s:^@tzp_Footnote@@tzp_FS@\s\+\(\S\+\)\$:\r<sup><a name="footnote_\1" href="#call_footnote_\1">\1</a></sup>:
+
+%s:^@tzp_Footnote@::
+
+%s#^:\$#</p>\r<div class=sectionbreak></div>\r<p>#
+
+%s#^:\([^:]\+\):#</p>\r<p class=noindent><span class=dropcap>\1</span>#
+
+"%s#^:\s\+\(\%([0-9]\+\.\)*[0-9]\+\)\.\s#</p>\r<p class=beginsection><span class=dropcap>\1</span> #
+"%s#^:\s\+\([^A-Z0-9]*[A-Z0-9]\)#</p>\r<p class=beginsection><span class=dropcap>\1</span>#
+
+"g/^<p class=FOLLOWINGANCHOR>/,/^<\/p>/d
+
+%s#^\s*-\{5,}\$#<hr/>#
+%s#^\.\s*--\(\s.*\)\?\$#<hr noshade size="1"/>#
+%s#^\.\s*==\(\s.*\)\?\$#<hr noshade size="5"/>#
+
+/^\.NAV/ m \$
+
+\$ /^\.NAV/ co 0
+
+%s:^\.NAV.*:\r\0\r:
+
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):@tzp_Navbar@<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>; <a href="\4">index</a>:
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):@tzp_Navbar@<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>:
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\):@tzp_Navbar@<a href="\1">previous</a>, <a href="\2">next</a> page:
+%s:^\.NAV\s\+\(\S\+\):@tzp_Navbar@<a href="\1">next</a> page:
+
+g/^@tzp_Navbar@/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
+
+%s:^@tzp_Navbar@\(.*\)\$:<div align=right><span class=navbar>[Go to \1]</span></div>:
+
+%s:^@tzp_So_toc@\s\+\(\S\+\)\s\+\(.*\):<a href="\1">\2</a><br/>:
+
+"empty lines are paragraph separators
+
+%s#^\$#</p>\r\r<p>#
+
+"g/^<p>$/,+1 j!
+
+"%s#^<p>\(\%([A-Z0-9]\+\.\)\+\)\s#<p><b>\1</b> #
+
+v/^@tzp_Preformatted@/ s#\`\`\(.\{-1,}\)\`\`#<code>\1</code>#g
+
+v/^@tzp_Preformatted@/ s#\`\(.\{-1,}\)\`#<code>\1</code>#g
+
+g/^@tzp_Bogus_end_of_file_line@/d
+
+%s:^\.JPEG\s:.!! :
+
+v/^@tzp_Preformatted@/ call Recognize_urls()
+
+g/^@tzp_Href@href=/ call Clean_up_urls()
+
+call Find_urlhs()
+
+%s/^@tzp_Preformatted@//
+%s/@tzp_Preformatted@/\r/g
+
+"add html boilerplate and title
+
+0i
+<!DOCTYPE html>
+<html lang="en">
+<!--
+Generated from $f by txt2page, version $ver
+Copyright (C) 2010-2014 Dorai Sitaram
+-->
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="$cssf" />
+<title>MYTITLE</title>
+</head>
+<body>
+<p>
+.
+
+\$a
+</p>
+</body>
+</html>
+.
+
+exec '5,10s#^<title>MYTITLE</title>#<title>' . titleText . '</title>#'
+
+endfunc
+
+call Txt2page()
+
+w
+EOF
+
+# vi:ft=vim:tw=0

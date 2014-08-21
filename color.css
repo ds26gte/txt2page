@@ -1,0 +1,42 @@
+/* last modified 2013-03-20 */
+
+a {
+    /* color: #dd4814; /* ubuntu orange */
+    /* color: #cc7722; */
+    /* color: #b7410e; /* rust */
+}
+
+a:visited {
+    /* color: #9400d3; /* dark violet */
+    /* color: #b44e3d; /* burnt ochre */
+}
+
+a:hover {
+    color: #333333; /* ubuntu cool gray */
+    background-color: #fdca01; /* ubuntu yellow */
+}
+
+h1,h2,h3 {
+    /* color: #a14743; /* roof terracotta */
+    color: #333333; /* ubuntu cool gray */
+}
+
+.navbar {
+    color: #993300;
+}
+
+.grayed {
+    color: gray;
+}
+
+.anchor {
+    color: gray;
+}
+
+.dropcap {
+    color: #72010f; /* venetian red */
+}
+
+.listing {
+    background-color: #f7f6f5; /* ubuntu warm gray */
+}

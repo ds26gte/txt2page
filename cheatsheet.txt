@@ -1,0 +1,107 @@
+.\" last modified 2014-07-01
+```
+blank lines separate grafs
+
+lines with leading spaces aren't broken (as in troff)
+
+# section title
+## subsection title
+### subsubsection title
+#### and so on
+#####
+######
+ (compat with gfm, pandoc)
+
+# title #
+ (this becomes document title (usu centered))
+
+# html-title ##
+ (this produces external title only)
+
+.TH single_word_title
+.TH "multiword title"
+  (this is for compat with man)
+
+.SH section title
+.SS subsection title
+  (compat with man)
+
+5 or more hyphens -- horiz rule
+  (compat with gfm, pandoc)
+
+.** for section break (no title) with ornament
+
+ ``` opens and closes code listing
+ ```alpha opens Lisp code listing
+     (this requires lisphilite, which should be placed in PATH --
+     use lisphilte to softlink to either lisphilite.lisp or
+     lisphilite.rkt, which are provided)
+   (compat with gfm pandoc)
+.EE ... EX also enclose listing (compat with man)
+
+`...` for inline code fragment
+``...`` ditto (to include `)
+   (compat with gfm pandoc)
+
+* followed by space -- bulleted graf
+   (compat with gfm pandoc)
+
+URLs as is
+*text* URL
+  links to URL with text (with * shorn) as link-text
+
+./filename
+  links to filename in current directory
+./path/name
+  links to path/name
+
+quotes are smart
+two hyphens become em-dash unless they're obviously not
+  (e.g. i-- --version)
+
+.NAV next_page
+.NAV prev_page next_page
+.NAV prev_page next_page ToC_page
+.NAV prev_page next_page ToC_page index_page
+  navigation bar (if -s option not used)
+  if any of the .NAV args aren't relevant, use _ as placeholder
+    so nav bars on related pages don't jerk about
+  you can put .NAV (or anything) relevant to filename.txt
+    in filename__something.txt, which will be sourced first
+
+  .so filename
+  inserts filename's contents
+  .so filename link-text
+  links to filename (if -s option not used)
+
+^^[symbol]
+  footnote mark in text
+.+ symbol
+.++
+  actual footnote
+    (shd make this compat with gfm pandoc)
+
+.!! imgfile
+.!! -pos imgfile
+.!! -pos imgfile width
+   pos is L C or R
+   width is percentage (without %)
+
+.:= L orem ipsum
+  L is set as drop cap
+
+|cell|cell|cell
+  on successive lines makes table
+
+for HTML:
+  txt2page will use default.css, and if that doesn't exist,
+    the lexicographically first .css file in cwd
+  this was to avoid markup for specifying CSS
+  if you wish to include multiple .css files, simply have your main
+    one @import the rest. (@import statments have to be the
+    first in a CSS file!)
+
+for PDF:
+  set env var GROFF_FONT_FAM GROFF_FONT_BOLD GROFF_FONT_MONO
+    to use your neat fonts
+```
