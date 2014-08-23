@@ -1,4 +1,4 @@
-# last modified 2014-06-21
+# last modified 2014-08-23
 # ds26gte@yahoo.com
 
 opts=""
@@ -40,6 +40,7 @@ func! Troff_recognize_urls()
 endfunc
 
 func! Troff_find_urlhs()
+    " a line that starts with @tzp_Url_begin@ is a possible urlh
     v/^@tzp_Preformatted@/ s/^@tzp_Url_begin@/@tzp_Possible_urlh@&/
 
     g/^@tzp_Possible_urlh@/ -1s/\*\$/&@tzp_Urlh_continuation_line@/
@@ -61,6 +62,19 @@ func! Troff_find_urlhs()
     %s/@tzp_Urlh_continuation_line@//
 
     v/^@tzp_Preformatted@/ s:\*\([^*]\+\)\*\s\+@tzp_Url_begin@.\{-}@tzp_Url_end@:\1:g
+
+    " GFM-style urlhs
+    v/^@tzp_Preformatted@/ s/^[^[\[\]]\+\](@tzp_Url_begin@/@tzp_Possible_urlh@&/
+
+    g/^@tzp_Possible_urlh@/ -1s/\[[^\[^\]]\+\$/&@tzp_Urlh_continuation_line@/
+
+    %s/^@tzp_Possible_urlh@//
+
+    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+
+    %s/@tzp_Urlh_continuation_line@//
+
+    v/^@tzp_Preformatted@/ s#\[\([^\[\]]*\)\](@tzp_Url_begin@.\{-}@tzp_Url_end@)#\1#g
 
     v/^@tzp_Preformatted@/ s:@tzp_Url_begin@\(.\{-}\)@tzp_Url_end@:\1:g
 endfunc
