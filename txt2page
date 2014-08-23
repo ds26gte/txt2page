@@ -1,4 +1,4 @@
-ver=2014-08-22 # last modified
+ver=2014-08-23 # last modified
 
 # ds26gte@yahoo.com
 
@@ -190,10 +190,10 @@ func! Find_urlhs()
     " GFM-style urlhs
     " a line containing no [ followed by ](<a href= is a possible urlh
 
-    v/^@tzp_Preformatted@/ s/^[^\[]\+\](<a href/@tzp_Possible_urlh@&/
+    v/^@tzp_Preformatted@/ s/^[^\[\]]\+\](<a href/@tzp_Possible_urlh@&/
 
     " its previous line contains a part of the link text
-    g/^@tzp_Possible_urlh@/ -1s/\[[^\[]\+\$/&@tzp_Urlh_continuation_line@/
+    g/^@tzp_Possible_urlh@/ -1s/\[[^\[\]]\+\$/&@tzp_Urlh_continuation_line@/
 
     %s/^@tzp_Possible_urlh@//
 
