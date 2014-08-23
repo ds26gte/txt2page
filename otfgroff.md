@@ -103,7 +103,7 @@ In your document, have
 Sometimes, the single style you want is the bold, possibly for
 section headers.  Thus, to use the bold from TeX Gyre Pagella,
 (available at
-http://www.gust.org.pl/projects/e-foundary/tex-gyre/pagella),
+http://www.gust.org.pl/projects/e-foundry/tex-gyre/pagella),
 call
 
 ```
