@@ -1,8 +1,9 @@
 # Using OpenType Fonts in CSS #
 
-Keep the directory containing the OTF inside your public_html.
+Keep the directory containing the OTF (e.g., `groffonts`) inside
+your `public_html`.
 
-In the CSS file, have:
+In the CSS file, refer to the OTF by a relative pathname. E.g.,
 
 ```
 @font-face {
