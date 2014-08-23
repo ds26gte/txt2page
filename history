@@ -1,3 +1,11 @@
+2014 Aug 22
+
+Clean up function Clean_up_urls -- shouldn't have space before >
+in <a href="...">
+
+Accept GFM-style links and image specs: [...](...) and
+![...](...)
+
 2014 Aug 21
 
 Call ex with -u NONE
