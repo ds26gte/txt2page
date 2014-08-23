@@ -16,7 +16,7 @@ export GROFF_FONT_PATH=~/groffonts
 
 Let us now add the Baskervald OpenType font (OTF) to groff.
 Baskervald is a Baskerville-like free font available from
-arkandis.tuxfamily.org/adffonts.html.  Unpack the provided zip
+http://arkandis.tuxfamily.org/adffonts.html.  Unpack the provided zip
 file and add four of the OTF files, viz.
 
 ```
@@ -28,7 +28,7 @@ BaskervaldADFStd-BoldItalic.otf
 
 to your `groffonts/devps` directory.  These are now to be
 transformed into a four-element *font family* that is suitable for groff.
-To do this, copy the script ./otf2groff.sh
+To do this, copy the script [otf2groff.sh](./otf2groff.sh)
 into your `groffonts/devps`.
 `otf2groff.sh` takes two arguments, the
 name of the OTF font and the name preferred for the corresponding
@@ -84,7 +84,7 @@ document, using the command
 You may prefer to use just one style of an OTF, perhaps because
 the OTF comes in only one style.  Let's say we want to set the
 body text in EB Garamond, obtainable from
-fontsquirrel.com/fonts/eb-garamond.  As above, copy the
+http://fontsquirrel.com/fonts/eb-garamond.  As above, copy the
 `EBGaramond.otf` to `groffonts/devps` and convert it to the groff
 font `ebgaramondR`:
 
@@ -103,7 +103,7 @@ In your document, have
 Sometimes, the single style you want is the bold, possibly for
 section headers.  Thus, to use the bold from TeX Gyre Pagella,
 (available at
-gust.org.pl/projects/e-foundary/tex-gyre/pagella),
+http://gust.org.pl/projects/e-foundary/tex-gyre/pagella),
 call
 
 ```
