@@ -1,4 +1,4 @@
-ver=2014-08-21 # last modified
+ver=2014-08-22 # last modified
 
 # ds26gte@yahoo.com
 
@@ -151,9 +151,9 @@ endfunc
 
 func! Clean_up_urls()
     s/&amp;/\&/g
-    s/@tzp_Href@href/href/
-    -1,+1 jo
+    s/@tzp_Href@href/ href/
     s#href="FAKEHTTP://#href="http://#
+    -1,+1 jo!
     s#FAKEHTTP://##g
 endfunc
 
@@ -185,7 +185,30 @@ func! Find_urlhs()
     %s/@tzp_Urlh_continuation_line@//
 
     " replace previous link text with true link text
-    v/^@tzp_Preformatted@/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)"\s*>.\{-}</a>#<a href="\2">\1</a>#g
+    v/^@tzp_Preformatted@/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+
+    " GFM-style urlhs
+    " a line containing no [ followed by ](<a href= is a possible urlh
+
+    v/^@tzp_Preformatted@/ s/^[^\[]\+\](<a href/@tzp_Possible_urlh@&/
+
+    " its previous line contains a part of the link text
+    g/^@tzp_Possible_urlh@/ -1s/\[[^\[]\+\$/&@tzp_Urlh_continuation_line@/
+
+    %s/^@tzp_Possible_urlh@//
+
+    " unite link text and url
+    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+
+    %s/@tzp_Urlh_continuation_line@//
+
+    " if image make an img element
+    v/^@tzp_Preformatted@/ s#!\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<img src="\2" alt="\1">#g
+
+    v/^@tzp_Preformatted@/ s#!\[\([^\[\]]*\)\](\(\S\+\))#<img src="\2" alt="\1">#g
+
+    " if urlh, replace link text with true link text
+    v/^@tzp_Preformatted@/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
 endfunc
 
 func! Txt2page()
