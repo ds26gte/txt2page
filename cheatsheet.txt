@@ -1,4 +1,4 @@
-.\" last modified 2014-07-01
+.\" last modified 2014-08-22
 ```
 blank lines separate grafs
 
@@ -49,6 +49,8 @@ lines with leading spaces aren't broken (as in troff)
 URLs as is
 *text* URL
   links to URL with text (with * shorn) as link-text
+[text](URL)
+  as in GFM
 
 ./filename
   links to filename in current directory
@@ -86,6 +88,9 @@ two hyphens become em-dash unless they're obviously not
 .!! -pos imgfile width
    pos is L C or R
    width is percentage (without %)
+
+![alt](imgfile)
+   as in GFM
 
 .:= L orem ipsum
   L is set as drop cap
