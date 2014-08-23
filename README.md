@@ -1,6 +1,6 @@
 # txt2page
 
-txt2page is a bash/vim/groff script that converts
+[txt2page](https://github.com/ds26gte/txt2page) is a bash/vim/groff script that converts
 free-form plain text into HTML and PDF. groff is needed only for PDF.
 
 ```
