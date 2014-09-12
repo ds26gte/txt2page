@@ -1,4 +1,4 @@
-.\" last modified 2014-08-22
+.\" last modified 2014-09-12
 ```
 blank lines separate grafs
 
@@ -56,6 +56,12 @@ URLs as is
   links to filename in current directory
 ./path/name
   links to path/name
+
+@twitterhandle
+  links to https://twitter.com/twitterhandle
+
+:emoji:
+  image of emoji (see emoji-cheat-sheet.com)
 
 quotes are smart
 two hyphens become em-dash unless they're obviously not
