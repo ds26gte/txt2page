@@ -1,4 +1,4 @@
-ver=2014-08-23 # last modified
+ver=2014-09-12 # last modified
 
 # ds26gte@yahoo.com
 
@@ -128,6 +128,9 @@ func! Recognize_urls()
 
     " FAKEHTTP has done its job by now -- remove it
     "s#FAKEHTTP://##g
+
+    " :emoji:
+    s#:\([a-z0-9_+]\{1,32}\):#<img class="emoji" title=":\1:" alt=":\1:" src="https://assets.github.com/images/icons/emoji/\1.png" height=20 width=20 align="absmiddle"/>#g
 
     s#^\(\.!!\)\s\+\([^-[:space:]]\)#\1 -center \2#
 
