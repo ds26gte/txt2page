@@ -1,3 +1,9 @@
+2014 Sep 17
+
+Accept AsciiDoc-style links.
+
+URLs shouldn't contain brackets.
+
 2014 Sep 12
 
 Recognize :emoji:.

@@ -1,4 +1,4 @@
-# last modified 2014-08-23
+# last modified 2014-09-17
 # ds26gte@yahoo.com
 
 opts=""
@@ -30,7 +30,7 @@ func! Troff_recognize_urls()
     s#\%(@\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|se\)\>#FAKEHTTP://&#g
 
     " URL
-    s#\<[[:alpha:]-]\+://[^[:space:]()<>]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#@tzp_Url_begin@&@tzp_Url_end@#g
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#@tzp_Url_begin@&@tzp_Url_end@#g
 
     s#FAKEHTTP://##g
 
@@ -76,6 +76,20 @@ func! Troff_find_urlhs()
 
     v/^@tzp_Preformatted@/ s#\[\([^\[\]]*\)\](@tzp_Url_begin@.\{-}@tzp_Url_end@)#\1#g
 
+    " AsciiDoc-style urlhs
+    v/^@tzp_Preformatted@/ s#@tzp_Url_end@\[[^\[\]]*\$#&@tzp_Possible_urlh_2@#
+
+    g/@tzp_Possible_urlh_2@/ +1s#^[^\[\]]*\]#@tzp_Continuation_line_2@&#
+
+    %s/@tzp_Possible_urlh_2@\$//
+
+    g/^@tzp_Continuation_line_2@/ .,-1 j
+
+    %s/@tzp_Continuation_line_2@//
+
+    v/^@tzp_Preformatted@/ s#@tzp_Url_begin@.\{-}@tzp_Url_end@\[\(.\{-}\)\]#\1#g
+
+    " rm Url markers
     v/^@tzp_Preformatted@/ s:@tzp_Url_begin@\(.\{-}\)@tzp_Url_end@:\1:g
 endfunc
 

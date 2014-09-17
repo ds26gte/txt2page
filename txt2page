@@ -1,4 +1,4 @@
-ver=2014-09-12 # last modified
+ver=2014-09-17 # last modified
 
 # ds26gte@yahoo.com
 
@@ -118,7 +118,7 @@ func! Recognize_urls()
     s#\%([[:alnum:]]\)\@<!@\([[:alnum:]_]\{1,15}\)#*<code>@\1</code>* https://twitter.com/\1#g
 
     " URL becomes <a href="URL">URL</a>
-    s#\<[[:alpha:]-]\+://[^[:space:]()<>]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#<a\r@tzp_Href@href="&"\r><code>&</code></a>#g
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#<a\r@tzp_Href@href="&"\r><code>&</code></a>#g
 
     " "./sth" becomes <a href="sth">sth</a>
     s_&#x201c;\./\(.\{-}\)&#x201d;_<a href="\1"><code>\1</code></a>_g
@@ -212,6 +212,19 @@ func! Find_urlhs()
 
     " if urlh, replace link text with true link text
     v/^@tzp_Preformatted@/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
+
+    " AsciiDoc-style urlhs
+    v/^@tzp_Preformatted@/ s#<a href=".\{-}">.\{-}</a>\[[^\]]*\$#&@tzp_Possible_urlh_2@#
+
+    g/@tzp_Possible_urlh_2@/ +1s#^[^\[\]]*\]#@tzp_Continuation_line_2@&#
+
+    %s/@tzp_Possible_urlh_2@\$//
+
+    g/^@tzp_Continuation_line_2@/ .,-1 j
+
+    %s/@tzp_Continuation_line_2@//
+
+    v/^@tzp_Preformatted@/ s#<a href="\(.\{-}\)">.\{-}</a>\[\(.\{-}\)\]#<a href="\1">\2</a>#g
 endfunc
 
 func! Txt2page()
