@@ -352,10 +352,10 @@ while 1
 endwhile
 
 if executable('lisphilite')
-    g/^\`\`\`./+1,/^\`\`\`\$/-1 s/&lt;/</g
-    g/^\`\`\`./+1,/^\`\`\`\$/-1 s/&gt;/>/g
-    g/^\`\`\`./+1,/^\`\`\`\$/-1 s/&amp;/\&/g
-    g/^\`\`\`./+1,/^\`\`\`\$/-1 !lisphilite
+    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/&lt;/</g
+    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/&gt;/>/g
+    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/&amp;/\&/g
+    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 !lisphilite
 endif
 
 %s/^\.EX\$/\`\`\`/
@@ -365,17 +365,17 @@ endif
 "misses backticks in very first line
 \$
 while 1
-    let m = search('^\`\`\`')
+    let m = search('^\s*\`\`\`')
     if m == 0
         break
     endif
-    s#^\`\`\`..*#@tzp_Listing@ scheme#
-    s#^\`\`\`.*#@tzp_Listing@#
+    s#^\s*\`\`\`..*#@tzp_Listing@ scheme#
+    s#^\s*\`\`\`.*#@tzp_Listing@#
     s#^@tzp_Listing@\(.*\)#</p>\r@tzp_Preformatted@<div class="listing\1"><code>#
     norm j
     let lastline = line('$')
     while 1
-        if match(getline('.'), '^\`\`\`') > -1
+        if match(getline('.'), '^\s*\`\`\`') > -1
             s#.*#</code></div>\r<p class=noindent>#
             break
         endif

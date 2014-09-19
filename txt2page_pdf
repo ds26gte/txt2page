@@ -155,14 +155,14 @@ func! Txt2pdf()
 let lastline = line('$')
 0
 while 1
-    let m = search('^\`\`\`')
+    let m = search('^\s*\`\`\`')
     if m == 0
         break
     endif
     s#.*#.EX#
     norm j
     while 1
-        if match(getline('.'), '^\`\`\`\$') > -1
+        if match(getline('.'), '^\s*\`\`\`\$') > -1
             s#.*#.EE#
             break
         endif
