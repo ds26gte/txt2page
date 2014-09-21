@@ -501,6 +501,7 @@ g/^\.\s*\%(SH\|SS\|#\+\|SSS\|SIV\|SV\|SVI\|:=:\$\|\*\*\$\|\*\$\)/,/./-1 j!
 
 %s_^\.\s*:=\s\+\(\S\+\)\s*_</p>\r<p class=noindent><span class=dropcap>\1</span>_
 
+%s:^&gt;\s:.\`\`:
 %s:^.\`\`\s*:</p>\r<p class=blockquote>:
 
 v/^@tzp_Preformatted@/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 @tzp_Continuation_line@/
