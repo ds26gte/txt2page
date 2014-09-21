@@ -1,4 +1,4 @@
-/* last modified 2013-03-20 */
+/* last modified 2014-09-21 */
 
 body {
     max-width: 40em;
@@ -30,7 +30,6 @@ h1,h2 {
     font-size: 80%;
 }
 
-
 .figure {
     margin-top: 1em;
     margin-bottom: 1em;
@@ -47,6 +46,10 @@ h1,h2 {
     font-size: 500%;
     float: left;
     padding-right: 5px;
+}
+
+p.blockquote {
+    padding-left: 2em;
 }
 
 p.bulleted {
