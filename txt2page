@@ -1,4 +1,4 @@
-ver=2014-09-21 # last modified
+ver=2014-09-26 # last modified
 
 # ds26gte@yahoo.com
 
@@ -225,6 +225,18 @@ func! Find_urlhs()
     %s/@tzp_Continuation_line_2@//
 
     v/^@tzp_Preformatted@/ s#<a href="\(.\{-}\)">.\{-}</a>\[\(.\{-}\)\]#<a href="\1">\2</a>#g
+endfunc
+
+func! Redirect_if_necessary()
+  v/^@tzp_Preformatted@/ s#<a href="\(.\{-}\)">=REDIRECT=</a>#@tzp_Redirect@{\1}#
+  let redirect_found_p = 0
+  g/@tzp_Redirect@{.\{-}}/ let redirect_found_p = 1
+  if redirect_found_p
+    /@tzp_Redirect@/
+    norm f{lyi}
+    let g:redirectURL = @0
+    g/@tzp_Redirect@{.\{-}}/ s#@tzp_Redirect@{\(.\{-}\)}#If not redirected, go to <a href="\1">\1</a>.#
+  endif
 endfunc
 
 func! Txt2page()
@@ -607,6 +619,8 @@ g/^@tzp_Href@href=/ call Clean_up_urls()
 
 call Find_urlhs()
 
+call Redirect_if_necessary()
+
 %s/^@tzp_Preformatted@//
 %s/@tzp_Preformatted@/\r/g
 
@@ -635,6 +649,12 @@ Copyright (C) 2010-2014 Dorai Sitaram
 .
 
 exec '5,10s#^<title>MYTITLE</title>#<title>' . titleText . '</title>#'
+
+if exists('g:redirectURL')
+  5,15s#</head>#<meta http-equiv="refresh" content="1;@tzp_Redirect_2@">\r\0#
+  let @0 = g:redirectURL
+  5,15s#@tzp_Redirect_2@#\=@0#
+endif
 
 endfunc
 
