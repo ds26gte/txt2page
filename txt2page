@@ -1,4 +1,4 @@
-ver=2014-09-26 # last modified
+ver=2014-09-27 # last modified
 
 # ds26gte@yahoo.com
 
@@ -235,7 +235,7 @@ func! Redirect_if_necessary()
     /@tzp_Redirect@/
     norm f{lyi}
     let g:redirectURL = @0
-    g/@tzp_Redirect@{.\{-}}/ s#@tzp_Redirect@{\(.\{-}\)}#If not redirected, go to <a href="\1">\1</a>.#
+    g/@tzp_Redirect@{.\{-}}/ s#@tzp_Redirect@{\(.\{-}\)}#If not redirected automatically, go to <a href="\1">\1</a>.#
   endif
 endfunc
 
