@@ -1,0 +1,4 @@
+Let us now add the Baskervald OpenType font (OTF) to groff.
+Baskervald is a Baskerville-like free font available from
+<http://arkandis.tuxfamily.org/adffonts.html>.  Unpack the provided zip
+file and add four of the OTF files, viz.
