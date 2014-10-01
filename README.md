@@ -16,7 +16,7 @@ You can supply groff-like options to txt2page. For HTML, the only
 relevant one is `-s`.
 
 For PDF, use the option `-Tpdf` and other usual groff options for
-[fonts](./otfgroff.txt), layout, &c. E.g.
+[fonts](./fontsetup/otfgroff.md), layout, &c. E.g.
 
 ```
 % txt2page -Tpdf -f baskervald -r PS=31p -r LL=7i -r PO=.63i filename.txt
