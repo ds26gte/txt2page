@@ -1,4 +1,4 @@
-ver=2014-09-27 # last modified
+ver=2014-10-01 # last modified
 
 # ds26gte@yahoo.com
 
@@ -118,7 +118,7 @@ func! Recognize_urls()
     s#\%([[:alnum:]]\)\@<!@\([[:alnum:]_]\{1,15}\)#*<code>@\1</code>* https://twitter.com/\1#g
 
     " URL becomes <a href="URL">URL</a>
-    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#<a\r@tzp_Href@href="&"\r><code>&</code></a>#g
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]»]\)#<a\r@tzp_Href@href="&"\r><code>&</code></a>#g
 
     " "./sth" becomes <a href="sth">sth</a>
     s_&#x201c;\./\(.\{-}\)&#x201d;_<a href="\1"><code>\1</code></a>_g
@@ -153,11 +153,11 @@ func! Recognize_urls()
 endfunc
 
 func! Clean_up_urls()
-    s/&amp;/\&/g
     s/@tzp_Href@href/ href/
     s#href="FAKEHTTP://#href="http://#
     -1,+1 jo!
     s#FAKEHTTP://##g
+    s:«\(<a href.\{-}/a>\)»:\1:g
 endfunc
 
 func! Find_urlhs()
@@ -265,9 +265,13 @@ g/^@tzp_So_done@/d
 @tzp_Bogus_end_of_file_line@
 .
 
-%s/&/\&amp;/g
-%s/</\&lt;/g
-%s/>/\&gt;/g
+%s/Æ/@tzp_aelig@/g
+%s/«/@tzp_langle_langle@/g
+%s/»/@tzp_rangle_rangle@/g
+
+%s/&/Æ/g
+%s/</«/g
+%s/>/»/g
 
 %s/\s\+\$//
 
@@ -364,9 +368,9 @@ while 1
 endwhile
 
 if executable('lisphilite')
-    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/&lt;/</g
-    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/&gt;/>/g
-    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/&amp;/\&/g
+    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/«/</g
+    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/»/>/g
+    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/Æ/\&/g
     g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 !lisphilite
 endif
 
@@ -513,7 +517,7 @@ g/^\.\s*\%(SH\|SS\|#\+\|SSS\|SIV\|SV\|SVI\|:=:\$\|\*\*\$\|\*\$\)/,/./-1 j!
 
 %s_^\.\s*:=\s\+\(\S\+\)\s*_</p>\r<p class=noindent><span class=dropcap>\1</span>_
 
-%s:^&gt;\s:.\`\`:
+%s:^»\s:.\`\`:
 %s:^.\`\`\s*:</p>\r<p class=blockquote>:
 
 v/^@tzp_Preformatted@/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 @tzp_Continuation_line@/
@@ -623,6 +627,14 @@ call Redirect_if_necessary()
 
 %s/^@tzp_Preformatted@//
 %s/@tzp_Preformatted@/\r/g
+
+%s/Æ/\&amp;/g
+%s/«/\&lt;/g
+%s/»/\&gt;/g
+
+%s/@tzp_aelig@/Æ/g
+%s/@tzp_langle_langle@/«/g
+%s/@tzp_rangle_rangle@/»/g
 
 "add html boilerplate and title
 

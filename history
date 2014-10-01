@@ -1,3 +1,10 @@
+2014 Oct 1
+
+Make treatment of &<> more maintainable: save all Æ«» (if any) as
+@tzp_...@ strings; convert all source &<> to Æ«»; do the
+HTMLization; all &<> are now valid HTML; convert Æ«» to
+&amp;&lt;&gt; ; then finally restore the original Æ«»
+
 2014 Sep 26
 
 *=REDIRECT=* URL
