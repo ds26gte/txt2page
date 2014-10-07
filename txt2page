@@ -1,4 +1,4 @@
-ver=2014-10-01 # last modified
+ver=2014-10-06 # last modified
 
 # ds26gte@yahoo.com
 
@@ -321,6 +321,29 @@ endif
 
 %s/^\.\s*TOC\s*//
 
+0
+while 1
+    let m = search('^\s*::\$')
+    if m == 0
+        break
+    endif
+    .d
+    let lastline = line('$')
+    while 1
+        if match(getline('.'), '^\s*::\$') > -1
+            .d
+            break
+        endif
+        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
+            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
+        endwhile
+        s#\$#<br/>#
+        if line('.') == lastline
+            break
+        endif
+        norm j
+    endwhile
+endwhile
 0
 while 1
     let m = search('^\.\(uu\|nf\)\$')

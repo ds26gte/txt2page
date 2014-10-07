@@ -1,3 +1,7 @@
+2014 Oct 6
+
+Use :: to fence obeylines
+
 2014 Oct 1
 
 Make treatment of &<> more maintainable: save all Æ«» (if any) as
