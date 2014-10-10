@@ -1,4 +1,4 @@
-.\" last change 2013-03-19
+.\" last change 2014-10-10
 .
 .\" don't load more than once
 .if d :=: .nx
@@ -6,30 +6,18 @@
 .mso ms.tmac
 .
 .de BLM
-.\" if in unfill mode
-.ie !\\n[.u] \{\
-.\" if not displaying lines with one of our macros
-.ie !\\n[obeylines] \{\
-.\" put some vertical space
-.sp .8v
-.\}
-.\" if displaying lines via an LSM
-.el \{\
-.\" stop doing so
+.ie \\n[obeylines] \{\
 .nr obeylines 0
-.LP
+.nr poss_graf_within_obeylines 1
 .\}
+.el \{\
+.if \\n[poss_graf_within_obeylines] .nr poss_graf_within_obeylines 0
 .\}
-.\" if in fill mode
-.\" if context requires no parindent
-.el .ie \\n[next_graf_without_indent] \{\
-.\" don't insert parindent
+.ie \\n[next_graf_without_indent] \{\
 .nr next_graf_without_indent 0
 .LP
 .\}
-.\" otherwise, do insert parindent
 .el .PP
-.\"ns
 ..
 .
 .blm BLM
@@ -37,31 +25,28 @@
 .de LSM
 .\" if in unfill mode, do nothing
 .ie !\\n[.u] .nop
+.el \{\
 .\" if already displaying lines via LSM, insert linebreak
-.el .ie \\n[obeylines] .br
+.ie \\n[obeylines] .br
 .\" if not, start a graf of display lines with no parindent
 .el \{\
 .nr obeylines 1
 .nr next_graf_without_indent 1
+.if \\n[poss_graf_within_obeylines] \{\
+.nr poss_graf_within_obeylines 0
+.sp .5v
+.\}
 .ns
 .LP
 .\}
 .\" insert the leading spaces
-\h'\\n[lsn]n'
+.nr lsmspaces \\n[lsn]
+.nr lsmspaces -1
+\h'\\n[lsmspaces]n'
+.\}
 ..
 .
 .lsm LSM
-.
-.de uu
-.nf
-.nr next_graf_without_indent 1
-.in 0
-..
-.
-.de ~
-.uu
-.nr obeylines 1
-..
 .
 .rn @SH @SH_orig
 .
@@ -122,27 +107,52 @@
 .
 .nr FL \n[LL]
 .
-.de BLM_EX
-.KE
-.sp .8v
-.KS
+.de obeylinesStart
+.ns
+.lsm
+.blm
+.LP
+.nf
+..
+.
+.de obeylinesEnd
+.fi
+.blm BLM
+.lsm LSM
+.nr next_graf_without_indent 1
+..
+.
+.de obeylinesStartToggle
+.de ::: !!
+.obeylinesEnd
+.de ::: !!!
+.obeylinesStartToggle
+.!!!
+.!!
+.obeylinesStart
+..
+.
+.de :::
+.obeylinesStartToggle
 ..
 .
 .de EX
 .LP
+.nr inside_EX 1
 .nf
 .in 0
 .lsm
-.blm BLM_EX
+.blm
 .ft C
 .KS
 ..
 .
 .de EE
 .KE
-.fi
 .blm BLM
 .lsm LSM
+.fi
+.nr inside_EX 0
 .LP
 .nr next_graf_without_indent 1
 ..

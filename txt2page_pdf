@@ -1,4 +1,4 @@
-# last modified 2014-09-21
+# last modified 2014-10-10
 # ds26gte@yahoo.com
 
 opts=""
@@ -174,6 +174,8 @@ while 1
 endwhile
 
 g/^\.EX\$/+1,/^\.EE\$/-1 s/^/@tzp_Preformatted@/
+
+%s/^\s*::\$/.:::/
 
 g/^\.\s*\\\"/d
 
