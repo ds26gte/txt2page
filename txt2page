@@ -1,4 +1,4 @@
-ver=2014-10-10 # last modified
+ver=2014-10-11 # last modified
 
 # ds26gte@yahoo.com
 
@@ -696,5 +696,3 @@ call Txt2page()
 
 w
 EOF
-
-# vi:ft=vim:tw=0
