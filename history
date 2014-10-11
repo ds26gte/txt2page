@@ -1,3 +1,7 @@
+2014 Oct 10
+
+txt2page.tmac: .``` for fenced code, .> for blockquote
+
 2014 Oct 6
 
 Use :: to fence obeylines
@@ -15,8 +19,7 @@ HTMLization; all &<> are now valid HTML; convert Æ«» to
 
 2014 Sep 21
 
-.`` for blockquote;
-> (for GFM compatibility)
+> for blockquote
 
 2014 Sep 19
 

@@ -136,9 +136,9 @@
 .obeylinesStartToggle
 ..
 .
-.de EX
+.de codeDisplayStart
 .LP
-.nr inside_EX 1
+.nr insideCodeDisplay 1
 .nf
 .in 0
 .lsm
@@ -147,14 +147,33 @@
 .KS
 ..
 .
-.de EE
+.de codeDisplayEnd
 .KE
 .blm BLM
 .lsm LSM
 .fi
-.nr inside_EX 0
+.nr insideCodeDisplay 0
 .LP
 .nr next_graf_without_indent 1
+..
+.
+.de codeDisplayToggle
+.de ``` !!
+.codeDisplayEnd
+.de ``` !!!
+.codeDisplayToggle
+.!!!
+.!!
+.codeDisplayStart
+..
+.
+.de ```
+.codeDisplayToggle
+..
+.
+.de >
+.LP
+.in \\n[PI]u
 ..
 .
 .de JPEG

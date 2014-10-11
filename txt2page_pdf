@@ -100,7 +100,7 @@ func! Troff_palatable()
 
     s:\`\`\(.\{-1,}\)\`\`:\\\\fC\1\\\\fP:g
 
-    s:\`\(.\{-1,}\)\`:\\\\fC\1\\\\fP:g
+    s:\`\([^\`]\{-1,}\)\`:\\\\fC\1\\\\fP:g
 
     s:\(^\|\s\|(\|^\*\|\s\*\)":\1\\\\[u201C]:g
 
@@ -144,6 +144,12 @@ func! Troff_tables()
 
 endfunc
 
+let g:sub_alternate_p = 0
+func! Sub_alternate()
+  let g:sub_alternate_p = !g:sub_alternate_p
+  return g:sub_alternate_p
+endfunc
+
 func! Txt2pdf()
 
 %s/\s\+\$//
@@ -152,28 +158,17 @@ func! Txt2pdf()
 @tzp_Bogus_end_of_file_line@
 .
 
-let lastline = line('$')
-0
-while 1
-    let m = search('^\s*\`\`\`')
-    if m == 0
-        break
-    endif
-    s#.*#.EX#
-    norm j
-    while 1
-        if match(getline('.'), '^\s*\`\`\`\$') > -1
-            s#.*#.EE#
-            break
-        endif
-        if line('.') == lastline
-            break
-        endif
-        norm j
-    endwhile
-endwhile
+%s/^\s*\(\`\`\`\)\$/.\`\`\`/
+
+g/^\.\`\`\`\$/ s/\$/\=Sub_alternate()
+
+g/^\.\`\`\`1\$/+1,/^\.\`\`\`0\$/-1 s/^/@tzp_Preformatted@/
+
+%s/^\(\.\`\`\`\)[01]\$/\1/
 
 g/^\.EX\$/+1,/^\.EE\$/-1 s/^/@tzp_Preformatted@/
+
+%s/^\.E[XE]\$/.\`\`\`/
 
 %s/^\s*::\$/.:::/
 
@@ -199,9 +194,9 @@ g/^#\s\+.\{-}\s*##\$/d
 %s:^\.SH\s\+:.SEC 1 :
 %s:^\.SS\s\+:.SEC 2 :
 
-%s:^>\s:.\`\`:
-%s:^\(\.\`\`\)\s*\(\S\):\1\r\2:
-%s:^\.\`\`\$:.LP\r.in \\\\n[PI]u:
+%s:^>\s:.>:
+%s:^\(\.>\)\s*\(\S\):\1\r\2:
+"%s:^\.>\$:.LP\r.in \\\\n[PI]u:
 
 %s:^\.+\$:.FS:
 %s:^\.+ \(.\):.FS \1:

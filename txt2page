@@ -1,4 +1,4 @@
-ver=2014-10-06 # last modified
+ver=2014-10-10 # last modified
 
 # ds26gte@yahoo.com
 
@@ -397,8 +397,7 @@ if executable('lisphilite')
     g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 !lisphilite
 endif
 
-%s/^\.EX\$/\`\`\`/
-%s/^\.EE\$/\`\`\`/
+%s/^\.\s*E[XE]\$/\`\`\`/
 
 "would like to use 0 instead of $ here, but
 "misses backticks in very first line
