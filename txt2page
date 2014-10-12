@@ -1,4 +1,4 @@
-ver=2014-10-11 # last modified
+ver=2014-10-12 # last modified
 
 # ds26gte@yahoo.com
 
@@ -65,7 +65,7 @@ fi
 
 ex -u NONE $h <<EOF
 
-func! Smart_quotes()
+func! SmartQuotes()
     "opening " becomes #x201c
 
     s:\(^\|\s\|(\|^\*\|\s\*\)":\1\&#x201c;:g
@@ -95,7 +95,7 @@ func! Smart_quotes()
     s:\(^\|\s\)-\(&\|\s*\.\?[0-9]\):\1\&#x2212;\2:g
 endfunc
 
-func! Recognize_urls()
+func! RecognizeURLs()
 
     s#\\\\\*\[::\s\+\(\S\{-}\)\s*\]#<a href="\1"><code>\1</code></a>#g
 
@@ -118,7 +118,7 @@ func! Recognize_urls()
     s#\%([[:alnum:]]\)\@<!@\([[:alnum:]_]\{1,15}\)#*<code>@\1</code>* https://twitter.com/\1#g
 
     " URL becomes <a href="URL">URL</a>
-    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]»]\)#<a\r@tzp_Href@href="&"\r><code>&</code></a>#g
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]»]\)#<a\rÞtzpHrefTzphref="&"\r><code>&</code></a>#g
 
     " "./sth" becomes <a href="sth">sth</a>
     s_&#x201c;\./\(.\{-}\)&#x201d;_<a href="\1"><code>\1</code></a>_g
@@ -152,136 +152,132 @@ func! Recognize_urls()
 
 endfunc
 
-func! Clean_up_urls()
-    s/@tzp_Href@href/ href/
+func! CleanUpURLs()
+    s/ÞtzpHrefTzphref/ href/
     s#href="FAKEHTTP://#href="http://#
     -1,+1 jo!
     s#FAKEHTTP://##g
     s:«\(<a href.\{-}/a>\)»:\1:g
 endfunc
 
-func! Find_urlhs()
+func! FindURLHs()
     " a line that starts with <a href is a possible urlh
-    v/^@tzp_Preformatted@/ s/^<a href/@tzp_Possible_urlh@&/
+    v/^ÞtzpPreformattedTzp/ s/^<a href/ÞtzpPossibleURLHTzp&/
 
     " its previous line would contain the link text
-    g/^@tzp_Possible_urlh@/ -1s/\*\$/&@tzp_Urlh_continuation_line@/
+    g/^ÞtzpPossibleURLHTzp/ -1s/\*\$/&ÞtzpURLHContinuationLineTzp/
 
-    %s/^@tzp_Possible_urlh@//
+    %s/^ÞtzpPossibleURLHTzp//
 
     " unite link text and url
-    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+    g/ÞtzpURLHContinuationLineTzp\$/ .,+1 j
 
-    %s/@tzp_Urlh_continuation_line@//
+    %s/ÞtzpURLHContinuationLineTzp//
 
     " a line that contains an unmatched * followed by <a href is a possible urlh
-    v/^@tzp_Preformatted@/ s/^[^*]\+\*\s\+<a href/@tzp_Possible_urlh@&/
+    v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+<a href/ÞtzpPossibleURLHTzp&/
 
     " if its previous line contains a *, it contains (part of) the link text
-    g/^@tzp_Possible_urlh@/ -1s/\*[^*]\+\$/&@tzp_Urlh_continuation_line@/
+    g/^ÞtzpPossibleURLHTzp/ -1s/\*[^*]\+\$/&ÞtzpURLHContinuationLineTzp/
 
-    %s/^@tzp_Possible_urlh@//
+    %s/^ÞtzpPossibleURLHTzp//
 
     " unite link text and url
-    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+    g/ÞtzpURLHContinuationLineTzp\$/ .,+1 j
 
-    %s/@tzp_Urlh_continuation_line@//
+    %s/ÞtzpURLHContinuationLineTzp//
 
     " replace previous link text with true link text
-    v/^@tzp_Preformatted@/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+    v/^ÞtzpPreformattedTzp/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
     " GFM-style urlhs
     " a line containing no [ followed by ](<a href= is a possible urlh
 
-    v/^@tzp_Preformatted@/ s/^[^\[\]]\+\](<a href/@tzp_Possible_urlh@&/
+    v/^ÞtzpPreformattedTzp/ s/^[^\[\]]\+\](<a href/ÞtzpPossibleURLHTzp&/
 
     " its previous line contains a part of the link text
-    g/^@tzp_Possible_urlh@/ -1s/\[[^\[\]]\+\$/&@tzp_Urlh_continuation_line@/
+    g/^ÞtzpPossibleURLHTzp/ -1s/\[[^\[\]]\+\$/&ÞtzpURLHContinuationLineTzp/
 
-    %s/^@tzp_Possible_urlh@//
+    %s/^ÞtzpPossibleURLHTzp//
 
     " unite link text and url
-    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+    g/ÞtzpURLHContinuationLineTzp\$/ .,+1 j
 
-    %s/@tzp_Urlh_continuation_line@//
+    %s/ÞtzpURLHContinuationLineTzp//
 
     " if image make an img element
-    v/^@tzp_Preformatted@/ s#!\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<img src="\2" alt="\1">#g
+    v/^ÞtzpPreformattedTzp/ s#!\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<img src="\2" alt="\1">#g
 
-    v/^@tzp_Preformatted@/ s#!\[\([^\[\]]*\)\](\(\S\+\))#<img src="\2" alt="\1">#g
+    v/^ÞtzpPreformattedTzp/ s#!\[\([^\[\]]*\)\](\(\S\+\))#<img src="\2" alt="\1">#g
 
     " if urlh, replace link text with true link text
-    v/^@tzp_Preformatted@/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
+    v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
 
     " AsciiDoc-style urlhs
-    v/^@tzp_Preformatted@/ s#<a href=".\{-}">.\{-}</a>\[[^\]]*\$#&@tzp_Possible_urlh_2@#
+    v/^ÞtzpPreformattedTzp/ s#<a href=".\{-}">.\{-}</a>\[[^\]]*\$#&ÞtzpPossibleURLHTwoTzp#
 
-    g/@tzp_Possible_urlh_2@/ +1s#^[^\[\]]*\]#@tzp_Continuation_line_2@&#
+    g/ÞtzpPossibleURLHTwoTzp/ +1s#^[^\[\]]*\]#ÞtzpContinuationLineTwoTzp&#
 
-    %s/@tzp_Possible_urlh_2@\$//
+    %s/ÞtzpPossibleURLHTwoTzp\$//
 
-    g/^@tzp_Continuation_line_2@/ .,-1 j
+    g/^ÞtzpContinuationLineTwoTzp/ .,-1 j
 
-    %s/@tzp_Continuation_line_2@//
+    %s/ÞtzpContinuationLineTwoTzp//
 
-    v/^@tzp_Preformatted@/ s#<a href="\(.\{-}\)">.\{-}</a>\[\(.\{-}\)\]#<a href="\1">\2</a>#g
+    v/^ÞtzpPreformattedTzp/ s#<a href="\(.\{-}\)">.\{-}</a>\[\(.\{-}\)\]#<a href="\1">\2</a>#g
 endfunc
 
-func! Redirect_if_necessary()
-  v/^@tzp_Preformatted@/ s#<a href="\(.\{-}\)">=REDIRECT=</a>#@tzp_Redirect@{\1}#
-  let redirect_found_p = 0
-  g/@tzp_Redirect@{.\{-}}/ let redirect_found_p = 1
-  if redirect_found_p
-    /@tzp_Redirect@/
+func! RedirectIfNecessary()
+  v/^ÞtzpPreformattedTzp/ s#<a href="\(.\{-}\)">=REDIRECT=</a>#ÞtzpRedirectTzp{\1}#
+  let redirectFoundP = 0
+  g/ÞtzpRedirectTzp{.\{-}}/ let redirectFoundP = 1
+  if redirectFoundP
+    /ÞtzpRedirectTzp/
     norm f{lyi}
     let g:redirectURL = @0
-    g/@tzp_Redirect@{.\{-}}/ s#@tzp_Redirect@{\(.\{-}\)}#If not redirected automatically, go to <a href="\1">\1</a>.#
+    g/ÞtzpRedirectTzp{.\{-}}/ s#ÞtzpRedirectTzp{\(.\{-}\)}#If not redirected automatically, go to <a href="\1">\1</a>.#
   endif
 endfunc
-
-"let g:sub_alternate_p = 0
-"func! Sub_alternate(...)
-"  if a:0
-"    let g:sub_alternate_p = a:1
-"  else
-"    let g:sub_alternate_p = !g:sub_alternate_p
-"    return g:sub_alternate_p
-"  endif
-"endfunc
 
 func! Txt2page()
 
 while 1
-    0
-    "s/^\.\s*so/@tzp_So_toc@/
-    "norm W
-    "call Txt2page(expand("<cfile>"))
-    "exec "b " . g
-    if (!$soelim)
-        %s/^\.\s*so\s\+\(\S\+\s\+\S\)/@tzp_So_toc@ \1/
-    endif
-    let m = search('^\.\s*so\s')
-    if (m == 0)
-        break
-    endif
-    s/^\.\s*so/@tzp_So_done@/
-    norm W
-    r <cfile>
+  if (!$soelim)
+    %s/^\.\s*so\s\+\(\S\+\s\+\S\)/ÞtzpSoTOCTzp \1/
+  endif
+  0
+  let m = search('^\.\s*so\s')
+  if (m == 0)
+    break
+  endif
+  s/^\.\s*so/ÞtzpSoDoneTzp/
+  norm W
+  r <cfile>
 endwhile
 
-g/^@tzp_So_done@/d
+g/^ÞtzpSoDoneTzp/d
 
 \$a
-@tzp_Bogus_end_of_file_line@
+ÞtzpBogusEndOfFileLineTzp
 .
 
-%s/Æ/@tzp_aelig@/g
-%s/«/@tzp_langle_langle@/g
-%s/»/@tzp_rangle_rangle@/g
+"use unabbreviations for these rare characters if they occur verbatim in the source,
+"as we'll be using these characters as temporary symbols
+
+%s/Þ/ÞtzpThornTzp/g
+%s/Ø/ÞtzpOSlashTzp/g
+%s/Æ/ÞtzpAELigTzp/g
+%s/«/ÞtzpLangleLangleTzp/g
+%s/»/ÞtzpRangleRangleTzp/g
+
+"use temp symbols to stand for verbatim &<>; we'll convert them to appropriate HTML entities
+"at the end
 
 %s/&/Æ/g
 %s/</«/g
 %s/>/»/g
+
+"remove all trailing spaces
 
 %s/\s\+\$//
 
@@ -290,7 +286,7 @@ let fileStem = "$g"
 
 let g:fileExtension = "$ext"
 if g:fileExtension == ""
-    let g:fileExtension = "LetsNotMatchAnythingAgainstThis"
+    let g:fileExtension = "tzpLetsNotMatchAnythingAgainstThis"
 endif
 
 0
@@ -356,7 +352,7 @@ while 1
 endwhile
 0
 while 1
-    let m = search('^\.\(uu\|nf\)\$')
+  let m = search('^\.nf\$')
     if m == 0
         break
     endif
@@ -367,9 +363,12 @@ while 1
             .d
             break
         endif
-        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
-            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
-        endwhile
+        s/\s/Ø/g
+        s/\([^Ø]\)Ø\([^Ø]\)/\1 \2/g
+        s/Ø/\&nbsp;/g
+"        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
+"            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
+"        endwhile
         s#\$#<br/>#
         if line('.') == lastline
             break
@@ -417,9 +416,9 @@ while 1
     if m == 0
         break
     endif
-    s#^\s*\`\`\`..*#@tzp_Listing@ scheme#
-    s#^\s*\`\`\`.*#@tzp_Listing@#
-    s#^@tzp_Listing@\(.*\)#</p>\r@tzp_Preformatted@<div class="listing\1"><code>#
+    s#^\s*\`\`\`..*#ÞtzpListingTzp scheme#
+    s#^\s*\`\`\`.*#ÞtzpListingTzp#
+    s#^ÞtzpListingTzp\(.*\)#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
     norm j
     let lastline = line('$')
     while 1
@@ -431,7 +430,7 @@ while 1
             s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
         endwhile
         s/^\$/\&nbsp;/
-        s/^/@tzp_Preformatted@/
+        s/^/ÞtzpPreformattedTzp/
         s#\$#<br/>#
         if line('.') == lastline
             break
@@ -474,7 +473,7 @@ g/^\.\s*\\\"/d
 g/^\.\s*HTL/d
 g/^#\s\+.\{-}\s*##\$/d
 
-v/^@tzp_Preformatted@/ call Smart_quotes()
+v/^ÞtzpPreformattedTzp/ call SmartQuotes()
 
 "bullet items
 
@@ -482,39 +481,39 @@ v/^@tzp_Preformatted@/ call Smart_quotes()
 
 "Tables
 
-"for every line starting with |\s, replace it with <space>@tzp_Table_line@
+"for every line starting with |\s, replace it with <space>ÞtzpTableLineTzp
 
-g/^|\s/,/^[^|]/-1 s#^|\s# @tzp_Table_line@#
+g/^|\s/,/^[^|]/-1 s#^|\s# ÞtzpTableLineTzp#
 
-"collapse successive @tzp_Table_line@s together
+"collapse successive ÞtzpTableLineTzps together
 
-g/^ @tzp_Table_line@/,/^\%(\$\|[^ ]\)/-1 j
+g/^ ÞtzpTableLineTzp/,/^\%(\$\|[^ ]\)/-1 j
 
-"remove single space before @tzp_Table_line@
+"remove single space before ÞtzpTableLineTzp
 
-%s/ \(@tzp_Table_line@\)/\1/g
+%s/ \(ÞtzpTableLineTzp\)/\1/g
 
-"enclose the collapsed @tzp_Table_line@ with <table> tags
+"enclose the collapsed ÞtzpTableLineTzp with <table> tags
 
-%s#^@tzp_Table_line@.*\$#</p>\r<div align="center">\r<table border="1" cellpadding="4">&\r</table>\r</div>\r<p>#
+%s#^ÞtzpTableLineTzp.*\$#</p>\r<div align="center">\r<table border="1" cellpadding="4">&\r</table>\r</div>\r<p>#
 
-"precede each @tzp_Table_line@ with a CR
+"precede each ÞtzpTableLineTzp with a CR
 
-%s#@tzp_Table_line@#\r&#g
+%s#ÞtzpTableLineTzp#\r&#g
 
 "chomp the last | in each table line
 
-g/^@tzp_Table_line@/ s#\s|\$##
+g/^ÞtzpTableLineTzp/ s#\s|\$##
 
 "replace every other | with a table-cell separator
 
-g/^@tzp_Table_line@/ s#\s|\s#</td><td>#g
+g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 
 "wrap each table-line with a <tr>
 
-%s#^@tzp_Table_line@\(.*\)\$#<tr><td>\1</td></tr>#
+%s#^ÞtzpTableLineTzp\(.*\)\$#<tr><td>\1</td></tr>#
 
-"g/^@tzp_Bogus_end_of_file_line@/d
+"g/^ÞtzpBogusEndOfFileLineTzp/d
 
 "invisible anchor
 %s:^\.%%\s\+\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
@@ -552,56 +551,56 @@ g/^\.\s*\%(SH\|SS\|#\+\|SSS\|SIV\|SV\|SVI\|:=:\$\|\*\*\$\|\*\$\)/,/./-1 j!
 %s:^»\s:.\`\`:
 %s:^.\`\`\s*:</p>\r<p class=blockquote>:
 
-v/^@tzp_Preformatted@/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 @tzp_Continuation_line@/
+v/^ÞtzpPreformattedTzp/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 ÞtzpContinuationLineTzp/
 
-g/\\\*\[\%(\^\|::\)\s*[^]]\{-}@tzp_Continuation_line@\$/ .,+1 j!
+g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
-%s/@tzp_Continuation_line@//
+%s/ÞtzpContinuationLineTzp//
 
-v/^@tzp_Preformatted@/ s:\`\@<!\^\^\[\([^[:space:]]\+\)\]:<sup><a name="call_footnote_\1" href="#footnote_\1">\1</a></sup>:g
+v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\([^[:space:]]\+\)\]:<sup><a name="call_footnote_\1" href="#footnote_\1">\1</a></sup>:g
 
 %s:^\.FS\$:.+:
 %s:^\.FS \(.\):.+ \1:
 %s:^\.FE\$:.++:
 
 "use distinctive start and end markers for each footnote
-%s:^\.++:@tzp_FE@:
-%s:^\.+:@tzp_FS@:
+%s:^\.++:ÞtzpFETzp:
+%s:^\.+:ÞtzpFSTzp:
 
-%s:^@tzp_FS@\$:@tzp_FS@ @tzp_Unmarked_footnote@:
+%s:^ÞtzpFSTzp\$:ÞtzpFSTzp ÞtzpUnmarkedFootnoteTzp:
 
-"put a @tzp_Footnote@ before every footnote line
-g/^@tzp_FS@/ .,/^@tzp_FE@\$/ s/^/@tzp_Footnote@/
+"put a ÞtzpFootnoteTzp before every footnote line
+g/^ÞtzpFSTzp/ .,/^ÞtzpFETzp\$/ s/^/ÞtzpFootnoteTzp/
 
 "wrap all footnote lines from one footnote into one combined line
-g/^@tzp_Footnote@@tzp_FS@/ .,/^@tzp_Footnote@@tzp_FE@\$/ j!
+g/^ÞtzpFootnoteTzpÞtzpFSTzp/ .,/^ÞtzpFootnoteTzpÞtzpFETzp\$/ j!
 
 "move all the footnote combilines to the file's end
-g/^@tzp_Footnote@@tzp_FS@/ m\$
+g/^ÞtzpFootnoteTzpÞtzpFSTzp/ m\$
 
-"put a @tzp_Start_footnotes@ ahead of the first footnote combiline
-/^@tzp_Footnote@@tzp_FS@/ s/^/@tzp_Start_footnotes@\r\1/
+"put a ÞtzpStartFootnotesTzp ahead of the first footnote combiline
+/^ÞtzpFootnoteTzpÞtzpFSTzp/ s/^/ÞtzpStartFootnotesTzp\r\1/
 
-"put a @tzp_End_footnotes@ after the last footnote combiline
-\$ s/^\(@tzp_Footnote@@tzp_FS@.*\)\$/\1\r\@tzp_End_footnotes@/
+"put a ÞtzpEndFootnotesTzp after the last footnote combiline
+\$ s/^\(ÞtzpFootnoteTzpÞtzpFSTzp.*\)\$/\1\r\ÞtzpEndFootnotesTzp/
 
-"use @tzp_{Start,End}_footnotes to wrap a <div>
-%s#^@tzp_Start_footnotes@\$#</p>\r<div class=footnotes>\r<hr align=left width="40%"/><p>#
-%s#^@tzp_End_footnotes@\$#</p>\r</div><p>#
+"use Þtzp{Start,End}FootnotesTzp to wrap a <div>
+%s#^ÞtzpStartFootnotesTzp\$#</p>\r<div class=footnotes>\r<hr align=left width="40%"/><p>#
+%s#^ÞtzpEndFootnotesTzp\$#</p>\r</div><p>#
 
-"use @tzp_Footnote@ to un-combine the combilines into individual lines again
-%s/\(.\)\(@tzp_Footnote@\)/\1\r\2/g
+"use ÞtzpFootnoteTzp to un-combine the combilines into individual lines again
+%s/\(.\)\(ÞtzpFootnoteTzp\)/\1\r\2/g
 
 "throw away each footnote's end marker: its job is done
-%s/^@tzp_Footnote@@tzp_FE@\$//
+%s/^ÞtzpFootnoteTzpÞtzpFETzp\$//
 
 "use each footnote's start marker to typeset its symbol (if any)
 
-%s:^@tzp_Footnote@@tzp_FS@\s\+@tzp_Unmarked_footnote@\$:\r:
+%s:^ÞtzpFootnoteTzpÞtzpFSTzp\s\+ÞtzpUnmarkedFootnoteTzp\$:\r:
 
-%s:^@tzp_Footnote@@tzp_FS@\s\+\(\S\+\)\$:\r<sup><a name="footnote_\1" href="#call_footnote_\1">\1</a></sup>:
+%s:^ÞtzpFootnoteTzpÞtzpFSTzp\s\+\(\S\+\)\$:\r<sup><a name="footnote_\1" href="#call_footnote_\1">\1</a></sup>:
 
-%s:^@tzp_Footnote@::
+%s:^ÞtzpFootnoteTzp::
 
 %s#^:\$#</p>\r<div class=sectionbreak></div>\r<p>#
 
@@ -622,16 +621,16 @@ g/^@tzp_Footnote@@tzp_FS@/ m\$
 
 %s:^\.NAV.*:\r\0\r:
 
-%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):@tzp_Navbar@<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>; <a href="\4">index</a>:
-%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):@tzp_Navbar@<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>:
-%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\):@tzp_Navbar@<a href="\1">previous</a>, <a href="\2">next</a> page:
-%s:^\.NAV\s\+\(\S\+\):@tzp_Navbar@<a href="\1">next</a> page:
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>; <a href="\4">index</a>:
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>:
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page:
+%s:^\.NAV\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">next</a> page:
 
-g/^@tzp_Navbar@/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
+g/^ÞtzpNavbarTzp/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
 
-%s:^@tzp_Navbar@\(.*\)\$:<div align=right><span class=navbar>[Go to \1]</span></div>:
+%s:^ÞtzpNavbarTzp\(.*\)\$:<div align=right><span class=navbar>[Go to \1]</span></div>:
 
-%s:^@tzp_So_toc@\s\+\(\S\+\)\s\+\(.*\):<a href="\1">\2</a><br/>:
+%s:^ÞtzpSoTOCTzp\s\+\(\S\+\)\s\+\(.*\):<a href="\1">\2</a><br/>:
 
 "empty lines are paragraph separators
 
@@ -641,32 +640,34 @@ g/^@tzp_Navbar@/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
 
 "%s#^<p>\(\%([A-Z0-9]\+\.\)\+\)\s#<p><b>\1</b> #
 
-v/^@tzp_Preformatted@/ s#\`\`\(.\{-1,}\)\`\`#<code>\1</code>#g
+v/^ÞtzpPreformattedTzp/ s#\`\`\(.\{-1,}\)\`\`#<code>\1</code>#g
 
-v/^@tzp_Preformatted@/ s#\`\(.\{-1,}\)\`#<code>\1</code>#g
+v/^ÞtzpPreformattedTzp/ s#\`\(.\{-1,}\)\`#<code>\1</code>#g
 
-g/^@tzp_Bogus_end_of_file_line@/d
+g/^ÞtzpBogusEndOfFileLineTzp/d
 
 %s:^\.JPEG\s:.!! :
 
-v/^@tzp_Preformatted@/ call Recognize_urls()
+v/^ÞtzpPreformattedTzp/ call RecognizeURLs()
 
-g/^@tzp_Href@href=/ call Clean_up_urls()
+g/^ÞtzpHrefTzphref=/ call CleanUpURLs()
 
-call Find_urlhs()
+call FindURLHs()
 
-call Redirect_if_necessary()
+call RedirectIfNecessary()
 
-%s/^@tzp_Preformatted@//
-%s/@tzp_Preformatted@/\r/g
+%s/^ÞtzpPreformattedTzp//
+%s/ÞtzpPreformattedTzp/\r/g
 
 %s/Æ/\&amp;/g
 %s/«/\&lt;/g
 %s/»/\&gt;/g
 
-%s/@tzp_aelig@/Æ/g
-%s/@tzp_langle_langle@/«/g
-%s/@tzp_rangle_rangle@/»/g
+%s/ÞtzpThornTzp/Þ/g
+%s/ÞtzpOSlashTzp/Ø/g
+%s/ÞtzpAELigTzp/Æ/g
+%s/ÞtzpLangleLangleTzp/«/g
+%s/ÞtzpRangleRangleTzp/»/g
 
 "add html boilerplate and title
 
@@ -695,9 +696,9 @@ Copyright (C) 2010-2014 Dorai Sitaram
 exec '5,10s#^<title>MYTITLE</title>#<title>' . titleText . '</title>#'
 
 if exists('g:redirectURL')
-  5,15s#</head>#<meta http-equiv="refresh" content="1;@tzp_Redirect_2@">\r\0#
+  5,15s#</head>#<meta http-equiv="refresh" content="1;ÞtzpRedirectURLTzp">\r\0#
   let @0 = g:redirectURL
-  5,15s#@tzp_Redirect_2@#\=@0#
+  5,15s/ÞtzpRedirectURLTzp/\=@0/
 endif
 
 endfunc

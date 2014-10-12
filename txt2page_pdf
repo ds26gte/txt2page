@@ -1,4 +1,4 @@
-# last modified 2014-10-11
+# last modified 2014-10-12
 # ds26gte@yahoo.com
 
 opts=""
@@ -144,13 +144,15 @@ func! Troff_tables()
 
 endfunc
 
-let g:sub_alternate_p = 0
 func! Sub_alternate(...)
+  if !exists('b:sub_alternate_p')
+    let b:sub_alternate_p = 0
+  endif
   if a:0
-    let g:sub_alternate_p = a:1
+    let b:sub_alternate_p = a:1
   else
-    let g:sub_alternate_p = !g:sub_alternate_p
-    return g:sub_alternate_p
+    let b:sub_alternate_p = !b:sub_alternate_p
+    return b:sub_alternate_p
   endif
 endfunc
 
