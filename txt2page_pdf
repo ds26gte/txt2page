@@ -145,9 +145,13 @@ func! Troff_tables()
 endfunc
 
 let g:sub_alternate_p = 0
-func! Sub_alternate()
-  let g:sub_alternate_p = !g:sub_alternate_p
-  return g:sub_alternate_p
+func! Sub_alternate(...)
+  if a:0
+    let g:sub_alternate_p = a:1
+  else
+    let g:sub_alternate_p = !g:sub_alternate_p
+    return g:sub_alternate_p
+  endif
 endfunc
 
 func! Txt2pdf()
@@ -160,9 +164,10 @@ func! Txt2pdf()
 
 %s/^\s*\(\`\`\`\)\$/.\`\`\`/
 
+call Sub_alternate(1)
 g/^\.\`\`\`\$/ s/\$/\=Sub_alternate()
 
-g/^\.\`\`\`1\$/+1,/^\.\`\`\`0\$/-1 s/^/@tzp_Preformatted@/
+g/^\.\`\`\`0\$/+1,/^\.\`\`\`1\$/-1 s/^/@tzp_Preformatted@/
 
 %s/^\(\.\`\`\`\)[01]\$/\1/
 

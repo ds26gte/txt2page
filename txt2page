@@ -239,6 +239,16 @@ func! Redirect_if_necessary()
   endif
 endfunc
 
+"let g:sub_alternate_p = 0
+"func! Sub_alternate(...)
+"  if a:0
+"    let g:sub_alternate_p = a:1
+"  else
+"    let g:sub_alternate_p = !g:sub_alternate_p
+"    return g:sub_alternate_p
+"  endif
+"endfunc
+
 func! Txt2page()
 
 while 1
