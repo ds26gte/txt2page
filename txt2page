@@ -162,30 +162,30 @@ endfunc
 
 func! FindURLHs()
     " a line that starts with <a href is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^<a href/ÞtzpPossibleURLHTzp&/
+    v/^ÞtzpPreformattedTzp/ s/^<a href/ÞtzpPossibleURLHtzp&/
 
     " its previous line would contain the link text
-    g/^ÞtzpPossibleURLHTzp/ -1s/\*\$/&ÞtzpURLHContinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLineTzp/
 
-    %s/^ÞtzpPossibleURLHTzp//
+    %s/^ÞtzpPossibleURLHtzp//
 
     " unite link text and url
-    g/ÞtzpURLHContinuationLineTzp\$/ .,+1 j
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
 
-    %s/ÞtzpURLHContinuationLineTzp//
+    %s/ÞtzpURLHcontinuationLineTzp//
 
     " a line that contains an unmatched * followed by <a href is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+<a href/ÞtzpPossibleURLHTzp&/
+    v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+<a href/ÞtzpPossibleURLHtzp&/
 
     " if its previous line contains a *, it contains (part of) the link text
-    g/^ÞtzpPossibleURLHTzp/ -1s/\*[^*]\+\$/&ÞtzpURLHContinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*[^*]\+\$/&ÞtzpURLHcontinuationLineTzp/
 
-    %s/^ÞtzpPossibleURLHTzp//
+    %s/^ÞtzpPossibleURLHtzp//
 
     " unite link text and url
-    g/ÞtzpURLHContinuationLineTzp\$/ .,+1 j
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
 
-    %s/ÞtzpURLHContinuationLineTzp//
+    %s/ÞtzpURLHcontinuationLineTzp//
 
     " replace previous link text with true link text
     v/^ÞtzpPreformattedTzp/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
@@ -193,17 +193,17 @@ func! FindURLHs()
     " GFM-style urlhs
     " a line containing no [ followed by ](<a href= is a possible urlh
 
-    v/^ÞtzpPreformattedTzp/ s/^[^\[\]]\+\](<a href/ÞtzpPossibleURLHTzp&/
+    v/^ÞtzpPreformattedTzp/ s/^[^\[\]]\+\](<a href/ÞtzpPossibleURLHtzp&/
 
     " its previous line contains a part of the link text
-    g/^ÞtzpPossibleURLHTzp/ -1s/\[[^\[\]]\+\$/&ÞtzpURLHContinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\[[^\[\]]\+\$/&ÞtzpURLHcontinuationLineTzp/
 
-    %s/^ÞtzpPossibleURLHTzp//
+    %s/^ÞtzpPossibleURLHtzp//
 
     " unite link text and url
-    g/ÞtzpURLHContinuationLineTzp\$/ .,+1 j
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
 
-    %s/ÞtzpURLHContinuationLineTzp//
+    %s/ÞtzpURLHcontinuationLineTzp//
 
     " if image make an img element
     v/^ÞtzpPreformattedTzp/ s#!\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<img src="\2" alt="\1">#g
@@ -214,11 +214,11 @@ func! FindURLHs()
     v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
 
     " AsciiDoc-style urlhs
-    v/^ÞtzpPreformattedTzp/ s#<a href=".\{-}">.\{-}</a>\[[^\]]*\$#&ÞtzpPossibleURLHTwoTzp#
+    v/^ÞtzpPreformattedTzp/ s#<a href=".\{-}">.\{-}</a>\[[^\]]*\$#&ÞtzpPossibleURLHtwoTzp#
 
-    g/ÞtzpPossibleURLHTwoTzp/ +1s#^[^\[\]]*\]#ÞtzpContinuationLineTwoTzp&#
+    g/ÞtzpPossibleURLHtwoTzp/ +1s#^[^\[\]]*\]#ÞtzpContinuationLineTwoTzp&#
 
-    %s/ÞtzpPossibleURLHTwoTzp\$//
+    %s/ÞtzpPossibleURLHtwoTzp\$//
 
     g/^ÞtzpContinuationLineTwoTzp/ .,-1 j
 
@@ -275,7 +275,7 @@ func! Txt2page()
 
 while 1
   if (!$soelim)
-    %s/^\.\s*so\s\+\(\S\+\s\+\S\)/ÞtzpSoTOCTzp \1/
+    %s/^\.\s*so\s\+\(\S\+\s\+\S\)/ÞtzpSoTOCtzp \1/
   endif
   0
   let m = search('^\.\s*so\s')
@@ -293,8 +293,8 @@ g/^ÞtzpSoDoneTzp/d
 "as we'll be using these characters as temporary symbols
 
 %s/Þ/ÞtzpThornTzp/g
-%s/Ø/ÞtzpOSlashTzp/g
-%s/Æ/ÞtzpAELigTzp/g
+%s/Ø/ÞtzpOslashTzp/g
+%s/Æ/ÞtzpAEligTzp/g
 %s/«/ÞtzpLangleLangleTzp/g
 %s/»/ÞtzpRangleRangleTzp/g
 
@@ -523,32 +523,32 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 %s/ÞtzpContinuationLineTzp//
 
-v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\([^[:space:]]\+\)\]:<sup><a name="call_footnote_\1" href="#footnote_\1">\1</a></sup>:g
+v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\([^[:space:]]\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
 
 %s:^\.FS\$:.+:
 %s:^\.FS \(.\):.+ \1:
 %s:^\.FE\$:.++:
 
 "use distinctive start and end markers for each footnote
-%s:^\.++:ÞtzpFETzp:
-%s:^\.+:ÞtzpFSTzp:
+%s:^\.++:ÞtzpFEtzp:
+%s:^\.+:ÞtzpFStzp:
 
-%s:^ÞtzpFSTzp\$:ÞtzpFSTzp ÞtzpUnmarkedFootnoteTzp:
+%s:^ÞtzpFStzp\$:ÞtzpFStzp ÞtzpUnmarkedFootnoteTzp:
 
 "put a ÞtzpFootnoteTzp before every footnote line
-g/^ÞtzpFSTzp/ .,/^ÞtzpFETzp\$/ s/^/ÞtzpFootnoteTzp/
+g/^ÞtzpFStzp/ .,/^ÞtzpFEtzp\$/ s/^/ÞtzpFootnoteTzp/
 
 "wrap all footnote lines from one footnote into one combined line
-g/^ÞtzpFootnoteTzpÞtzpFSTzp/ .,/^ÞtzpFootnoteTzpÞtzpFETzp\$/ j!
+g/^ÞtzpFootnoteTzpÞtzpFStzp/ .,/^ÞtzpFootnoteTzpÞtzpFEtzp\$/ j!
 
 "move all the footnote combilines to the file's end
-g/^ÞtzpFootnoteTzpÞtzpFSTzp/ m\$
+g/^ÞtzpFootnoteTzpÞtzpFStzp/ m\$
 
 "put a ÞtzpStartFootnotesTzp ahead of the first footnote combiline
-/^ÞtzpFootnoteTzpÞtzpFSTzp/ s/^/ÞtzpStartFootnotesTzp\r\1/
+/^ÞtzpFootnoteTzpÞtzpFStzp/ s/^/ÞtzpStartFootnotesTzp\r\1/
 
 "put a ÞtzpEndFootnotesTzp after the last footnote combiline
-\$ s/^\(ÞtzpFootnoteTzpÞtzpFSTzp.*\)\$/\1\r\ÞtzpEndFootnotesTzp/
+\$ s/^\(ÞtzpFootnoteTzpÞtzpFStzp.*\)\$/\1\r\ÞtzpEndFootnotesTzp/
 
 "use Þtzp{Start,End}FootnotesTzp to wrap a <div>
 %s#^ÞtzpStartFootnotesTzp\$#</p>\r<div class=footnotes>\r<hr align=left width="40%"/><p>#
@@ -558,13 +558,13 @@ g/^ÞtzpFootnoteTzpÞtzpFSTzp/ m\$
 %s/\(.\)\(ÞtzpFootnoteTzp\)/\1\r\2/g
 
 "throw away each footnote's end marker: its job is done
-%s/^ÞtzpFootnoteTzpÞtzpFETzp\$//
+%s/^ÞtzpFootnoteTzpÞtzpFEtzp\$//
 
 "use each footnote's start marker to typeset its symbol (if any)
 
-%s:^ÞtzpFootnoteTzpÞtzpFSTzp\s\+ÞtzpUnmarkedFootnoteTzp\$:\r:
+%s:^ÞtzpFootnoteTzpÞtzpFStzp\s\+ÞtzpUnmarkedFootnoteTzp\$:\r:
 
-%s:^ÞtzpFootnoteTzpÞtzpFSTzp\s\+\(\S\+\)\$:\r<sup><a name="footnote_\1" href="#call_footnote_\1">\1</a></sup>:
+%s:^ÞtzpFootnoteTzpÞtzpFStzp\s\+\(\S\+\)\$:\r<sup><a name="footnote_\1" href="#callFootnote_\1">\1</a></sup>:
 
 %s:^ÞtzpFootnoteTzp::
 
@@ -596,7 +596,7 @@ g/^ÞtzpNavbarTzp/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
 
 %s:^ÞtzpNavbarTzp\(.*\)\$:<div align=right><span class=navbar>[Go to \1]</span></div>:
 
-%s:^ÞtzpSoTOCTzp\s\+\(\S\+\)\s\+\(.*\):<a href="\1">\2</a><br/>:
+%s:^ÞtzpSoTOCtzp\s\+\(\S\+\)\s\+\(.*\):<a href="\1">\2</a><br/>:
 
 "empty lines are paragraph separators, but collapse adjacent empty lines first
 
@@ -632,8 +632,8 @@ call RedirectIfNecessary()
 %s/»/\&gt;/g
 
 %s/ÞtzpThornTzp/Þ/g
-%s/ÞtzpOSlashTzp/Ø/g
-%s/ÞtzpAELigTzp/Æ/g
+%s/ÞtzpOslashTzp/Ø/g
+%s/ÞtzpAEligTzp/Æ/g
 %s/ÞtzpLangleLangleTzp/«/g
 %s/ÞtzpRangleRangleTzp/»/g
 
@@ -664,9 +664,9 @@ Copyright (C) 2010-2014 Dorai Sitaram
 exec '5,10s#^<title>MYTITLE</title>#<title>' . titleText . '</title>#'
 
 if exists('g:redirectURL')
-  5,15s#</head>#<meta http-equiv="refresh" content="1;ÞtzpRedirectURLTzp">\r\0#
+  5,15s#</head>#<meta http-equiv="refresh" content="1;ÞtzpRedirectURLtzp">\r\0#
   let @0 = g:redirectURL
-  5,15s/ÞtzpRedirectURLTzp/\=@0/
+  5,15s/ÞtzpRedirectURLtzp/\=@0/
 endif
 
 endfunc
