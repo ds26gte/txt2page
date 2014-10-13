@@ -1,4 +1,4 @@
-```
+```scheme
 (define cons
   (lambda (x)
     (+ 1 "lkajdf")))

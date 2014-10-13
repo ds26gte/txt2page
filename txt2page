@@ -382,25 +382,27 @@ g/^ÞtzpNoFillEnvTzp0/+1,/^\s*ÞtzpNoFillEnvTzp1/-1 call VerbatimLineAsIs()
 
 g/^\s*ÞtzpNoFillEnvTzp[01]/d
 
-if executable('lisphilite')
-    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/«/</g
-    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/»/>/g
-    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/Æ/\&/g
-    g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 !lisphilite
-endif
-
 %s/^\.\s*E[XE]\$/\`\`\`/
 
+%s/^\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
+%s/^\s*\`\`\`\$/ÞtzpListingTzp/
+
+if executable('lisphilite')
+  g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/«/</g
+  g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/»/>/g
+  g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/Æ/\&/g
+  g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 !lisphilite
+endif
+
 call SubAlternate(1)
-g/^\s*\`\`\`.*/ s/\$/\=SubAlternate()
+g/^ÞtzpListingTzp/ s/\$/\=SubAlternate()
 
-g/^\s*\`\`\`.*0/+1,/^\s*\`\`\`.*1/-1 call CodeLineAsIs()
+g/^ÞtzpListingTzp/+1,/^ÞtzpListingTzp/-1 call CodeLineAsIs()
 
-%s/^\s*\`\`\`..*0\$/ÞtzpListingTzp scheme/
-%s/^\s*\`\`\`0\$/ÞtzpListingTzp/
+%s#^ÞtzpListingTzp\(.*\)0\$#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
+%s#^ÞtzpListingTzp\(.*\)1\$#ÞtzpPreformattedTzp</code></div>\r<p class=noindent>#
 
-%s#^ÞtzpListingTzp\(.*\)#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
-%s#^\s*\`\`\`.*1\$#</code></div>\r<p class=noindent>#
+g/^\s*\`\`\`\%(\|\s*[[:alpha:]]\+\)0\$/+1,/^\s*\`\`\`1\$/-1 call CodeLineAsIs()
 
 0
 let lastline = line('$')
