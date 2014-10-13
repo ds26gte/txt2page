@@ -1,4 +1,4 @@
-.\" last change 2014-10-10
+.\" last change 2014-10-13
 .
 .\" don't load more than once
 .if d :=: .nx
@@ -8,13 +8,13 @@
 .de BLM
 .ie \\n[obeylines] \{\
 .nr obeylines 0
-.nr poss_graf_within_obeylines 1
+.nr possGrafWithinObeyLines 1
 .\}
 .el \{\
-.if \\n[poss_graf_within_obeylines] .nr poss_graf_within_obeylines 0
+.if \\n[possGrafWithinObeyLines] .nr possGrafWithinObeyLines 0
 .\}
-.ie \\n[next_graf_without_indent] \{\
-.nr next_graf_without_indent 0
+.ie \\n[nextGrafWithoutIndent] \{\
+.nr nextGrafWithoutIndent 0
 .LP
 .\}
 .el .PP
@@ -31,9 +31,9 @@
 .\" if not, start a graf of display lines with no parindent
 .el \{\
 .nr obeylines 1
-.nr next_graf_without_indent 1
-.if \\n[poss_graf_within_obeylines] \{\
-.nr poss_graf_within_obeylines 0
+.nr nextGrafWithoutIndent 1
+.if \\n[possGrafWithinObeyLines] \{\
+.nr possGrafWithinObeyLines 0
 .sp .5v
 .\}
 .ns
@@ -48,17 +48,17 @@
 .
 .lsm LSM
 .
-.rn @SH @SH_orig
+.rn @SH @SHorig
 .
 .de SEC
 .if d WRITETOCLINE .WRITETOCLINE \\$*
-.nr header_level \\$1
-.@SH_orig \\n[header_level]
+.nr headerLevel \\$1
+.@SHorig \\n[headerLevel]
 .shift
 \\$*
 .LP
 .ns
-.nr next_graf_without_indent 1
+.nr nextGrafWithoutIndent 1
 ..
 .
 .de @SH
@@ -76,7 +76,7 @@
 \[u00A4]
 .sp 1v
 .ns
-.nr next_graf_without_indent 1
+.nr nextGrafWithoutIndent 1
 ..
 .
 .de :=
@@ -101,7 +101,7 @@
 .sp 1ex
 .ce
 .LP
-.nr next_graf_without_indent 1
+.nr nextGrafWithoutIndent 1
 .\}
 ..
 .
@@ -119,7 +119,7 @@
 .fi
 .blm BLM
 .lsm LSM
-.nr next_graf_without_indent 1
+.nr nextGrafWithoutIndent 1
 ..
 .
 .de obeylinesStartToggle
@@ -154,7 +154,7 @@
 .fi
 .nr insideCodeDisplay 0
 .LP
-.nr next_graf_without_indent 1
+.nr nextGrafWithoutIndent 1
 ..
 .
 .de codeDisplayToggle
@@ -174,7 +174,7 @@
 .de >
 .LP
 .in \\n[PI]u
-.nr next_graf_without_indent 1
+.nr nextGrafWithoutIndent 1
 ..
 .
 .de JPEG

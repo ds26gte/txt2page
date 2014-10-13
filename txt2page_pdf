@@ -1,4 +1,4 @@
-# last modified 2014-10-12
+# last modified 2014-10-13
 # ds26gte@yahoo.com
 
 opts=""
@@ -24,76 +24,76 @@ soelim $f >> $h
 
 ex $h <<EOF
 
-func! Troff_recognize_urls()
+func! TroffRecognizeURLs()
     " evalwhen.com
     " -- check not preceded by @
     s#\%(@\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|se\)\>#FAKEHTTP://&#g
 
     " URL
-    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#@tzp_Url_begin@&@tzp_Url_end@#g
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#ÞtzpURLbeginTzp&ÞtzpURLendTzp#g
 
     s#FAKEHTTP://##g
 
     " ./pathname
-    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#@tzp_Url_begin@\1@tzp_Url_end@#g
+    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#ÞtzpURLbeginTzp\1ÞtzpURLendTzp#g
 
 endfunc
 
-func! Troff_find_urlhs()
-    " a line that starts with @tzp_Url_begin@ is a possible urlh
-    v/^@tzp_Preformatted@/ s/^@tzp_Url_begin@/@tzp_Possible_urlh@&/
+func! TroffFindURLHs()
+    " a line that starts with ÞtzpURLbeginTzp is a possible urlh
+    v/^ÞtzpPreformattedTzp/ s/^ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
-    g/^@tzp_Possible_urlh@/ -1s/\*\$/&@tzp_Urlh_continuation_line@/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLine/
 
-    %s/^@tzp_Possible_urlh@//
+    %s/^ÞtzpPossibleURLHtzp//
 
-    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+    g/ÞtzpURLHcontinuationLine\$/ .,+1 j
 
-    %s/@tzp_Urlh_continuation_line@//
+    %s/ÞtzpURLHcontinuationLine//
 
-    v/^@tzp_Preformatted@/ s/^[^*]\+\*\s\+@tzp_Url_begin@/@tzp_Possible_urlh@&/
+    v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
-    g/^@tzp_Possible_urlh@/ -1s/\*[^*]\+\$/&@tzp_Urlh_continuation_line@/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*[^*]\+\$/&ÞtzpURLHcontinuationLine/
 
-    %s/^@tzp_Possible_urlh@//
+    %s/^ÞtzpPossibleURLHtzp//
 
-    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+    g/ÞtzpURLHcontinuationLine\$/ .,+1 j
 
-    %s/@tzp_Urlh_continuation_line@//
+    %s/ÞtzpURLHcontinuationLine//
 
-    v/^@tzp_Preformatted@/ s:\*\([^*]\+\)\*\s\+@tzp_Url_begin@.\{-}@tzp_Url_end@:\1:g
+    v/^ÞtzpPreformattedTzp/ s:\*\([^*]\+\)\*\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
     " GFM-style urlhs
-    v/^@tzp_Preformatted@/ s/^[^[\[\]]\+\](@tzp_Url_begin@/@tzp_Possible_urlh@&/
+    v/^ÞtzpPreformattedTzp/ s/^[^[\[\]]\+\](ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
-    g/^@tzp_Possible_urlh@/ -1s/\[[^\[\]]\+\$/&@tzp_Urlh_continuation_line@/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\[[^\[\]]\+\$/&ÞtzpURLHcontinuationLine/
 
-    %s/^@tzp_Possible_urlh@//
+    %s/^ÞtzpPossibleURLHtzp//
 
-    g/@tzp_Urlh_continuation_line@\$/ .,+1 j
+    g/ÞtzpURLHcontinuationLine\$/ .,+1 j
 
-    %s/@tzp_Urlh_continuation_line@//
+    %s/ÞtzpURLHcontinuationLine//
 
-    v/^@tzp_Preformatted@/ s#\[\([^\[\]]*\)\](@tzp_Url_begin@.\{-}@tzp_Url_end@)#\1#g
+    v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp)#\1#g
 
     " AsciiDoc-style urlhs
-    v/^@tzp_Preformatted@/ s#@tzp_Url_end@\[[^\[\]]*\$#&@tzp_Possible_urlh_2@#
+    v/^ÞtzpPreformattedTzp/ s#ÞtzpURLendTzp\[[^\[\]]*\$#&ÞtzpPossibleURLHtwoTzp#
 
-    g/@tzp_Possible_urlh_2@/ +1s#^[^\[\]]*\]#@tzp_Continuation_line_2@&#
+    g/ÞtzpPossibleURLHtwoTzp/ +1s#^[^\[\]]*\]#ÞtzpContinuationLineTwoTzp&#
 
-    %s/@tzp_Possible_urlh_2@\$//
+    %s/ÞtzpPossibleURLHtwoTzp\$//
 
-    g/^@tzp_Continuation_line_2@/ .,-1 j
+    g/^ÞtzpContinuationLineTwoTzp/ .,-1 j
 
-    %s/@tzp_Continuation_line_2@//
+    %s/ÞtzpContinuationLineTwoTzp//
 
-    v/^@tzp_Preformatted@/ s#@tzp_Url_begin@.\{-}@tzp_Url_end@\[\(.\{-}\)\]#\1#g
+    v/^ÞtzpPreformattedTzp/ s#ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp\[\(.\{-}\)\]#\1#g
 
     " rm Url markers
-    v/^@tzp_Preformatted@/ s:@tzp_Url_begin@\(.\{-}\)@tzp_Url_end@:\1:g
+    v/^ÞtzpPreformattedTzp/ s:ÞtzpURLbeginTzp\(.\{-}\)ÞtzpURLendTzp:\1:g
 endfunc
 
-func! Troff_palatable()
+func! TroffPalatable()
     "s:\*\([^*]\+\)\*\s\+\./[^[:space:]()<>&]\+\%([[:punct:]]\)\@<!:\1:g
 
     s:\`\@<!\^\^\[\([^[:space:]]\+\)\]:\\\\*{\1\\\\*}:g
@@ -119,61 +119,63 @@ func! Troff_palatable()
     s:^\.[/]:\\\\\&\0:
 endfunc
 
-func! Troff_tables()
+func! TroffTables()
     g/^|\s/,/^[^|]/-1 s#|\s*\$##
 
-    g/^|\s/,/^[^|]/-1 s#^|\s# @tzp_Table_line@#
+    g/^|\s/,/^[^|]/-1 s#^|\s# ÞtzpTableLineTzp#
 
-    g/^ @tzp_Table_line@/,/^\%(\$\|[^ ]\)/-1 j
+    g/^ ÞtzpTableLineTzp/,/^\%(\$\|[^ ]\)/-1 j
 
-    v/@tzp_Preformatted@/ s/ \(@tzp_Table_line@\)/\1/g
+    v/ÞtzpPreformattedTzp/ s/ \(ÞtzpTableLineTzp\)/\1/g
 
-    %s#^@tzp_Table_line@.*\$#.TS\rtab(|),center,allbox;\r@tzp_Table_first_line@&\r.TE#
+    %s#^ÞtzpTableLineTzp.*\$#.TS\rtab(|),center,allbox;\rÞtzpTableFirstLineTzp&\r.TE#
 
-    %s#^\(@tzp_Table_first_line@\)@tzp_Table_line@#\1#
+    %s#^\(ÞtzpTableFirstLineTzp\)ÞtzpTableLineTzp#\1#
 
-    v/@tzp_Preformatted@/ s#@tzp_Table_line@#\r#g
+    v/ÞtzpPreformattedTzp/ s#ÞtzpTableLineTzp#\r#g
 
-    %s#^@tzp_Table_first_line@\(.*\)#@tzp_Table_preamble@\1@tzp_Table_space@.\r\1#
+    %s#^ÞtzpTableFirstLineTzp\(.*\)#ÞtzpTablePreamble\1ÞtzpTableSpaceTzp.\r\1#
 
-    g/^@tzp_Table_preamble@/ s/|/@tzp_Table_space@/g
+    g/^ÞtzpTablePreamble/ s/|/ÞtzpTableSpaceTzp/g
 
-    g/@tzp_Table_space@/ s/.\{-}\(@tzp_Table_space@\)/c\1/g
+    g/ÞtzpTableSpaceTzp/ s/.\{-}\(ÞtzpTableSpaceTzp\)/c\1/g
 
-    v/@tzp_Preformatted@/ s/@tzp_Table_space@/ /g
+    v/ÞtzpPreformattedTzp/ s/ÞtzpTableSpaceTzp/ /g
 
 endfunc
 
-func! Sub_alternate(...)
-  if !exists('b:sub_alternate_p')
-    let b:sub_alternate_p = 0
+func! SubAlternate(...)
+  if !exists('b:subAlternateP')
+    let b:subAlternateP = 0
   endif
   if a:0
-    let b:sub_alternate_p = a:1
+    let b:subAlternateP = a:1
   else
-    let b:sub_alternate_p = !b:sub_alternate_p
-    return b:sub_alternate_p
+    let b:subAlternateP = !b:subAlternateP
+    return b:subAlternateP
   endif
 endfunc
 
 func! Txt2pdf()
 
+%s/Þ/ÞtzpThornTzp/g
+
 %s/\s\+\$//
 
 \$a
-@tzp_Bogus_end_of_file_line@
+ÞtzpBogusEndOfFileLineTzp
 .
 
 %s/^\s*\(\`\`\`\)\$/.\`\`\`/
 
-call Sub_alternate(1)
-g/^\.\`\`\`\$/ s/\$/\=Sub_alternate()
+call SubAlternate(1)
+g/^\.\`\`\`\$/ s/\$/\=SubAlternate()
 
-g/^\.\`\`\`0\$/+1,/^\.\`\`\`1\$/-1 s/^/@tzp_Preformatted@/
+g/^\.\`\`\`0\$/+1,/^\.\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
 
 %s/^\(\.\`\`\`\)[01]\$/\1/
 
-g/^\.EX\$/+1,/^\.EE\$/-1 s/^/@tzp_Preformatted@/
+g/^\.EX\$/+1,/^\.EE\$/-1 s/^/ÞtzpPreformattedTzp/
 
 %s/^\.E[XE]\$/.\`\`\`/
 
@@ -183,11 +185,11 @@ g/^\.\s*\\\"/d
 
 %s/^\s*-\{5,}\$//
 
-%s:\\\\":@tzp_Backslash@@tzp_Doublequote@:g
+%s:\\\\":ÞtzpBackslashTzpÞtzpDoubleQuoteTzp:g
 
-%s:\\\\:@tzp_Backslash@@tzp_Backslash@:g
+%s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
 
-%s:^\.TH\s\+"\(.*\)"\$:.TH @tzp_Doublequote@\1@tzp_Doublequote@:
+%s:^\.TH\s\+"\(.*\)"\$:.TH ÞtzpDoubleQuoteTzp\1ÞtzpDoubleQuoteTzp:
 
 g/^#\s\+.\{-}\s*##\$/d
 
@@ -218,33 +220,35 @@ g/^\.%%/d
 
 "bullet items
 
-g/^\*\s\+\(.*\)/ -1s/^\$/@tzp_Delete_blank_line@/
+g/^\*\s\+\(.*\)/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
 
-g/^@tzp_Delete_blank_line@\$/d
+g/^ÞtzpDeleteBlankLineTzp\$/d
 
-%s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr next_graf_without_indent 1\r\1/
+%s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
 
-g/^@tzp_Preformatted@/ s:\\\\:@tzp_Backslash_e@:g
+g/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashETzp:g
 
-v/^@tzp_Preformatted@/ call Troff_recognize_urls()
+v/^ÞtzpPreformattedTzp/ call TroffRecognizeURLs()
 
-call Troff_tables()
+call TroffTables()
 
-call Troff_find_urlhs()
+call TroffFindURLHs()
 
-v/^@tzp_Preformatted@/ call Troff_palatable()
+v/^ÞtzpPreformattedTzp/ call TroffPalatable()
 
-%s:@tzp_Backslash@:\\\\:g
+%s:ÞtzpBackslashTzp:\\\\:g
 
-%s:@tzp_Backslash_e@:\\e:g
+%s:ÞtzpBackslashETzp:\\e:g
 
-%s:@tzp_Doublequote@:":g
+%s:ÞtzpDoubleQuoteTzp:":g
 
-%s:^@tzp_Preformatted@\.:\\\\\&.:
+%s:^ÞtzpPreformattedTzp\.:\\\\\&.:
 
-%s:^@tzp_Preformatted@::
+%s:^ÞtzpPreformattedTzp::
 
-g/^@tzp_Bogus_end_of_file_line@/d
+g/^ÞtzpBogusEndOfFileLineTzp/d
+
+%s/ÞtzpThornTzp/Þ/g
 
 endfunc
 
