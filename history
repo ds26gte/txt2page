@@ -1,3 +1,8 @@
+2014 Oct 13
+
+.nf and ``` should preserve contiguous spaces even if they aren't
+leading
+
 2014 Oct 10
 
 txt2page.tmac: .``` for fenced code, .> for blockquote

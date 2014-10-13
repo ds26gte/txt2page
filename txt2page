@@ -1,4 +1,4 @@
-ver=2014-10-12 # last modified
+ver=2014-10-13 # last modified
 
 # ds26gte@yahoo.com
 
@@ -239,6 +239,38 @@ func! RedirectIfNecessary()
   endif
 endfunc
 
+func! SubAlternate(...)
+  if !exists('b:subAlternateP')
+    let b:subAlternateP = 0
+  endif
+  if a:0
+    let b:subAlternateP = a:1
+  else
+    let b:subAlternateP = !b:subAlternateP
+    return b:subAlternateP
+  endif
+endfunc
+
+func! LineAsIs()
+  while match(getline('.'), '^Ø*\s') > -1
+    s/^\(Ø*\)\s/\1Ø/
+  endwhile
+  s/Ø/\&nbsp;/g
+  s#\$#<br/>#
+endfunc
+
+func! VerbatimLineAsIs()
+  s/\s/Ø/g
+  s/\([^Ø]\)Ø\([^Ø]\)/\1 \2/g
+  s/Ø/\&nbsp;/g
+  s#\$#<br/>#
+endfunc
+
+func! CodeLineAsIs()
+  call VerbatimLineAsIs()
+  s/^/ÞtzpPreformattedTzp/
+endfunc
+
 func! Txt2page()
 
 while 1
@@ -257,10 +289,6 @@ endwhile
 
 g/^ÞtzpSoDoneTzp/d
 
-\$a
-ÞtzpBogusEndOfFileLineTzp
-.
-
 "use unabbreviations for these rare characters if they occur verbatim in the source,
 "as we'll be using these characters as temporary symbols
 
@@ -269,6 +297,10 @@ g/^ÞtzpSoDoneTzp/d
 %s/Æ/ÞtzpAELigTzp/g
 %s/«/ÞtzpLangleLangleTzp/g
 %s/»/ÞtzpRangleRangleTzp/g
+
+\$a
+ÞtzpBogusEndOfFileLineTzp
+.
 
 "use temp symbols to stand for verbatim &<>; we'll convert them to appropriate HTML entities
 "at the end
@@ -308,7 +340,7 @@ while 1
 endwhile
 
 let ln = 0
-while ln < 100 && ln < lastline
+hile ln < 100 && ln < lastline
     let x = getline(ln)
     if match(x, '^\%(\.\s*\%(HTL\|TH\|SH\|SS\)\|#\+\)\s*\S') > -1
         let titleText = substitute(x, '^\%(\.\s*\%(HTL\|TH\|SH\|SS\)\|#\+\)\s*\(.\{-}\)\s*#*\$', '\1', '')
@@ -327,77 +359,28 @@ endif
 
 %s/^\.\s*TOC\s*//
 
-0
-while 1
-    let m = search('^\s*::\$')
-    if m == 0
-        break
-    endif
-    .d
-    let lastline = line('$')
-    while 1
-        if match(getline('.'), '^\s*::\$') > -1
-            .d
-            break
-        endif
-        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
-            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
-        endwhile
-        s#\$#<br/>#
-        if line('.') == lastline
-            break
-        endif
-        norm j
-    endwhile
-endwhile
-0
-while 1
-  let m = search('^\.nf\$')
-    if m == 0
-        break
-    endif
-    .d
-    let lastline = line('$')
-    while 1
-        if match(getline('.'), '^\.fi\$') > -1
-            .d
-            break
-        endif
-        s/\s/Ø/g
-        s/\([^Ø]\)Ø\([^Ø]\)/\1 \2/g
-        s/Ø/\&nbsp;/g
-"        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
-"            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
-"        endwhile
-        s#\$#<br/>#
-        if line('.') == lastline
-            break
-        endif
-        norm j
-    endwhile
-endwhile
-0
-while 1
-    let m = search('^\.\~\$')
-    if m == 0
-        break
-    endif
-    .d
-    let lastline = line('$')
-    while 1
-        if match(getline('.'), '^\$') > -1
-            break
-        endif
-        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
-            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
-        endwhile
-        s#\$#<br/>#
-        if line('.') == lastline
-            break
-        endif
-        norm j
-    endwhile
-endwhile
+call SubAlternate(1)
+g/^\s*::\$/ s/\$/\=SubAlternate()
+
+g/^\s*::0\$/+1,/^\s*::1/-1 call LineAsIs()
+
+g/^\s*::[01]/d
+
+%s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
+%s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
+
+call SubAlternate(1)
+g/^ÞtzpNoFillEnvTzp\$/ s/\$/\=SubAlternate()
+
+if (b:subAlternateP != 1)
+      \$a
+  ÞtzpNoFillEnvTzp1
+.
+endif
+
+g/^ÞtzpNoFillEnvTzp0/+1,/^\s*ÞtzpNoFillEnvTzp1/-1 call VerbatimLineAsIs()
+
+g/^\s*ÞtzpNoFillEnvTzp[01]/d
 
 if executable('lisphilite')
     g/^\s*\`\`\`./+1,/^\s*\`\`\`\$/-1 s/«/</g
@@ -408,36 +391,17 @@ endif
 
 %s/^\.\s*E[XE]\$/\`\`\`/
 
-"would like to use 0 instead of $ here, but
-"misses backticks in very first line
-\$
-while 1
-    let m = search('^\s*\`\`\`')
-    if m == 0
-        break
-    endif
-    s#^\s*\`\`\`..*#ÞtzpListingTzp scheme#
-    s#^\s*\`\`\`.*#ÞtzpListingTzp#
-    s#^ÞtzpListingTzp\(.*\)#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
-    norm j
-    let lastline = line('$')
-    while 1
-        if match(getline('.'), '^\s*\`\`\`') > -1
-            s#.*#</code></div>\r<p class=noindent>#
-            break
-        endif
-        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
-            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
-        endwhile
-        s/^\$/\&nbsp;/
-        s/^/ÞtzpPreformattedTzp/
-        s#\$#<br/>#
-        if line('.') == lastline
-            break
-        endif
-        norm j
-    endwhile
-endwhile
+call SubAlternate(1)
+g/^\s*\`\`\`.*/ s/\$/\=SubAlternate()
+
+g/^\s*\`\`\`.*0/+1,/^\s*\`\`\`.*1/-1 call CodeLineAsIs()
+
+%s/^\s*\`\`\`..*0\$/ÞtzpListingTzp scheme/
+%s/^\s*\`\`\`0\$/ÞtzpListingTzp/
+
+%s#^ÞtzpListingTzp\(.*\)#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
+%s#^\s*\`\`\`.*1\$#</code></div>\r<p class=noindent>#
+
 0
 let lastline = line('$')
 while 1
@@ -454,20 +418,22 @@ while 1
     if m == 0
         break
     endif
+    s/\$/ÞtzpLeadingSpacesStartLineTzp/
     while 1
         if match(getline('.'), '^\$') > -1
             break
         endif
-        while match(getline('.'), '^\%(&nbsp;\)*\s') > -1
-            s/^\(\%(&nbsp;\)*\)\s/\1\&nbsp;/
-        endwhile
-        s#\$#<br/>#
+        call VerbatimLineAsIs()
         if line('.') == lastline
             break
         endif
         norm j
     endwhile
 endwhile
+
+g/ÞtzpLeadingSpacesStartLineTzp/ s#^#\r#
+
+%s/ÞtzpLeadingSpacesStartLineTzp//
 
 g/^\.\s*\\\"/d
 g/^\.\s*HTL/d
@@ -632,7 +598,9 @@ g/^ÞtzpNavbarTzp/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
 
 %s:^ÞtzpSoTOCTzp\s\+\(\S\+\)\s\+\(.*\):<a href="\1">\2</a><br/>:
 
-"empty lines are paragraph separators
+"empty lines are paragraph separators, but collapse adjacent empty lines first
+
+v/./,/./-j
 
 %s#^\$#</p>\r\r<p>#
 
