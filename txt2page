@@ -1,4 +1,4 @@
-ver=2014-10-13 # last modified
+ver=2014-10-15 # last modified
 
 # ds26gte@yahoo.com
 
@@ -241,10 +241,10 @@ endfunc
 
 func! SubAlternate(...)
   if !exists('b:subAlternateP')
-    let b:subAlternateP = 0
+    let b:subAlternateP = 1
   endif
   if a:0
-    let b:subAlternateP = a:1
+    let b:subAlternateP = 1
   else
     let b:subAlternateP = !b:subAlternateP
     return b:subAlternateP
@@ -359,7 +359,7 @@ endif
 
 %s/^\.\s*TOC\s*//
 
-call SubAlternate(1)
+call SubAlternate(0)
 g/^\s*::\$/ s/\$/\=SubAlternate()
 
 g/^\s*::0\$/+1,/^\s*::1/-1 call LineAsIs()
@@ -369,7 +369,7 @@ g/^\s*::[01]/d
 %s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
 %s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
 
-call SubAlternate(1)
+call SubAlternate(0)
 g/^ÞtzpNoFillEnvTzp\$/ s/\$/\=SubAlternate()
 
 if (b:subAlternateP != 1)
@@ -394,7 +394,7 @@ if executable('lisphilite')
   g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 !lisphilite
 endif
 
-call SubAlternate(1)
+call SubAlternate(0)
 g/^ÞtzpListingTzp/ s/\$/\=SubAlternate()
 
 g/^ÞtzpListingTzp/+1,/^ÞtzpListingTzp/-1 call CodeLineAsIs()
@@ -525,50 +525,56 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 %s/ÞtzpContinuationLineTzp//
 
-v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\([^[:space:]]\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
+"footnotes
 
-%s:^\.FS\$:.+:
-%s:^\.FS \(.\):.+ \1:
-%s:^\.FE\$:.++:
+v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\(\S\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
 
-"use distinctive start and end markers for each footnote
-%s:^\.++:ÞtzpFEtzp:
-%s:^\.+:ÞtzpFStzp:
+%s/^:+:\$/ÞtzpFootnoteEnvTzp/
+%s/^:+:\s*\(\S\+\)\$/ÞtzpFootnoteEnvTzp \1/
 
-%s:^ÞtzpFStzp\$:ÞtzpFStzp ÞtzpUnmarkedFootnoteTzp:
+call SubAlternate(0)
+g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
+
+%s/^\(ÞtzpFootnoteEnvTzp\)0\$/\1 ÞtzpUnmarkedFootnoteTzp0/
 
 "put a ÞtzpFootnoteTzp before every footnote line
-g/^ÞtzpFStzp/ .,/^ÞtzpFEtzp\$/ s/^/ÞtzpFootnoteTzp/
+g/^ÞtzpFootnoteEnvTzp.*0\$/,/^ÞtzpFootnoteEnvTzp.*1\$/ s/^/ÞtzpFootnoteTzp/
 
 "wrap all footnote lines from one footnote into one combined line
-g/^ÞtzpFootnoteTzpÞtzpFStzp/ .,/^ÞtzpFootnoteTzpÞtzpFEtzp\$/ j!
+g/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp.*0\$/,/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp.*1\$/ j!
 
 "move all the footnote combilines to the file's end
-g/^ÞtzpFootnoteTzpÞtzpFStzp/ m\$
+g/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp/ m\$
 
 "put a ÞtzpStartFootnotesTzp ahead of the first footnote combiline
-/^ÞtzpFootnoteTzpÞtzpFStzp/ s/^/ÞtzpStartFootnotesTzp\r\1/
+/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp/ s/^/ÞtzpStartFootnotesTzp\r/
 
 "put a ÞtzpEndFootnotesTzp after the last footnote combiline
-\$ s/^\(ÞtzpFootnoteTzpÞtzpFStzp.*\)\$/\1\r\ÞtzpEndFootnotesTzp/
+\$ s/^\(ÞtzpFootnoteTzpÞtzpFootnoteEnv.*\)/\1\rÞtzpEndFootnotesTzp/
 
 "use Þtzp{Start,End}FootnotesTzp to wrap a <div>
-%s#^ÞtzpStartFootnotesTzp\$#</p>\r<div class=footnotes>\r<hr align=left width="40%"/><p>#
-%s#^ÞtzpEndFootnotesTzp\$#</p>\r</div><p>#
+
+/^ÞtzpStartFootnotesTzp/ s#^.*\$#</p>\r<div class=footnotes>\r<hr align=left width="40%"/><p>#
+/^ÞtzpEndFootnotesTzp/   s#^.*\$#</p>\r</div><p>#
 
 "use ÞtzpFootnoteTzp to un-combine the combilines into individual lines again
 %s/\(.\)\(ÞtzpFootnoteTzp\)/\1\r\2/g
 
+"do it once more to pick up adjacent ÞtzpFootnoteTzp's
+%s/\(.\)\(ÞtzpFootnoteTzp\)/\1\r\2/g
+
 "throw away each footnote's end marker: its job is done
-%s/^ÞtzpFootnoteTzpÞtzpFEtzp\$//
+%s/^ÞtzpFootnoteTzpÞtzpFootnoteEnv.*1\$//
 
 "use each footnote's start marker to typeset its symbol (if any)
 
-%s:^ÞtzpFootnoteTzpÞtzpFStzp\s\+ÞtzpUnmarkedFootnoteTzp\$:\r:
+%s:^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp ÞtzpUnmarkedFootnoteTzp0\$:\r:
 
-%s:^ÞtzpFootnoteTzpÞtzpFStzp\s\+\(\S\+\)\$:\r<sup><a name="footnote_\1" href="#callFootnote_\1">\1</a></sup>:
+%s:^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp \(\S\+\)0\$:\r<sup><a name="footnote_\1" href="#callFootnote_\1">\1</a></sup>:
 
 %s:^ÞtzpFootnoteTzp::
+
+"end footnotes
 
 %s#^:\$#</p>\r<div class=sectionbreak></div>\r<p>#
 

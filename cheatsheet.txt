@@ -1,4 +1,4 @@
-.\" last modified 2014-09-12
+.\" last modified 2014-10-15
 ```
 blank lines separate grafs
 
@@ -84,10 +84,12 @@ two hyphens become em-dash unless they're obviously not
 
 ^^[symbol]
   footnote mark in text
-.+ symbol
-.++
-  actual footnote
-    (shd make this compat with gfm pandoc)
+
+:+:
+footnote text (can be multiple grafs)
+:+:
+    (can we make this compat with gfm pandoc, which only supports
+    one graf footnotes?)
 
 .!! imgfile
 .!! -pos imgfile

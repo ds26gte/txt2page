@@ -1,4 +1,4 @@
-# last modified 2014-10-13
+# last modified 2014-10-15
 # ds26gte@yahoo.com
 
 opts=""
@@ -146,10 +146,10 @@ endfunc
 
 func! SubAlternate(...)
   if !exists('b:subAlternateP')
-    let b:subAlternateP = 0
+    let b:subAlternateP = 1
   endif
   if a:0
-    let b:subAlternateP = a:1
+    let b:subAlternateP = 1
   else
     let b:subAlternateP = !b:subAlternateP
     return b:subAlternateP
@@ -168,7 +168,7 @@ func! Txt2pdf()
 
 %s/^\s*\(\`\`\`\)\$/.\`\`\`/
 
-call SubAlternate(1)
+call SubAlternate(0)
 g/^\.\`\`\`\$/ s/\$/\=SubAlternate()
 
 g/^\.\`\`\`0\$/+1,/^\.\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
@@ -207,9 +207,14 @@ g/^#\s\+.\{-}\s*##\$/d
 %s:^\(\.>\)\s*\(\S\):\1\r\2:
 "%s:^\.>\$:.LP\r.in \\\\n[PI]u:
 
-%s:^\.+\$:.FS:
-%s:^\.+ \(.\):.FS \1:
-%s:^\.++\$:.FE:
+%s/^:+:\$/ÞtzpFootnoteEnvTzp/
+%s/^:+:\s*\(\S\+\)\$/ÞtzpFootnoteEnvTzp \1/
+
+call SubAlternate(0)
+g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
+
+%s/^ÞtzpFootnoteEnvTzp\(.*\)0\$/.FS \1/
+%s/^ÞtzpFootnoteEnvTzp.*1\$/.FE/
 
 %s:^\.!!\s:.JPEG :
 
