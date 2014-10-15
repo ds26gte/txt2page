@@ -527,7 +527,7 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
-v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\(\S\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
+v/^ÞtzpPreformattedTzp/ s:\`\@<!\[\^\(\S\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
 
 %s/^:+:\$/ÞtzpFootnoteEnvTzp/
 %s/^:+:\s*\(\S\+\)\$/ÞtzpFootnoteEnvTzp \1/

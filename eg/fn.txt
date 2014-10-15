@@ -1,6 +1,6 @@
 Voluptas in officia omnis quod id consequatur. Quas omnis
 officiis non est. Eveniet est dolorem alias perspiciatis beatae
-et^^[1] quasi aut. Omnis sed dolorum atque tenetur aspernatur animi.
+et[^1] quasi aut. Omnis sed dolorum atque tenetur aspernatur animi.
 Provident non quod veritatis consequatur modi illum animi aut.
 
 :+: 1
@@ -18,7 +18,7 @@ accusantium eligendi. Eligendi aut enim omnis.
 
 Ut quidem quo occaecati. Et quod consectetur voluptas excepturi
 similique. Quia nulla voluptas enim debitis minima est est ad.
-Quaerat^^[2] odit odio maiores iure consequatur ad aut.
+Quaerat[^2] odit odio maiores iure consequatur ad aut.
 
 :+: 2
 FN2.1 Doloribus ut consequatur suscipit. Saepe earum consectetur quae

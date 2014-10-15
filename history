@@ -1,7 +1,8 @@
 2014 Oct 15
 
 :+: to enclose footnotes (no need for differing opening and
-closing markup)
+closing markup). Use [^tag] for footnote marker for
+compatibility with pandoc
 
 2014 Oct 13
 
