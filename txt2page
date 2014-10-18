@@ -1,4 +1,4 @@
-ver=2014-10-15 # last modified
+ver=2014-10-17 # last modified
 
 # ds26gte@yahoo.com
 
@@ -528,6 +528,8 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 "footnotes
 
 v/^ÞtzpPreformattedTzp/ s:\`\@<!\[\^\(\S\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
+
+%s/^\.\s*F[SE]\(\s\+\S.*\)\?\$/ÞtzpFootnoteEnvTzp\1/
 
 %s/^:+:\$/ÞtzpFootnoteEnvTzp/
 %s/^:+:\s*\(\S\+\)\$/ÞtzpFootnoteEnvTzp \1/

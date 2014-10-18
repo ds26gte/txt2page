@@ -1,4 +1,4 @@
-.\" last modified 2014-10-15
+.\" last modified 2014-10-17
 ```
 blank lines separate grafs
 
@@ -85,9 +85,9 @@ two hyphens become em-dash unless they're obviously not
 [^symbol]
   footnote mark in text (compat with pandoc)
 
-:+:
+.FS
 footnote text (can be multiple grafs)
-:+:
+.FE
     (can we make this compat with pandoc, which only supports
     one-graf footnotes?)
 
