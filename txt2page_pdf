@@ -217,6 +217,12 @@ g/^ÞtzpDeleteBlankLineTzp\$/d
 
 %s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
 
+g/^[.]\@![^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
+
+g/^ÞtzpSectionBreakTzp/,/./-1 j
+
+%s/^ÞtzpSectionBreakTzp\(.*\)\$/.LP\r\1\r.LP/
+
 g/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashETzp:g
 
 v/^ÞtzpPreformattedTzp/ call TroffRecognizeURLs()
