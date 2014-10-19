@@ -1,3 +1,14 @@
+2014 Oct 18
+
+txt2page.tmac (also in txt2page[_pdf])
+
+.#... for sections
+.#% for title
+.#* for section break
+.:: for obeylines
+
+(I.e., with a dot in front)
+
 2014 Oct 15
 
 :+: to enclose footnotes (no need for differing opening and
