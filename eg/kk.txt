@@ -1,72 +1,29 @@
 .\" comment
-# klajdf
+.#% klajdf
 
-.> Et dolor libero ut quidem ducimus sed. Facere voluptate rem
+> Et dolor libero ut quidem ducimus sed. Facere voluptate rem
 “aliquid” facilis. Sunt quis adipisci eveniet ea aut repellat quos.
 Ut cumque at architecto ea. Harum ut eius fugiat expedita
 deserunt sit omnis laborum.
 
-.#*
-Deserunt amet ut debitis voluptate. Corrupti minima error cum vel
-hic atque necessitatibus dolor. Iste minus quas unde dolores
-explicabo iure recusandae. Dicta tempore tenetur id asperiores.
-Ea ipsa sit architecto.
-
-.```
+.:= N ulla red
 Nulla neque non vel consequuntur quaerat
 repellat in. Modi fugit aliquid nihil
 asperiores. Sit sed similique nisi rerum
 natus nisi dicta. Eius minima ut
 recusandae quis. Dolore officia repellat
 voluptatem et.
-.```
 
-Est ducimus est consequuntur architecto corrupti velit a eveniet.
-Dolores commodi autem odit. Perferendis consequatur odio aut ut.
-Aut et eius voluptas voluptas et qui.
+#*
 
-!^%%^!
-Suscipit est asperiores dolores vero unde consectetur. Eum
-molestias labore omnis iusto quis. Dicta assumenda vero dolores
-expedita sed sunt impedit ratione. Est temporibus autem adipisci.
+Aspernatur officiis repellendus quam harum. Voluptate ea
+asperiores et a dignissimos voluptas eum sed. Dolorum officia
+adipisci velit est eos laborum fuga sint. Odit dicta eligendi hic
+accusamus error. Ratione iste quas et ut voluptate. Nihil rerum
+impedit culpa suscipit.
 
-Suscipit est asperiores dolores vero unde consectetur. Eum
-molestias labore omnis iusto quis. Dicta assumenda vero dolores
-expedita sed sunt impedit ratione. Est temporibus autem adipisci.
+———
 
-.::
-Id sed quia
-consequatur et sint
-consequatur ut non.
-Repellat voluptatem
-id ipsam tempora
-deserunt excepturi
-ratione possimus.
-Praesentium velit
-eligendi omnis
-molestias.
-
-Debitis ex soluta
-perspiciatis. Fuga
-temporibus quibusdam
-autem cum. Ipsum
-quas voluptatum et
-tenetur et minus.
-Vitae sunt vero quis
-quibusdam suscipit
-vitae. Cum a et
-ratione debitis
-quis. Eveniet et ad
-molestiae.
-.::
-
-Quas quia facere
-corrupti sit et
-culpa consequatur.
-Error sunt nam iste
-nihil fugit
-dignissimos facere.
-Impedit libero iste
-tempore officia
-delectus alias
-quibusdam.
+Voluptatem culpa delectus sit. Et dolor aut at deleniti. Aliquid
+consequatur suscipit aut. Quod qui et deserunt est assumenda at
+ratione tenetur. Non doloremque ullam unde.
