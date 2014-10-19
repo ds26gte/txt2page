@@ -166,14 +166,47 @@ func! Txt2pdf()
 ÞtzpBogusEndOfFileLineTzp
 .
 
-%s/^\s*\(\`\`\`\)\$/.\`\`\`/
+"code display
+
+%s/^\s*\(\`\`\`\)/.\`\`\`/
+
+%s/^\.\s*\`\`\`.\+\$/.\`\`\`/
 
 call SubAlternate(0)
-g/^\.\`\`\`\$/ s/\$/\=SubAlternate()
+g/^\.\s*\`\`\`\$/ s/\$/\=SubAlternate()
 
-g/^\.\`\`\`0\$/+1,/^\.\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
+g/^\.\s*\`\`\`0\$/+1,/^\.\s*\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
 
-%s/^\(\.\`\`\`\)[01]\$/\1/
+"%s/^\(\.\s*\`\`\`\)[01]\$/\1/
+
+%s/^\.\s*\`\`\`0\$/.codeDisplayStart/
+
+%s/^\.\s*\`\`\`1\$/.codeDisplayEnd/
+
+g/^\.codeDisplayEnd\$/,/./-1 j!
+
+%s/^\.codeDisplayStart\$/.nr nextGrafWithoutIndent 0\r.LP\r.nf\r.in 0\r.ft C\r.KS/
+
+%s/^\.codeDisplayEnd\$/.KE\r.fi\r.LP/
+
+"obeylines
+
+call SubAlternate(0)
+g/^\.\s*::\$/ s/\$/\=SubAlternate()
+
+%s/^\.\s*::0\$/.obeylinesStart/
+
+%s/^\.\s*::1\$/.obeylinesEnd/
+
+g/^\.obeylinesStart\$/+1,/^\.obeylinesEnd\$/-1 s/^\$/.sp 1/
+
+g/^\.obeylinesEnd\$/,/./-1 j!
+
+%s/^\.obeylinesStart\$/.LP\r.nf/
+
+%s/^\.obeylinesEnd\$/.fi\r.LP/
+
+"
 
 g/^\.\s*\\\"/d
 
@@ -183,19 +216,61 @@ g/^\.\s*\\\"/d
 
 %s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
 
-%s:^\#\+\s:.&:
+"sections
+
+%s:^\(\#\+\)\s\+:.\1 :
+
+%s/^#%\s\+\(.*\)\$/.#% \1/
+
+%s/^\.\s*#\s\+.\{-}\s\+#\$/.#% \1/
 
 g/^\.\s*#\s\+.\{-}\s\+##\$/d
 
+%s/^#\*\$/.&/
+
 %s:^\.\s*\(#\+\)\s\+\(.\{-}\)\s*#\+\$:.\1 \2:
 
-%s:^>\s:.>:
+g/^\.\s*#%\s/,/./-1 j!
 
-%s:^>\s\+:.>\r:
+g/^\.\s*#\*\$/,/./-1 j!
+
+g/^\.\s*#\+\s/,/./-1 j!
+
+%s/^\.\s*#\s/.SEC 1 /
+%s/^\.\s*##\s/.SEC 2 /
+%s/^\.\s*###\s/.SEC 3 /
+%s/^\.\s*####\s/.SEC 4 /
+%s/^\.\s*#####\s/.SEC 5 /
+%s/^\.\s*######\s/.SEC 6 /
+
+%s/^\.SEC\s\+\(\d\+\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
+
+%s/^\.\s*#%\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B \1\r.sp 1ex\r.ce\r.LP/
+
+%s/^\.\s*#\*\$/.LP\r\\\\[u2014]\r.LP\r.LP/
+
+"%s/^\.\s*#\*\$/.rs\r.sp .8v\r.LP\r\\\\[u2014]\r.sp 1v\r.LP/
+
+"section break
+
+g/^[.]\@![^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
+
+g/^ÞtzpSectionBreakTzp/ .,/./-1 j!
+
+%s/^ÞtzpSectionBreakTzp\(.*\)\$/.LP\r\1\r.LP\r.LP/
+
+"drop cap
+
+%s/^\.\s*:=\s/.if !d DC .mso dc.tmac\r.DC /
+
+"blockquote
+
+%s:^>\s\+\(\S\):.>\r\1:
 %s:^>\$:.>:
 
 %s:^\.\s*>\s\+\(\S\):.>\r\1:
-"%s:^\.>\$:.LP\r.in \\\\n[PI]u:
+
+%s:^\.\s*>\$:.LP\r.in \\\\n[PI]u\r.nr nextGrafWithoutIndent 1:
 
 %s/^:+:\$/ÞtzpFootnoteEnvTzp/
 %s/^:+:\s*\(\S\+\)\$/ÞtzpFootnoteEnvTzp \1/
@@ -221,14 +296,6 @@ g/^ÞtzpDeleteBlankLineTzp\$/d
 
 %s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
 
-"section break
-
-g/^[.]\@![^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
-
-g/^ÞtzpSectionBreakTzp/,/./-1 j
-
-%s/^ÞtzpSectionBreakTzp\(.*\)\$/.** \1/
-
 "
 
 g/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashETzp:g
@@ -246,6 +313,8 @@ v/^ÞtzpPreformattedTzp/ call TroffPalatable()
 %s:ÞtzpBackslashETzp:\\e:g
 
 %s:ÞtzpDoubleQuoteTzp:":g
+
+%s/^\$/.grafSeparatorLine/
 
 %s:^ÞtzpPreformattedTzp\.:\\\\\&.:
 

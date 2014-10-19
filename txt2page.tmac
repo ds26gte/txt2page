@@ -1,122 +1,16 @@
 .\" last change 2014-10-19
 .
 .\" don't load more than once
-.if d :=: .nx
+.if d grafSeparatorLine .nx
 .
 .mso ms.tmac
 .
-.de BLM
-.ie \\n[obeylines] \{\
-.nr obeylines 0
-.nr possGrafWithinObeyLines 1
-.\}
-.el \{\
-.if \\n[possGrafWithinObeyLines] .nr possGrafWithinObeyLines 0
-.\}
+.de grafSeparatorLine
 .ie \\n[nextGrafWithoutIndent] \{\
 .nr nextGrafWithoutIndent 0
 .LP
 .\}
 .el .PP
-..
-.
-.blm BLM
-.
-.de LSM
-.\" if in unfill mode, do nothing
-.ie !\\n[.u] .nop
-.el \{\
-.\" if already displaying lines via LSM, insert linebreak
-.ie \\n[obeylines] .br
-.\" if not, start a graf of display lines with no parindent
-.el \{\
-.nr obeylines 1
-.nr nextGrafWithoutIndent 1
-.if \\n[possGrafWithinObeyLines] \{\
-.nr possGrafWithinObeyLines 0
-.sp .5v
-.\}
-.ns
-.LP
-.\}
-.\" insert the leading spaces
-.nr lsmspaces \\n[lsn]
-.nr lsmspaces -1
-\h'\\n[lsmspaces]n'
-.\}
-..
-.
-.lsm LSM
-.
-.de SEC
-.if d WRITETOCLINE .WRITETOCLINE \\$*
-.nr headerLevel \\$1
-.@SH \\n[headerLevel]
-.shift
-\\$*
-.LP
-.ns
-.nr nextGrafWithoutIndent 1
-..
-.
-.de #
-.SEC 1 \\$*
-..
-.
-.de ##
-.SEC 2 \\$*
-..
-.
-.de ###
-.SEC 3 \\$*
-..
-.
-.de ####
-.SEC 4 \\$*
-..
-.
-.de ######
-.SEC 5 \\$*
-..
-.
-.de #######
-.SEC 6 \\$*
-..
-.
-.de #%
-.RT
-.if !'\\$1'' \{\
-.LP
-.ce 10
-.LG
-\fB\\$*
-.sp 1ex
-.ce
-.LP
-.nr nextGrafWithoutIndent 1
-.\}
-..
-.
-.de #*
-.rs
-.sp .8v
-.LP
-\[u00A4]
-.sp 1v
-.ns
-.nr nextGrafWithoutIndent 1
-..
-.
-.de **
-.LP
-\\$*
-.LP
-.nr nextGrafWithoutIndent 1
-..
-.
-.de :=
-.mso dc.tmac
-.DC \\$*
 ..
 .
 .de par*fp!0-no
@@ -125,76 +19,6 @@
 ..
 .
 .nr FL \n[LL]
-.
-.de obeylinesStart
-.ns
-.lsm
-.blm
-.LP
-.nf
-..
-.
-.de obeylinesEnd
-.fi
-.blm BLM
-.lsm LSM
-.nr nextGrafWithoutIndent 1
-..
-.
-.de obeylinesStartToggle
-.de :: !!
-.obeylinesEnd
-.de :: !!!
-.obeylinesStartToggle
-.!!!
-.!!
-.obeylinesStart
-..
-.
-.de ::
-.obeylinesStartToggle
-..
-.
-.de codeDisplayStart
-.LP
-.nr insideCodeDisplay 1
-.nf
-.in 0
-.lsm
-.blm
-.ft C
-.KS
-..
-.
-.de codeDisplayEnd
-.KE
-.blm BLM
-.lsm LSM
-.fi
-.nr insideCodeDisplay 0
-.LP
-.nr nextGrafWithoutIndent 1
-..
-.
-.de codeDisplayToggle
-.de ``` !!
-.codeDisplayEnd
-.de ``` !!!
-.codeDisplayToggle
-.!!!
-.!!
-.codeDisplayStart
-..
-.
-.de ```
-.codeDisplayToggle
-..
-.
-.de >
-.LP
-.in \\n[PI]u
-.nr nextGrafWithoutIndent 1
-..
 .
 .de JPEG
 .mso jpeg.tmac
