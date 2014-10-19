@@ -1,4 +1,4 @@
-ver=2014-10-18 # last modified
+ver=2014-10-19 # last modified
 
 # ds26gte@yahoo.com
 
@@ -493,15 +493,13 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 "visible anchor
 %s:^\.%%%\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]\&nbsp;</span>:
 
-g/^\.\s*\%(SH\|SS\|#\+\|SSS\|SIV\|SV\|SVI\|:=:\$\|\*\*\$\|\*\$\)/,/./-1 j!
-
-%s:^\.\s*TH\s\+\(.\{-}\)\$:</p>\r<h1 class=title>\1</h1>\r<p class=noindent>:
-%s:^\.\s*SH\s\+\(.\{-}\)\$:</p>\r<h1 class=section>\1</h1>\r<p class=noindent>:
-%s:^\.\s*SS\s\+\(.\{-}\)\$:</p>\r<h2 class=section>\1</h2>\r<p class=noindent>:
-%s:^\.\s*SSS\s\+\(.\{-}\)\$:</p>\r<h3 class=section>\1</h3>\r<p class=noindent>:
-%s:^\.\s*SIV\s\+\(.\{-}\)\$:</p>\r<h4 class=section>\1</h4>\r<p class=noindent>:
-%s:^\.\s*SV\s\+\(.\{-}\)\$:</p>\r<h5 class=section>\1</h5>\r<p class=noindent>:
-%s:^\.\s*SVI\s\+\(.\{-}\)\$:</p>\r<h6 class=section>\1</h6>\r<p class=noindent>:
+%s:^\.\s*TH\s\+:.#% :
+%s:^\.\s*SH\s\+:.# :
+%s:^\.\s*SS\s\+:.## :
+%s:^\.\s*SSS\s\+:.### :
+%s:^\.\s*SIV\s\+:.#### :
+%s:^\.\s*SV\s\+:.##### :
+%s:^\.\s*SVI\s\+:.###### :
 
 %s/^#\s\+\(.\{-}\)\s*#\$/.#% \1/
 
@@ -512,6 +510,8 @@ g/^\.\s*\%(SH\|SS\|#\+\|SSS\|SIV\|SV\|SVI\|:=:\$\|\*\*\$\|\*\$\)/,/./-1 j!
 %s/^\.\s*\*\*\$/.#*/
 %s/^\.\s*:=:\$/.#*/
 %s/^\.\.\.\$/.#*/
+
+g/^\.\s*\%(#%\|#\*\|#\+\)/,/./-1 j
 
 %s:^\.\s*#\*\$:</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>:
 " possible ornaments: * &#x203b &#x2217
@@ -524,10 +524,6 @@ g/^\.\s*\%(SH\|SS\|#\+\|SSS\|SIV\|SV\|SVI\|:=:\$\|\*\*\$\|\*\$\)/,/./-1 j!
 %s:^\.\s*####\s\+\(.*\)\$:</p>\r<h4 class=section>\1</h4>\r<p class=noindent>:
 %s:^\.\s*#####\s\+\(.*\)\$:</p>\r<h5 class=section>\1</h5>\r<p class=noindent>:
 %s:^\.\s*######\s\+\(.*\)\$:</p>\r<h6 class=section>\1</h6>\r<p class=noindent>:
-
-"%s_^\.\s*\*\*\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
-"%s_^\.\s*:=:\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
-"%s_^\.\.\.\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
 
 %s_^\.\s*:=\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\$_</p>\r<p class=noindent><span class=dropcap><font color="\3">\1</font></span>\2_
 

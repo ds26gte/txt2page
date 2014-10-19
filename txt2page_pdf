@@ -1,4 +1,4 @@
-# last modified 2014-10-18
+# last modified 2014-10-19
 # ds26gte@yahoo.com
 
 opts=""
@@ -183,12 +183,14 @@ g/^\.\s*\\\"/d
 
 %s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
 
-g/^#\s\+.\{-}\s*##\$/d
+%s:^\#\+\s:.&:
 
-%s:^\(#\+\)\s\+\(.{-}\)\s*#*\$:.\1 \2:
+g/^\.\s*#\s\+.\{-}\s\+##\$/d
+
+%s:^\.\s*\(#\+\)\s\+\(.\{-}\)\s*#\+\$:.\1 \2:
 
 %s:^>\s:.>:
-%s:^\(\.>\)\s*\(\S\):\1\r\2:
+%s:^\.\s*>\s\+\(\S\):.>\r\1:
 "%s:^\.>\$:.LP\r.in \\\\n[PI]u:
 
 %s/^:+:\$/ÞtzpFootnoteEnvTzp/
