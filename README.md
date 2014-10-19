@@ -19,8 +19,7 @@ For PDF, use the option `-Tpdf` and other usual groff options for
 [fonts](./fontsetup/otfgroff.md), layout, &c. E.g.
 
 ```
-% txt2page -Tpdf -f baskervald -r PS=31p -r LL=7i -r PO=.63i filename.txt
-% txt2page -Tpdf -r PS=14p -r LL=6i -r PO=1.13i filename.txt
+% txt2page -Tpdf -r PS=14p -r PI=1.5m -r LL=6i -r PO=1.13i filename.txt
 ```
 
 For HTML, if the `-s` option is not used,

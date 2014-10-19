@@ -190,6 +190,10 @@ g/^\.\s*#\s\+.\{-}\s\+##\$/d
 %s:^\.\s*\(#\+\)\s\+\(.\{-}\)\s*#\+\$:.\1 \2:
 
 %s:^>\s:.>:
+
+%s:^>\s\+:.>\r:
+%s:^>\$:.>:
+
 %s:^\.\s*>\s\+\(\S\):.>\r\1:
 "%s:^\.>\$:.LP\r.in \\\\n[PI]u:
 
@@ -217,11 +221,15 @@ g/^ÞtzpDeleteBlankLineTzp\$/d
 
 %s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
 
+"section break
+
 g/^[.]\@![^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
 
 g/^ÞtzpSectionBreakTzp/,/./-1 j
 
-%s/^ÞtzpSectionBreakTzp\(.*\)\$/.LP\r\1\r.LP/
+%s/^ÞtzpSectionBreakTzp\(.*\)\$/.** \1/
+
+"
 
 g/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashETzp:g
 
