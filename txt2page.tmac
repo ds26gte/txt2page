@@ -1,4 +1,4 @@
-.\" last change 2014-10-13
+.\" last change 2014-10-18
 .
 .\" don't load more than once
 .if d :=: .nx
@@ -48,12 +48,10 @@
 .
 .lsm LSM
 .
-.rn @SH @SHorig
-.
 .de SEC
 .if d WRITETOCLINE .WRITETOCLINE \\$*
 .nr headerLevel \\$1
-.@SHorig \\n[headerLevel]
+.@SH \\n[headerLevel]
 .shift
 \\$*
 .LP
@@ -61,15 +59,45 @@
 .nr nextGrafWithoutIndent 1
 ..
 .
-.de @SH
+.de #
 .SEC 1 \\$*
 ..
 .
-.de SS
+.de ##
 .SEC 2 \\$*
 ..
 .
-.de :=:
+.de ###
+.SEC 3 \\$*
+..
+.
+.de ####
+.SEC 4 \\$*
+..
+.
+.de ######
+.SEC 5 \\$*
+..
+.
+.de #######
+.SEC 6 \\$*
+..
+.
+.de #%
+.RT
+.if !'\\$1'' \{\
+.LP
+.ce 10
+.LG
+\fB\\$*
+.sp 1ex
+.ce
+.LP
+.nr nextGrafWithoutIndent 1
+.\}
+..
+.
+.de #*
 .rs
 .sp .8v
 .LP
@@ -91,20 +119,6 @@
 \&\\*[par@sup-start]\\$1\\*[par@sup-end]\ \c
 ..
 .
-.de TH
-.RT
-.if !'\\$1'' \{\
-.LP
-.ce 10
-.LG
-\fB\\$*
-.sp 1ex
-.ce
-.LP
-.nr nextGrafWithoutIndent 1
-.\}
-..
-.
 .nr FL \n[LL]
 .
 .de obeylinesStart
@@ -123,16 +137,16 @@
 ..
 .
 .de obeylinesStartToggle
-.de ::: !!
+.de :: !!
 .obeylinesEnd
-.de ::: !!!
+.de :: !!!
 .obeylinesStartToggle
 .!!!
 .!!
 .obeylinesStart
 ..
 .
-.de :::
+.de ::
 .obeylinesStartToggle
 ..
 .
