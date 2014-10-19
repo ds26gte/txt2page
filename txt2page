@@ -1,4 +1,4 @@
-ver=2014-10-17 # last modified
+ver=2014-10-18 # last modified
 
 # ds26gte@yahoo.com
 
@@ -359,12 +359,14 @@ endif
 
 %s/^\.\s*TOC\s*//
 
+%s/^\s*::\$/.::/
+
 call SubAlternate(0)
-g/^\s*::\$/ s/\$/\=SubAlternate()
+g/^\.\s*::\$/ s/\$/\=SubAlternate()
 
-g/^\s*::0\$/+1,/^\s*::1/-1 call LineAsIs()
+g/^\.\s*::0\$/+1,/^\.\s*::1/-1 call LineAsIs()
 
-g/^\s*::[01]/d
+g/^\.\s*::[01]/d
 
 %s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
 %s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
@@ -382,10 +384,12 @@ g/^ÞtzpNoFillEnvTzp0/+1,/^\s*ÞtzpNoFillEnvTzp1/-1 call VerbatimLineAsIs()
 
 g/^\s*ÞtzpNoFillEnvTzp[01]/d
 
-%s/^\.\s*E[XE]\$/\`\`\`/
+%s/^\s*\`\`\`/.\`\`\`/
 
-%s/^\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
-%s/^\s*\`\`\`\$/ÞtzpListingTzp/
+%s/^\.\s*E[XE]\$/.\`\`\`/
+
+%s/^\.\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
+%s/^\.\s*\`\`\`\$/ÞtzpListingTzp/
 
 if executable('lisphilite')
   g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/«/</g
@@ -402,7 +406,7 @@ g/^ÞtzpListingTzp/+1,/^ÞtzpListingTzp/-1 call CodeLineAsIs()
 %s#^ÞtzpListingTzp\(.*\)0\$#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
 %s#^ÞtzpListingTzp\(.*\)1\$#ÞtzpPreformattedTzp</code></div>\r<p class=noindent>#
 
-g/^\s*\`\`\`\%(\|\s*[[:alpha:]]\+\)0\$/+1,/^\s*\`\`\`1\$/-1 call CodeLineAsIs()
+g/^\.\s*\`\`\`\%(\|\s*[[:alpha:]]\+\)0\$/+1,/^\.\s*\`\`\`1\$/-1 call CodeLineAsIs()
 
 0
 let lastline = line('$')
@@ -499,18 +503,31 @@ g/^\.\s*\%(SH\|SS\|#\+\|SSS\|SIV\|SV\|SVI\|:=:\$\|\*\*\$\|\*\$\)/,/./-1 j!
 %s:^\.\s*SV\s\+\(.\{-}\)\$:</p>\r<h5 class=section>\1</h5>\r<p class=noindent>:
 %s:^\.\s*SVI\s\+\(.\{-}\)\$:</p>\r<h6 class=section>\1</h6>\r<p class=noindent>:
 
-%s:^#\s\+\(.\{-}\)\s*#\$:</p>\r<h1 class=title>\1</h1>\r<p class=noindent>:
-%s:^#\s\+\(.\{-}\)\s*#*\$:</p>\r<h1 class=section>\1</h1>\r<p class=noindent>:
-%s:^##\s\+\(.\{-}\)\s*#*\$:</p>\r<h2 class=section>\1</h2>\r<p class=noindent>:
-%s:^###\s\+\(.\{-}\)\s*#*\$:</p>\r<h3 class=section>\1</h3>\r<p class=noindent>:
-%s:^####\s\+\(.\{-}\)\s*#*\$:</p>\r<h4 class=section>\1</h4>\r<p class=noindent>:
-%s:^#####\s\+\(.\{-}\)\s*#*\$:</p>\r<h5 class=section>\1</h5>\r<p class=noindent>:
-%s:^######\s\+\(.\{-}\)\s*#*\$:</p>\r<h6 class=section>\1</h6>\r<p class=noindent>:
+%s/^#\s\+\(.\{-}\)\s*#\$/.#% \1/
 
-%s_^\.\s*\*\*\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
-%s_^\.\s*:=:\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
-%s_^\.\.\.\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
+%s/^\(#\+\)\s\+.\{-}\)\s*#*\$/.\1/
+
+%s/^#\+\s\+/.&/
+
+%s/^\.\s*\*\*\$/.#*/
+%s/^\.\s*:=:\$/.#*/
+%s/^\.\.\.\$/.#*/
+
+%s:^\.\s*#\*\$:</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>:
 " possible ornaments: * &#x203b &#x2217
+
+%s:^\.\s*#%\s\+\(.*\)\$:</p>\r<h1 class=title>\1</h1>\r<p class=noindent>:
+
+%s:^\.\s*#\s\+\(.*\)\$:</p>\r<h1 class=section>\1</h1>\r<p class=noindent>:
+%s:^\.\s*##\s\+\(.*\)\$:</p>\r<h2 class=section>\1</h2>\r<p class=noindent>:
+%s:^\.\s*###\s\+\(.*\)\$:</p>\r<h3 class=section>\1</h3>\r<p class=noindent>:
+%s:^\.\s*####\s\+\(.*\)\$:</p>\r<h4 class=section>\1</h4>\r<p class=noindent>:
+%s:^\.\s*#####\s\+\(.*\)\$:</p>\r<h5 class=section>\1</h5>\r<p class=noindent>:
+%s:^\.\s*######\s\+\(.*\)\$:</p>\r<h6 class=section>\1</h6>\r<p class=noindent>:
+
+"%s_^\.\s*\*\*\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
+"%s_^\.\s*:=:\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
+"%s_^\.\.\.\$_</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>_
 
 %s_^\.\s*:=\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\$_</p>\r<p class=noindent><span class=dropcap><font color="\3">\1</font></span>\2_
 
@@ -578,9 +595,9 @@ g/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp/ m\$
 
 "end footnotes
 
-%s#^:\$#</p>\r<div class=sectionbreak></div>\r<p>#
+"%s#^:\$#</p>\r<div class=sectionbreak></div>\r<p>#
 
-%s#^:\([^:]\+\):#</p>\r<p class=noindent><span class=dropcap>\1</span>#
+"%s#^:\([^:]\+\):#</p>\r<p class=noindent><span class=dropcap>\1</span>#
 
 "%s#^:\s\+\(\%([0-9]\+\.\)*[0-9]\+\)\.\s#</p>\r<p class=beginsection><span class=dropcap>\1</span> #
 "%s#^:\s\+\([^A-Z0-9]*[A-Z0-9]\)#</p>\r<p class=beginsection><span class=dropcap>\1</span>#
