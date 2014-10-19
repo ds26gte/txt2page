@@ -1,4 +1,4 @@
-/* last modified 2014-06-28 */
+/* last modified 2014-10-18 */
 
 @import url(http://fonts.googleapis.com/css?family=Ubuntu);
 @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono);
@@ -11,15 +11,10 @@ body,.dropcap {
 }
 
 code {
-    font-size: 120%; 
+    font-size: 120%;
     font-family: 'ubuntu mono', monospace;
 }
 
-.title {
+h1,h2,h3,h4,h5,h6 {
   font-family: ubuntu, sans-serif;
-}
-
-.section {
-  font-family: ubuntu, sans-serif;
- /* font-weight: 600; */
 }
