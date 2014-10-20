@@ -4,9 +4,8 @@ Cleaner DC annotation.
 
 2014 Oct 19
 
-Any line with only non-alnums that doesn't begin with a dot and
-with at least one of non-alnums repeated is treated as a
-section breaking ornament.
+Any line with only non-alnums and with at least one of them
+repeated is treated as a section breaking ornament.
 
 2014 Oct 15
 

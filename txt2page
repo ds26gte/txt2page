@@ -600,7 +600,7 @@ g/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp/ m\$
 %s#^\.\s*--\(\s.*\)\?\$#<hr noshade size="1"/>#
 %s#^\.\s*==\(\s.*\)\?\$#<hr noshade size="5"/>#
 
-g/^[.]\@![^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
+g/^[^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
 
 g/^ÞtzpSectionBreakTzp/,/./-1 j
 
