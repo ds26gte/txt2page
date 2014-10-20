@@ -1,4 +1,4 @@
-# last modified 2014-10-19
+# last modified 2014-10-20
 # ds26gte@yahoo.com
 
 opts=""
@@ -235,6 +235,16 @@ g/^ÞtzpSectionTzp/,/./-1 j!
 
 %s/^ÞtzpSectionTzp\s\+sectionbreak\s\+\(.*\)\$/.LP\r\\\\[u2014]\r.LP\r.LP/
 
+"drop cap
+
+%s/^\[===\]/ÞtzpDropCapTzp/
+
+g/^ÞtzpDropCapTzp\$/ , /./ j
+
+%s/^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\)\(\S*\)\s*/.if !d DC .mso dc.tmac\r.DC \1 \2\r/
+
+"%s/^\.\s*:=\s/.if !d DC .mso dc.tmac\r.DC /
+
 "section break
 
 g/^[.]\@![^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
@@ -242,10 +252,6 @@ g/^[.]\@![^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
 g/^ÞtzpSectionBreakTzp/ .,/./-1 j!
 
 %s/^ÞtzpSectionBreakTzp\(.*\)\$/.LP\r\1\r.LP\r.LP/
-
-"drop cap
-
-%s/^\.\s*:=\s/.if !d DC .mso dc.tmac\r.DC /
 
 "blockquote
 

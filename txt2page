@@ -1,4 +1,4 @@
-ver=2014-10-19 # last modified
+ver=2014-10-20 # last modified
 
 # ds26gte@yahoo.com
 
@@ -293,7 +293,7 @@ g/^ÞtzpSoDoneTzp/d
 "as we'll be using these characters as temporary symbols
 
 %s/Þ/ÞtzpThornTzp/g
-%s/^ÞtzpThornTzp\(tzpSoTOCtzp\)/Þ\1/  "kludge
+%s/^ÞtzpThornTzp\(tzpSoTOCtzp\)/Þ\1/  "! see above
 %s/Ø/ÞtzpOslashTzp/g
 %s/Æ/ÞtzpAEligTzp/g
 %s/«/ÞtzpLangleLangleTzp/g
@@ -341,13 +341,10 @@ while 1
 endwhile
 
 let ln = 0
-hile ln < 100 && ln < lastline
+while ln < 100 && ln < lastline
     let x = getline(ln)
-    if match(x, '^\%(\.\s*\%(HTL\|TH\|SH\|SS\)\|#\+\)\s*\S') > -1
-        let titleText = substitute(x, '^\%(\.\s*\%(HTL\|TH\|SH\|SS\)\|#\+\)\s*\(.\{-}\)\s*#*\$', '\1', '')
-        if match(titleText, '.*\\\*\[::\s.\{-}\].*') > -1
-            let titleText = substitute(titleText, '\(.\{-}\)\s*\\\\\*\[::\s.\{-}\]\(.*\)', '\1\2', '')
-        endif
+    if match(x, '^\%(\.\s*\%(HTL\|TH\|SH\|SS\)\|#\+\)\s\+\S') > -1
+        let titleText = substitute(x, '^\%(\.\s*\%(HTL\|TH\|SH\|SS\)\|#\+\)\s\+\(.\{-}\)\s*#*\$', '\1', '')
         break
     endif
     let ln+=1
@@ -360,14 +357,12 @@ endif
 
 %s/^\.\s*TOC\s*//
 
-%s/^\s*::\$/.::/
-
 call SubAlternate(0)
-g/^\.\s*::\$/ s/\$/\=SubAlternate()
+g/^\s*::\$/ s/\$/\=SubAlternate()
 
-g/^\.\s*::0\$/+1,/^\.\s*::1/-1 call LineAsIs()
+g/^\s*::0\$/+1,/^\s*::1/-1 call LineAsIs()
 
-g/^\.\s*::[01]/d
+g/^\s*::[01]/d
 
 %s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
 %s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
@@ -519,12 +514,23 @@ g/^ÞtzpSectionTzp/,/./-1 j!
 
 " possible ornaments: * &#x203b &#x2217
 
-%s_^\.\s*:=\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\$_</p>\r<p class=noindent><span class=dropcap><font color="\3">\1</font></span>\2_
+"drop cap
 
-%s_^\.\s*:=\s\+\(\S\+\)\s*_</p>\r<p class=noindent><span class=dropcap>\1</span>_
+%s/^\[===\]/ÞtzpDropCapTzp/
 
-%s:^»\s:.»:
-%s:^.»\s*:</p>\r<p class=blockquote>\r:
+g/^ÞtzpDropCapTzp\$/ , /./-1 j
+
+g/^ÞtzpDropCapTzp\s*\$/ , +1 j
+
+%s:^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\):</p>\r<p class=noindent><span class=dropcap><font color=black>\1</font></span>:
+
+"%s_^\.\s*:=\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\$_</p>\r<p class=noindent><span class=dropcap><font color="\3">\1</font></span>\2_
+
+"%s_^\.\s*:=\s\+\(\S\+\)\s*_</p>\r<p class=noindent><span class=dropcap>\1</span>_
+
+"blockquote
+
+%s:^»\s*:</p>\r<p class=blockquote>\r:
 
 v/^ÞtzpPreformattedTzp/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 ÞtzpContinuationLineTzp/
 
