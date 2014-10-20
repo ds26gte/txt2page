@@ -4,31 +4,15 @@ Any line with only non-alnums that doesn't begin with a dot and
 with at least one of non-alnums repeated is treated as a
 section breaking ornament.
 
-2014 Oct 18
-
-txt2page.tmac (also in txt2page[_pdf])
-
-.#... for sections
-.#% for title
-.#* for section break
-.:: for obeylines
-
-(I.e., with a dot in front)
-
 2014 Oct 15
 
-:+: to enclose footnotes (no need for differing opening and
-closing markup). Use [^tag] for footnote marker for
+Use [^tag] for footnote marker for
 compatibility with pandoc
 
 2014 Oct 13
 
 .nf and ``` should preserve contiguous spaces even if they aren't
 leading
-
-2014 Oct 10
-
-txt2page.tmac: .``` for fenced code, .> for blockquote
 
 2014 Oct 6
 

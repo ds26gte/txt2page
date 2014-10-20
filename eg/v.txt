@@ -11,4 +11,4 @@ file and add four of the OTF files, viz.
    (call/cc))
 ::
 
-[^1]: nothing special
+[^1]: nothing special: this is not a footnote!

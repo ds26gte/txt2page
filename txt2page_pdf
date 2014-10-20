@@ -168,43 +168,39 @@ func! Txt2pdf()
 
 "code display
 
-%s/^\s*\(\`\`\`\)/.\`\`\`/
-
-%s/^\.\s*\`\`\`.\+\$/.\`\`\`/
+%s/^\s*\`\`\`.\+\$/\`\`\`/
 
 call SubAlternate(0)
-g/^\.\s*\`\`\`\$/ s/\$/\=SubAlternate()
+g/^\s*\`\`\`\$/ s/\$/\=SubAlternate()
 
-g/^\.\s*\`\`\`0\$/+1,/^\.\s*\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
+g/^\s*\`\`\`0\$/+1,/^\s*\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
 
-"%s/^\(\.\s*\`\`\`\)[01]\$/\1/
+%s/^\s*\`\`\`0\$/ÞtzpCodeDisplayStartTzp/
 
-%s/^\.\s*\`\`\`0\$/.codeDisplayStart/
+%s/^\s*\`\`\`1\$/ÞtzpCodeDisplayEndTzp/
 
-%s/^\.\s*\`\`\`1\$/.codeDisplayEnd/
+g/^ÞtzpCodeDisplayEndTzp\$/,/./-1 j!
 
-g/^\.codeDisplayEnd\$/,/./-1 j!
+%s/^ÞtzpCodeDisplayStartTzp\$/.nr nextGrafWithoutIndent 0\r.LP\r.nf\r.in 0\r.ft C\r.KS/
 
-%s/^\.codeDisplayStart\$/.nr nextGrafWithoutIndent 0\r.LP\r.nf\r.in 0\r.ft C\r.KS/
-
-%s/^\.codeDisplayEnd\$/.KE\r.fi\r.LP/
+%s/^ÞtzpCodeDisplayEndTzp\$/.KE\r.fi\r.LP/
 
 "obeylines
 
 call SubAlternate(0)
-g/^\.\s*::\$/ s/\$/\=SubAlternate()
+g/^\s*::\$/ s/\$/\=SubAlternate()
 
-%s/^\.\s*::0\$/.obeylinesStart/
+%s/^\s*::0\$/ÞtzpObeyLinesStartTzp/
 
-%s/^\.\s*::1\$/.obeylinesEnd/
+%s/^\s*::1\$/ÞtzpObeyLinesEndTzp/
 
-g/^\.obeylinesStart\$/+1,/^\.obeylinesEnd\$/-1 s/^\$/.sp 1/
+g/^ÞtzpObeyLinesStartTzp\$/+1,/^ÞtzpObeyLinesEndTzp\$/-1 s/^\$/.sp 1/
 
-g/^\.obeylinesEnd\$/,/./-1 j!
+g/^ÞtzpObeyLinesEndTzp\$/,/./-1 j!
 
-%s/^\.obeylinesStart\$/.LP\r.nf/
+%s/^ÞtzpObeyLinesStartTzp\$/.LP\r.nf/
 
-%s/^\.obeylinesEnd\$/.fi\r.LP/
+%s/^ÞtzpObeyLinesEndTzp\$/.fi\r.LP/
 
 "
 
@@ -218,38 +214,26 @@ g/^\.\s*\\\"/d
 
 "sections
 
-%s:^\(\#\+\)\s\+:.\1 :
+%s/^#\s\+\(.\{-}\)\s\+#\$/ÞtzpSectionTzp title \1/
+%s/^#\s\+\(.\{-}\)\s\+##\$/ÞtzpSectionTzp htmltitle \1/
+%s/^##\s\+##\$/ÞtzpSectionTzp sectionbreak \1/
 
-%s/^#%\s\+\(.*\)\$/.#% \1/
+g/^ÞtzpSection\s\+htmltitle\s\+/d "for now
 
-%s/^\.\s*#\s\+.\{-}\s\+#\$/.#% \1/
+%s/^#\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 1 \1/
+%s/^##\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 2 \1/
+%s/^###\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 3 \1/
+%s/^####\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 4 \1/
+%s/^#####\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 5 \1/
+%s/^######\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 6 \1/
 
-g/^\.\s*#\s\+.\{-}\s\+##\$/d
+g/^ÞtzpSectionTzp/,/./-1 j!
 
-%s/^#\*\$/.&/
+%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B \1\r.sp 1ex\r.ce\r.LP/
 
-%s:^\.\s*\(#\+\)\s\+\(.\{-}\)\s*#\+\$:.\1 \2:
+%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
 
-g/^\.\s*#%\s/,/./-1 j!
-
-g/^\.\s*#\*\$/,/./-1 j!
-
-g/^\.\s*#\+\s/,/./-1 j!
-
-%s/^\.\s*#\s/.SEC 1 /
-%s/^\.\s*##\s/.SEC 2 /
-%s/^\.\s*###\s/.SEC 3 /
-%s/^\.\s*####\s/.SEC 4 /
-%s/^\.\s*#####\s/.SEC 5 /
-%s/^\.\s*######\s/.SEC 6 /
-
-%s/^\.SEC\s\+\(\d\+\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
-
-%s/^\.\s*#%\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B \1\r.sp 1ex\r.ce\r.LP/
-
-%s/^\.\s*#\*\$/.LP\r\\\\[u2014]\r.LP\r.LP/
-
-"%s/^\.\s*#\*\$/.rs\r.sp .8v\r.LP\r\\\\[u2014]\r.sp 1v\r.LP/
+%s/^ÞtzpSectionTzp\s\+sectionbreak\s\+\(.*\)\$/.LP\r\\\\[u2014]\r.LP\r.LP/
 
 "section break
 
@@ -265,12 +249,11 @@ g/^ÞtzpSectionBreakTzp/ .,/./-1 j!
 
 "blockquote
 
-%s:^>\s\+\(\S\):.>\r\1:
-%s:^>\$:.>:
+%s:^>\s\+\(\S\):>\r\1:
 
-%s:^\.\s*>\s\+\(\S\):.>\r\1:
+%s:^>\$:.LP\r.in \\\\n[PI]u\r.nr nextGrafWithoutIndent 1:
 
-%s:^\.\s*>\$:.LP\r.in \\\\n[PI]u\r.nr nextGrafWithoutIndent 1:
+"
 
 %s/^:+:\$/ÞtzpFootnoteEnvTzp/
 %s/^:+:\s*\(\S\+\)\$/ÞtzpFootnoteEnvTzp \1/

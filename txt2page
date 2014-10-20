@@ -293,6 +293,7 @@ g/^ÞtzpSoDoneTzp/d
 "as we'll be using these characters as temporary symbols
 
 %s/Þ/ÞtzpThornTzp/g
+%s/^ÞtzpThornTzp\(tzpSoTOCtzp\)/Þ\1/  "kludge
 %s/Ø/ÞtzpOslashTzp/g
 %s/Æ/ÞtzpAEligTzp/g
 %s/«/ÞtzpLangleLangleTzp/g
@@ -384,12 +385,12 @@ g/^ÞtzpNoFillEnvTzp0/+1,/^\s*ÞtzpNoFillEnvTzp1/-1 call VerbatimLineAsIs()
 
 g/^\s*ÞtzpNoFillEnvTzp[01]/d
 
-%s/^\s*\`\`\`/.\`\`\`/
+"code display
 
-%s/^\.\s*E[XE]\$/.\`\`\`/
+%s/^\.\s*E[XE]\$/\`\`\`/
 
-%s/^\.\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
-%s/^\.\s*\`\`\`\$/ÞtzpListingTzp/
+%s/^\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
+%s/^\s*\`\`\`\$/ÞtzpListingTzp/
 
 if executable('lisphilite')
   g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/«/</g
@@ -401,12 +402,10 @@ endif
 call SubAlternate(0)
 g/^ÞtzpListingTzp/ s/\$/\=SubAlternate()
 
-g/^ÞtzpListingTzp/+1,/^ÞtzpListingTzp/-1 call CodeLineAsIs()
+g/^ÞtzpListingTzp.*0\$/+1,/^ÞtzpListingTzp.*1\$/-1 call CodeLineAsIs()
 
 %s#^ÞtzpListingTzp\(.*\)0\$#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
 %s#^ÞtzpListingTzp\(.*\)1\$#ÞtzpPreformattedTzp</code></div>\r<p class=noindent>#
-
-g/^\.\s*\`\`\`\%(\|\s*[[:alpha:]]\+\)0\$/+1,/^\.\s*\`\`\`1\$/-1 call CodeLineAsIs()
 
 0
 let lastline = line('$')
@@ -493,43 +492,32 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 "visible anchor
 %s:^\.%%%\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]\&nbsp;</span>:
 
-%s:^\.\s*TH\s\+:.#% :
-%s:^\.\s*SH\s\+:.# :
-%s:^\.\s*SS\s\+:.## :
-%s:^\.\s*SSS\s\+:.### :
-%s:^\.\s*SIV\s\+:.#### :
-%s:^\.\s*SV\s\+:.##### :
-%s:^\.\s*SVI\s\+:.###### :
+"sections
 
-%s/^#\s\+\(.\{-}\)\s*#\$/.#% \1/
+%s/^\.\s*TH\s\+\(.*\)\$/ÞtzpSectionTzp title \1/
+%s/^\.\s*SH\s\+\(.*\)\$/ÞtzpSectionTzp 1 \1/
+%s/^\.\s*SS\s\+\(.*\)\$/ÞtzpSectionTzp 2 \1/
 
-%s/^\(#\+\)\s\+.\{-}\)\s*#*\$/.\1/
+%s/^#\s\+\(.\{-}\)\s\+#\$/ÞtzpSectionTzp title \1/
+%s/^#\s\+\(.\{-}\)\s\+##\$/ÞtzpSectionTzp htmltitle \1/
+%s/^##\s\+##\$/ÞtzpSectionTzp sectionbreak \1/
 
-%s/^\(#%\)\s\+/.\1 /
+g/^ÞtzpSection\s\+htmltitle\s\+/d "for now
 
-%s/^#\*\$/.&/
+%s/^#\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 1 \1/
+%s/^##\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 2 \1/
+%s/^###\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 3 \1/
+%s/^####\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 4 \1/
+%s/^#####\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 5 \1/
+%s/^######\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 6 \1/
 
-%s/^\(#\+\)\s\+/.\1 /
+g/^ÞtzpSectionTzp/,/./-1 j!
 
-%s/^\.\s*\*\*\$/.#*/
-%s/^\.\s*:=:\$/.#*/
-%s/^\.\.\.\$/.#*/
+%s:^ÞtzpSectionTzp\s\+\(title\)\s\+\(.*\):</p>\r<h1 class=\1>\2</h1>\r<p class=noindent>:
+%s:^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\):</p>\r<h\1 class=section>\2</h\1>\r<p class=noindent>:
+%s:^ÞtzpSectionTzp\s\+\(sectionbreak\)\s\+\(.*\):</p>\r<h3 class=\1>\&#x3091;</h3>\r<p class=noindent>:
 
-g/^\.\s*\%(#%\|#\+\)\s/,/./-1 j!
-
-g/^\.\s*#\*\$/,/./-1 j!
-
-%s:^\.\s*#\*\$:</p>\r<h3 class=sectionbreak>\&#x3091;</h3>\r<p class=noindent>:
 " possible ornaments: * &#x203b &#x2217
-
-%s:^\.\s*#%\s\+\(.*\)\$:</p>\r<h1 class=title>\1</h1>\r<p class=noindent>:
-
-%s:^\.\s*#\s\+\(.*\)\$:</p>\r<h1 class=section>\1</h1>\r<p class=noindent>:
-%s:^\.\s*##\s\+\(.*\)\$:</p>\r<h2 class=section>\1</h2>\r<p class=noindent>:
-%s:^\.\s*###\s\+\(.*\)\$:</p>\r<h3 class=section>\1</h3>\r<p class=noindent>:
-%s:^\.\s*####\s\+\(.*\)\$:</p>\r<h4 class=section>\1</h4>\r<p class=noindent>:
-%s:^\.\s*#####\s\+\(.*\)\$:</p>\r<h5 class=section>\1</h5>\r<p class=noindent>:
-%s:^\.\s*######\s\+\(.*\)\$:</p>\r<h6 class=section>\1</h6>\r<p class=noindent>:
 
 %s_^\.\s*:=\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\$_</p>\r<p class=noindent><span class=dropcap><font color="\3">\1</font></span>\2_
 
