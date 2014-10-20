@@ -522,11 +522,7 @@ g/^ÞtzpDropCapTzp\$/ , /./-1 j
 
 g/^ÞtzpDropCapTzp\s*\$/ , +1 j
 
-%s:^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\):</p>\r<p class=noindent><span class=dropcap><font color=black>\1</font></span>:
-
-"%s_^\.\s*:=\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\$_</p>\r<p class=noindent><span class=dropcap><font color="\3">\1</font></span>\2_
-
-"%s_^\.\s*:=\s\+\(\S\+\)\s*_</p>\r<p class=noindent><span class=dropcap>\1</span>_
+%s:^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\):</p>\r<p class=noindent><span class=dropcap>\1</span>:
 
 "blockquote
 
