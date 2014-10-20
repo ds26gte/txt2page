@@ -305,6 +305,8 @@ v/^ÞtzpPreformattedTzp/ call TroffPalatable()
 
 %s/^\$/.grafSeparatorLine/
 
+g/^\.grafSeparatorLine/+1 s/^\s\+/.LP\r&/
+
 %s:^ÞtzpPreformattedTzp\.:\\\\\&.:
 
 %s:^ÞtzpPreformattedTzp::
