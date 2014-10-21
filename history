@@ -1,5 +1,8 @@
 2014 Oct 21
 
+Use leading :: to introduce obeylines, which ends on a blank
+line. No need for any other closer.
+
 Retire txt2page.tmac.
 
 Obeylines env should begin/end with implicit noindent.

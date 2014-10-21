@@ -186,14 +186,11 @@ g/^ÞtzpCodeDisplayEndTzp\$/,/./-1 j!
 
 "obeylines
 
-call SubAlternate(0)
-g/^\s*::\$/ s/\$/\=SubAlternate()
+%s/^::\(.\)/::\r\1/
 
-%s/^\s*::0\$/ÞtzpObeyLinesStartTzp/
+g/^::\$/+1, /^\$/ s/^\$/ÞtzpObeyLinesEndTzp/
 
-%s/^\s*::1\$/ÞtzpObeyLinesEndTzp/
-
-g/^ÞtzpObeyLinesStartTzp\$/+1,/^ÞtzpObeyLinesEndTzp\$/-1 s/^\$/.sp 1/
+%s/^::\$/ÞtzpObeyLinesStartTzp/
 
 g/^ÞtzpObeyLinesEndTzp\$/,/./-1 j!
 

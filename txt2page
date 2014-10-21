@@ -351,36 +351,6 @@ while ln < 100 && ln < lastline
     let ln+=1
 endwhile
 
-if $soelim
-    g/^\.\s*TOC/ d
-    g/^\.\s*NAV/ d
-endif
-
-%s/^\.\s*TOC\s*//
-
-call SubAlternate(0)
-g/^\s*::\$/ s/\$/\=SubAlternate()
-
-g/^\s*::0\$/+1,/^\s*::1/-1 call LineAsIs()
-
-g/^\s*::[01]/d
-
-%s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
-%s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
-
-call SubAlternate(0)
-g/^ÞtzpNoFillEnvTzp\$/ s/\$/\=SubAlternate()
-
-if (b:subAlternateP != 1)
-      \$a
-  ÞtzpNoFillEnvTzp1
-.
-endif
-
-g/^ÞtzpNoFillEnvTzp0/+1,/^\s*ÞtzpNoFillEnvTzp1/-1 call VerbatimLineAsIs()
-
-g/^\s*ÞtzpNoFillEnvTzp[01]/d
-
 "code display
 
 %s/^\.\s*E[XE]\$/\`\`\`/
@@ -402,6 +372,48 @@ g/^ÞtzpListingTzp.*0\$/+1,/^ÞtzpListingTzp.*1\$/-1 call CodeLineAsIs()
 
 %s#^ÞtzpListingTzp\(.*\)0\$#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
 %s#^ÞtzpListingTzp\(.*\)1\$#ÞtzpPreformattedTzp</code></div>\r<p class=noindent>#
+
+"
+
+if $soelim
+    g/^\.\s*TOC/ d
+    g/^\.\s*NAV/ d
+endif
+
+%s/^\.\s*TOC\s*//
+
+"call SubAlternate(0)
+"g/^\s*::\$/ s/\$/\=SubAlternate()
+"
+"g/^\s*::0\$/+1,/^\s*::1/-1 call LineAsIs()
+"
+"g/^\s*::[01]/d
+
+%s/^::\(.\)/::\r\1/
+
+g/^::\$/+1, /^\$/ s/^\$/ÞtzpLineAsIsEndTzp/
+
+%s/^::\$/ÞtzpLineAsIsStartTzp/
+
+g/^ÞtzpLineAsIsStartTzp/+1,/^ÞtzpLineAsIsEndTzp/-1 call LineAsIs()
+
+%s:^ÞtzpLineAsIs\%(Start\|End\)Tzp:</p><p class=noindent>:
+
+%s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
+%s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
+
+call SubAlternate(0)
+g/^ÞtzpNoFillEnvTzp\$/ s/\$/\=SubAlternate()
+
+if (b:subAlternateP != 1)
+      \$a
+  ÞtzpNoFillEnvTzp1
+.
+endif
+
+g/^ÞtzpNoFillEnvTzp0/+1,/^\s*ÞtzpNoFillEnvTzp1/-1 call VerbatimLineAsIs()
+
+g/^\s*ÞtzpNoFillEnvTzp[01]/d
 
 0
 let lastline = line('$')

@@ -9,6 +9,5 @@ file and add four of the OTF files, viz.
   (define cons
      (lambda)
    (call/cc))
-::
 
 [^1]: nothing special: this is not a footnote!
