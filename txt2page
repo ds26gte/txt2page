@@ -1,4 +1,4 @@
-ver=2014-10-20 # last modified
+ver=2014-10-21 # last modified
 
 # ds26gte@yahoo.com
 
@@ -260,6 +260,7 @@ func! LineAsIs()
 endfunc
 
 func! VerbatimLineAsIs()
+  s/^\$/Ø/
   s/\s/Ø/g
   s/\([^Ø]\)Ø\([^Ø]\)/\1 \2/g
   s/Ø/\&nbsp;/g
@@ -421,6 +422,7 @@ while 1
     s/\$/ÞtzpLeadingSpacesStartLineTzp/
     while 1
         if match(getline('.'), '^\$') > -1
+          s:^\$:</p>\r<p class=noindent>:
             break
         endif
         call VerbatimLineAsIs()
@@ -431,7 +433,7 @@ while 1
     endwhile
 endwhile
 
-g/ÞtzpLeadingSpacesStartLineTzp/ s#^#\r#
+g/ÞtzpLeadingSpacesStartLineTzp/ s#^#</p>\r<p class=noindent>\r#
 
 %s/ÞtzpLeadingSpacesStartLineTzp//
 
