@@ -1,3 +1,12 @@
+2014 Oct 21
+
+Retire txt2page.tmac.
+
+Obeylines env should begin/end with implicit noindent.
+
+Use a dummy space for a blank line within code display so lynx
+doesn't swallow it.
+
 2014 Oct 20
 
 Cleaner DC annotation.
