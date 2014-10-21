@@ -1,4 +1,4 @@
-# last modified 2014-10-20
+# last modified 2014-10-21
 # ds26gte@yahoo.com
 
 opts=""
@@ -19,8 +19,7 @@ g=${g%.*}
 
 h=$g.txt.so
 
-echo .mso txt2page.tmac > $h
-soelim $f >> $h
+soelim $f > $h
 
 ex $h <<EOF
 
@@ -181,7 +180,7 @@ g/^\s*\`\`\`0\$/+1,/^\s*\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
 
 g/^ÞtzpCodeDisplayEndTzp\$/,/./-1 j!
 
-%s/^ÞtzpCodeDisplayStartTzp\$/.nr nextGrafWithoutIndent 0\r.LP\r.nf\r.in 0\r.ft C\r.KS/
+%s/^ÞtzpCodeDisplayStartTzp\$/.LP\r.nf\r.ft C\r.KS/
 
 %s/^ÞtzpCodeDisplayEndTzp\$/.KE\r.fi\r.LP/
 
@@ -303,9 +302,33 @@ v/^ÞtzpPreformattedTzp/ call TroffPalatable()
 
 %s:ÞtzpDoubleQuoteTzp:":g
 
+"
+
 %s/^\$/.grafSeparatorLine/
 
-g/^\.grafSeparatorLine/+1 s/^\s\+/.LP\r&/
+g/^\.LP\$/-1 s/^\.grafSeparatorLine/.deletedGrafSeparatorLine/
+
+g/^\.grafSeparatorLine/+1 s/^\s\+/.obeylinesSeparatorLine\r&/
+
+g/^\.obeylinesSeparatorLine/-1 s/^\.grafSeparatorLine/.deletedGrafSeparatorLine/
+
+g/^\.grafSeparatorLine/-1 s/^\s\+.*\$/&\r.obeylinesSeparatorLine/
+
+g/^.obeylinesSeparatorLine/+1 s/^\.grafSeparatorLine/.deletedGrafSeparatorLine/
+
+g/^\.deletedGrafSeparatorLine/d
+
+%s/^.obeylinesSeparatorLine/.sp .1v\r.LP/
+
+%s/^\.LP\$/.nr nextGrafWithoutIndent 0\r&/
+
+%s/^\.grafSeparatorLine\$/.ie \\\\n[nextGrafWithoutIndent] \\\\{\\\\\r.nr nextGrafWithoutIndent 0\r.LP\r.\\\\}\r.el .PP/
+
+"g/^\.grafSeparatorLine/+1 s/^\s\+/.LP\r&/
+
+"g/^\.grafSeparatorLine/-1 s/^\s\+.*/&\r.nr nextGrafWithoutIndent 1/
+
+"
 
 %s:^ÞtzpPreformattedTzp\.:\\\\\&.:
 
@@ -314,6 +337,30 @@ g/^\.grafSeparatorLine/+1 s/^\s\+/.LP\r&/
 g/^ÞtzpBogusEndOfFileLineTzp/d
 
 %s/ÞtzpThornTzp/Þ/g
+
+0i
+.mso ms.tmac
+.de par*fp!0-no
+.@PP
+\&\\\\*[par@sup-start]\\\\\$1\\\\*[par@sup-end]\ \c
+..
+.nr FL \\n[LL]
+.de JPEG
+.mso jpeg.tmac
+.JPEG \\\\\$*
+..
+.de TOC
+.mso toc.tmac
+.TOC
+..
+.de IX
+.mso index.tmac
+.IX \\\\\$*
+..
+.if !'\\V[GROFF_FONT_FAM]'' .fam \\V[GROFF_FONT_FAM]
+.if !'\\V[GROFF_FONT_BOLD]'' .ftr B \\V[GROFF_FONT_BOLD]
+.if !'\\V[GROFF_FONT_MONO]'' .ftr C \\V[GROFF_FONT_MONO]
+.
 
 endfunc
 
