@@ -1,4 +1,4 @@
-/* last modified 2014-09-21 */
+/* last modified 2014-10-22 */
 
 body {
     max-width: 40em;
@@ -21,7 +21,8 @@ a {
     /* font-weight: normal; */
 }
 
-h1,h2 {
+h1,
+h2 {
     margin-top: 1.5em;
 }
 

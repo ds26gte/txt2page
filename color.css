@@ -1,4 +1,4 @@
-/* last modified 2013-03-20 */
+/* last modified 2014-10-22 */
 
 a {
     /* color: #dd4814; /* ubuntu orange */
@@ -16,7 +16,9 @@ a:hover {
     background-color: #fdca01; /* ubuntu yellow */
 }
 
-h1,h2,h3 {
+h1,
+h2,
+h3 {
     /* color: #a14743; /* roof terracotta */
     color: #333333; /* ubuntu cool gray */
 }
