@@ -1,3 +1,8 @@
+2014 Oct 22
+
+Any lines with only non-alnums that is preceded and followed by
+blank lines is treated as a section-breaking ornament.
+
 2014 Oct 21
 
 Use leading :: to introduce obeylines, which ends on a blank
@@ -6,7 +11,7 @@ line. No need for any other closer.
 Empty level-3 section with 3 trailing #s (### ###) introduces a
 drop cap.
 
-(Trying to reuse the # section syntax to introduce these
+(Motivation: Recycle the # section syntax to introduce these
 sectioning variations, so they will be ignored gracefully by other
 #-recognizers.)
 
@@ -20,11 +25,6 @@ doesn't swallow it.
 2014 Oct 20
 
 Cleaner DC annotation.
-
-2014 Oct 19
-
-Any line with only non-alnums and with at least one of them
-repeated is treated as a section breaking ornament.
 
 2014 Oct 15
 
