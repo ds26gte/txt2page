@@ -1,22 +1,30 @@
-.\" last modified 2014-10-17
+.\" last modified 2014-10-21
 ```
 blank lines separate grafs
 
-lines with leading spaces aren't broken (as in troff)
+lines with leading spaces aren't broken (compat with troff)
 
 # section title
 ## subsection title
 ### subsubsection title
 #### and so on
-#####
-######
- (compat with gfm, pandoc)
+##### until
+###### level 6
+
+Section titles may optionally be closed with any number of #s,
+but note the following special cases:
 
 # title #
  (this becomes document title (usu centered))
 
 # html-title ##
  (this produces external title only)
+
+## ##
+ (this produces a section break with an ornamental dingbat)
+
+### ###
+ (this starts a paragraph with a drop cap)
 
 .TH single_word_title
 .TH "multiword title"
@@ -29,15 +37,13 @@ lines with leading spaces aren't broken (as in troff)
 5 or more hyphens -- horiz rule
   (compat with gfm, pandoc)
 
-.** for section break (no title) with ornament
-
  ``` opens and closes code listing
  ```alpha opens Lisp code listing
      (this requires lisphilite, which should be placed in PATH --
      use lisphilte to softlink to either lisphilite.lisp or
      lisphilite.rkt, which are provided)
    (compat with gfm pandoc)
-.EE ... EX also enclose listing (compat with man)
+.EX ... .EE also enclose listing (compat with man)
 
 `...` for inline code fragment
 ``...`` ditto (to include `)
@@ -51,6 +57,8 @@ URLs as is
   links to URL with text (with * shorn) as link-text
 [text](URL)
   as in GFM
+URL[text]
+  as in asciidoc
 
 ./filename
   links to filename in current directory
@@ -99,9 +107,6 @@ footnote text (can be multiple grafs)
 
 ![alt](imgfile)
    as in GFM
-
-.:= L orem ipsum
-  L is set as drop cap
 
 |cell|cell|cell
   on successive lines makes table
