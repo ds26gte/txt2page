@@ -213,8 +213,7 @@ g/^\.\s*\\\"/d
 %s/^#\s\+\(.\{-}\)\s\+#\$/ÞtzpSectionTzp title \1/
 %s/^#\s\+\(.\{-}\)\s\+##\$/ÞtzpSectionTzp htmltitle \1/
 %s/^##\s\+##\$/ÞtzpSectionTzp sectionbreak \1/
-
-g/^ÞtzpSection\s\+htmltitle\s\+/d "for now
+%s/^###\s\+###\$/ÞtzpSectionTzp dropcap x/
 
 %s/^#\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 1 \1/
 %s/^##\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 2 \1/
@@ -225,6 +224,8 @@ g/^ÞtzpSection\s\+htmltitle\s\+/d "for now
 
 g/^ÞtzpSectionTzp/,/./-1 j!
 
+g/^ÞtzpSectionTzp\s\+htmltitle\s\+/d
+
 %s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B \1\r.sp 1ex\r.ce\r.LP/
 
 %s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
@@ -233,7 +234,7 @@ g/^ÞtzpSectionTzp/,/./-1 j!
 
 "drop cap
 
-%s/^\[===\]/ÞtzpDropCapTzp/
+%s/^ÞtzpSectionTzp\s\+dropcap\s\+.*/ÞtzpDropCapTzp/
 
 g/^ÞtzpDropCapTzp\$/ , /./ j
 

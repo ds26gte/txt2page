@@ -3,6 +3,13 @@
 Use leading :: to introduce obeylines, which ends on a blank
 line. No need for any other closer.
 
+Empty level-3 section with 3 trailing #s (### ###) introduces a
+drop cap.
+
+(Trying to reuse the # section syntax to introduce these
+sectioning variations, so they will be ignored gracefully by other
+#-recognizers.)
+
 Retire txt2page.tmac.
 
 Obeylines env should begin/end with implicit noindent.

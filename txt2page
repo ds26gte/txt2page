@@ -382,13 +382,6 @@ endif
 
 %s/^\.\s*TOC\s*//
 
-"call SubAlternate(0)
-"g/^\s*::\$/ s/\$/\=SubAlternate()
-"
-"g/^\s*::0\$/+1,/^\s*::1/-1 call LineAsIs()
-"
-"g/^\s*::[01]/d
-
 %s/^::\(.\)/::\r\1/
 
 g/^::\$/+1, /^\$/ s/^\$/ÞtzpLineAsIsEndTzp/
@@ -451,7 +444,7 @@ g/ÞtzpLeadingSpacesStartLineTzp/ s#^#</p>\r<p class=noindent>\r#
 
 g/^\.\s*\\\"/d
 g/^\.\s*HTL/d
-g/^#\s\+.\{-}\s*##\$/d
+"g/^#\s\+.\{-}\s*##\$/d
 
 v/^ÞtzpPreformattedTzp/ call SmartQuotes()
 
@@ -509,9 +502,8 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 
 %s/^#\s\+\(.\{-}\)\s\+#\$/ÞtzpSectionTzp title \1/
 %s/^#\s\+\(.\{-}\)\s\+##\$/ÞtzpSectionTzp htmltitle \1/
-%s/^##\s\+##\$/ÞtzpSectionTzp sectionbreak \1/
-
-g/^ÞtzpSection\s\+htmltitle\s\+/d "for now
+%s/^##\s\+##\$/ÞtzpSectionTzp sectionbreak x/
+%s/^###\s\+###\$/ÞtzpSectionTzp dropcap x/
 
 %s/^#\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 1 \1/
 %s/^##\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 2 \1/
@@ -522,19 +514,19 @@ g/^ÞtzpSection\s\+htmltitle\s\+/d "for now
 
 g/^ÞtzpSectionTzp/,/./-1 j!
 
+g/^ÞtzpSectionTzp\s\+htmltitle\s\+/d
+
 %s:^ÞtzpSectionTzp\s\+\(title\)\s\+\(.*\):</p>\r<h1 class=\1>\2</h1>\r<p class=noindent>:
 %s:^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\):</p>\r<h\1 class=section>\2</h\1>\r<p class=noindent>:
-%s:^ÞtzpSectionTzp\s\+\(sectionbreak\)\s\+\(.*\):</p>\r<h3 class=\1>\&#x3091;</h3>\r<p class=noindent>:
+%s:^ÞtzpSectionTzp\s\+\(sectionbreak\)\s\+.*:</p>\r<h3 class=\1>\&#x3091;</h3>\r<p class=noindent>:
 
 " possible ornaments: * &#x203b &#x2217
 
 "drop cap
 
-%s/^\[===\]/ÞtzpDropCapTzp/
+%s/^ÞtzpSectionTzp\s\+dropcap\s\+.*/ÞtzpDropCapTzp/
 
-g/^ÞtzpDropCapTzp\$/ , /./-1 j
-
-g/^ÞtzpDropCapTzp\s*\$/ , +1 j
+g/^ÞtzpDropCapTzp\$/ , +1 j
 
 %s:^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\):</p>\r<p class=noindent><span class=dropcap>\1</span>:
 
