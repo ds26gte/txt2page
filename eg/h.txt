@@ -1,4 +1,4 @@
-# HTML title only ##
+# HTML-only external title ##
 
 # Document title #
 
