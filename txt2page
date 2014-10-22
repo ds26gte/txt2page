@@ -532,7 +532,7 @@ g/^ÞtzpDropCapTzp\$/ , +1 j
 
 "blockquote
 
-%s:^»\s*:</p>\r<p class=blockquote>\r:
+%s:^»\s*:</p>\r<p class="blockquote noindent">:
 
 v/^ÞtzpPreformattedTzp/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 ÞtzpContinuationLineTzp/
 
