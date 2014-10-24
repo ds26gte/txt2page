@@ -1,4 +1,4 @@
-# last modified 2014-10-22
+# last modified 2014-10-23
 # ds26gte@yahoo.com
 
 opts=""
@@ -224,9 +224,34 @@ g/^\.\s*\\\"/d
 
 g/^ÞtzpSectionTzp/,/./-1 j!
 
-g/^ÞtzpSectionTzp\s\+htmltitle\s\+/d
+g/^ÞtzpSectionTzp\s\+htmltitle\s/d
 
-%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B \1\r.sp 1ex\r.ce\r.LP/
+"section break
+
+%s/^[^[:alnum:]]\+\$/ÞtzpSectionTzp break &/
+
+g/^ÞtzpSectionTzp\s\+break\s/-1 s/^\$/ÞtzpSectionTzp blankabovebreak x/
+g/^ÞtzpSectionTzp\s\+break\s/+1 s/^\$/ÞtzpSectionTzp blankbelowbreak x/
+
+g/^ÞtzpSectionTzp\s\+blankabovebreak\s/+1 s/ÞtzpSectionTzp\s\+break\s/ÞtzpSectionTzp breakbelowblank /
+
+%s/^ÞtzpSectionTzp\s\+blankabovebreak\s.*//
+
+%s/^ÞtzpSectionTzp\s\+break\s//
+
+g/^ÞtzpSectionTzp\s\+blankbelowbreak\s/-1 s/ÞtzpSectionTzp\s\+breakbelowblank\s/ÞtzpSectionTzp breakbetweenblanks /
+
+%s/^ÞtzpSectionTzp\s\+blankbelowbreak\s.*//
+
+%s/^ÞtzpSectionTzp\s\+breakbelowblank\s//
+
+g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
+
+%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.sp .1v\r.LP\r\1\r.sp .1v\r.LP/
+
+"
+
+%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B ÞtzpDoubleQuoteTzp\1ÞtzpDoubleQuoteTzp\r.sp 1ex\r.ce\r.LP/
 
 %s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
 
@@ -239,25 +264,6 @@ g/^ÞtzpSectionTzp\s\+htmltitle\s\+/d
 g/^ÞtzpDropCapTzp\$/ , /./ j
 
 %s/^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\)\(\S*\)\s*/.if !d DC .mso dc.tmac\r.DC \1 \2\r/
-
-"%s/^\.\s*:=\s/.if !d DC .mso dc.tmac\r.DC /
-
-"section break
-
-%s/^[^[:alnum:]]\+\$/ÞtzpSectionBreakTzp&/
-
-g/^ÞtzpSectionBreakTzp/-1 s/^\$/ÞtzpSectionBreakAboveTzp/
-g/^ÞtzpSectionBreakTzp/+1 s/^\$/ÞtzpSectionBreakBelowTzp/
-
-g/^ÞtzpSectionBreakAboveTzp/+1 s/ÞtzpSectionBreakTzp/ÞtzpSectionBreakFollowingBlankTzp/
-
-g/^ÞtzpSectionBreakBelowTzp/-1 s/ÞtzpSectionBreakFollowingBlankTzp/ÞtzpSectionBreakValidTzp/
-
-g/^ÞtzpSectionBreak\%(Above\|Below\|FollowingBlank\)Tzp/d
-
-g/^ÞtzpSectionBreakValidTzp/,/./-1 j!
-
-%s/^ÞtzpSectionBreakValidTzp\(.*\)\$/.sp .1v\r.LP\r\1\r.sp .1v\r.LP/
 
 "blockquote
 

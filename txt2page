@@ -1,4 +1,4 @@
-ver=2014-10-22 # last modified
+ver=2014-10-23 # last modified
 
 # ds26gte@yahoo.com
 
@@ -608,31 +608,30 @@ g/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp/ m\$
 
 "arbitrary section-break ornament
 
-%s/^[^[:alnum:]]\+\$/ÞtzpSectionBreakTzp&/
+%s/^[^[:alnum:]]\+\$/ÞtzpSectionTzp break &/
 
-g/^ÞtzpSectionBreakTzp/-1 s/^\$/ÞtzpSectionBreakAboveTzp/
-g/^ÞtzpSectionBreakTzp/+1 s/^\$/ÞtzpSectionBreakBelowTzp/
+g/^ÞtzpSectionTzp\s\+break\s/-1 s/^\$/ÞtzpSectionTzp blankabovebreak x/
+g/^ÞtzpSectionTzp\s\+break\s/+1 s/^\$/ÞtzpSectionTzp blankbelowbreak x/
 
-g/^ÞtzpSectionBreakAboveTzp/+1 s/ÞtzpSectionBreakTzp/ÞtzpSectionBreakFollowingBlankTzp/
+g/^ÞtzpSectionTzp\s\+blankabovebreak\s/+1 s/ÞtzpSectionTzp\s\+break\s/ÞtzpSectionTzp breakbelowblank /
 
-g/^ÞtzpSectionBreakBelowTzp/-1 s/ÞtzpSectionBreakFollowingBlankTzp/ÞtzpSectionBreakValidTzp/
+%s/^ÞtzpSectionTzp\s\+blankabovebreak\s.*//
 
-g/^ÞtzpSectionBreak\%(Above\|Below\|FollowingBlank\)Tzp/d
+%s/^ÞtzpSectionTzp\s\+break\s//
 
-g/^ÞtzpSectionBreakValidTzp/,/./-1 j!
+g/^ÞtzpSectionTzp\s\+blankbelowbreak\s/-1 s/ÞtzpSectionTzp\s\+breakbelowblank\s/ÞtzpSectionTzp breakbetweenblanks /
 
-%s:^ÞtzpSectionBreakValidTzp\(.*\)\$:</p>\r<p class=noindent>\1\r</p>\r<p class=noindent>:
+%s/^ÞtzpSectionTzp\s\+blankbelowbreak\s.*//
 
-"g/^ÞtzpSectionBreakTzp/-1 s/^\$/ÞtzpSectionBreakAboveTzp/
-"g/^ÞtzpSectionBreakTzp/+1 s/^\$/ÞtzpSectionBreakBelowTzp/
+%s/^ÞtzpSectionTzp\s\+breakbelowblank\s//
+
+g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
+
+"%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.sp .1v\r.LP\r\1\r.sp .1v\r.LP/
+
+%s:^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\):</p>\r<p class=noindent>\1\r</p>\r<p class=noindent>:
+
 "
-"g/^
-"
-"g/^[^[:alnum:]]\+\$/ s/^.\{-}\(.\).\{-}\1/ÞtzpSectionBreakTzp&/
-"
-"g/^ÞtzpSectionBreakTzp/,/./-1 j
-"
-"%s:^ÞtzpSectionBreakTzp\(.*\)\$:</p>\r<p class=noindent>\1\r</p>\r<p class=noindent>:
 
 /^\.NAV/ m \$
 
