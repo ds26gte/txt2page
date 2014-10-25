@@ -1,4 +1,4 @@
-.\" last modified 2014-10-21
+.\" last modified 2014-10-24
 ```
 blank lines separate grafs
 
@@ -20,11 +20,11 @@ but note the following special cases:
 # html-title ##
  (this produces external title only)
 
-## ##
- (this produces a section break with an ornamental dingbat)
-
 ### ###
  (this starts a paragraph with a drop cap)
+
+A line that contains only non-alnums and is preceded and followed
+by a blank line is treated as a dinkus
 
 .TH single_word_title
 .TH "multiword title"
