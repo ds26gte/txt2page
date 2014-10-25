@@ -1,4 +1,4 @@
-# last modified 2014-10-23
+# last modified 2014-10-24
 # ds26gte@yahoo.com
 
 opts=""
@@ -212,7 +212,6 @@ g/^\.\s*\\\"/d
 
 %s/^#\s\+\(.\{-}\)\s\+#\$/ÞtzpSectionTzp title \1/
 %s/^#\s\+\(.\{-}\)\s\+##\$/ÞtzpSectionTzp htmltitle \1/
-%s/^##\s\+##\$/ÞtzpSectionTzp sectionbreak \1/
 %s/^###\s\+###\$/ÞtzpSectionTzp dropcap x/
 
 %s/^#\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 1 \1/
@@ -254,8 +253,6 @@ g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 %s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B ÞtzpDoubleQuoteTzp\1ÞtzpDoubleQuoteTzp\r.sp 1ex\r.ce\r.LP/
 
 %s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
-
-%s/^ÞtzpSectionTzp\s\+sectionbreak\s\+\(.*\)\$/.LP\r\\\\[u2014]\r.LP\r.LP/
 
 "drop cap
 
