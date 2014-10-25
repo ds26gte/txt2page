@@ -1,4 +1,4 @@
-# last modified 2014-10-24
+# last modified 2014-10-25
 # ds26gte@yahoo.com
 
 opts=""
@@ -264,9 +264,9 @@ g/^ÞtzpDropCapTzp\$/ , /./ j
 
 "blockquote
 
-%s:^>\s\+\(\S\):>\r\1:
+"%s:^>\s\+\(\S\):>\r\1:
 
-%s:^>\$:.LP\r.in \\\\n[PI]u\r.nr nextGrafWithoutIndent 1:
+"%s:^>\$:.LP\r.in \\\\n[PI]u\r.nr nextGrafWithoutIndent 1:
 
 "
 
@@ -281,18 +281,18 @@ g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
 
 %s:^\.!!\s:.JPEG :
 
-%s:^\.LI\s\+\(.\+\)\$:.LI\r\1:
+"%s:^\.LI\s\+\(.\+\)\$:.LI\r\1:
 
 %s:^\.%%%\s\+\(.*\)\$:.LP\r[\1]\r.br:
 g/^\.%%/d
 
 "bullet items
 
-g/^\*\s\+\(.*\)/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
+"g/^\*\s\+\(.*\)/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
 
-g/^ÞtzpDeleteBlankLineTzp\$/d
+"g/^ÞtzpDeleteBlankLineTzp\$/d
 
-%s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
+"%s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
 
 "
 

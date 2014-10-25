@@ -1,4 +1,4 @@
-ver=2014-10-24 # last modified
+ver=2014-10-25 # last modified
 
 # ds26gte@yahoo.com
 
@@ -450,7 +450,7 @@ v/^ÞtzpPreformattedTzp/ call SmartQuotes()
 
 "bullet items
 
-%s:^\*\s\+:</p><p class=bulleted><span class=bullet>\&bull;\&nbsp;</span>:
+"%s:^\*\s\+:</p><p class=bulleted><span class=bullet>\&bull;\&nbsp;</span>:
 
 "Tables
 
@@ -532,7 +532,9 @@ g/^ÞtzpDropCapTzp\$/ , +1 j
 
 "blockquote
 
-%s:^»\s*:</p>\r<p class="blockquote noindent">:
+"%s:^»\s*:</p>\r<p class="blockquote noindent">:
+
+"
 
 v/^ÞtzpPreformattedTzp/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 ÞtzpContinuationLineTzp/
 

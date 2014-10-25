@@ -1,3 +1,9 @@
+2014 Oct 25
+
+Take out > for blockquote. Punctuation > markup. "Let them use
+quotes." For similar reason: remove special markup for bulleted
+list items.
+
 2014 Oct 22
 
 Any lines with only non-alnums that is preceded and followed by
