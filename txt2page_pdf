@@ -1,4 +1,4 @@
-# last modified 2014-10-25
+# last modified 2014-10-26
 # ds26gte@yahoo.com
 
 opts=""
@@ -264,9 +264,11 @@ g/^ÞtzpDropCapTzp\$/ , /./ j
 
 "blockquote
 
-"%s:^>\s\+\(\S\):>\r\1:
+if $PLAINTZP != ""
+  %s:^>\s\+\(\S\):>\r\1:
 
-"%s:^>\$:.LP\r.in \\\\n[PI]u\r.nr nextGrafWithoutIndent 1:
+  %s:^>\$:.LP\r.in \\\\n[PI]u\r.nr nextGrafWithoutIndent 1:
+endif
 
 "
 
@@ -288,11 +290,13 @@ g/^\.%%/d
 
 "bullet items
 
-"g/^\*\s\+\(.*\)/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
+if $PLAINTZP != ""
+  g/^\*\s\+\(.*\)/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
 
-"g/^ÞtzpDeleteBlankLineTzp\$/d
+  g/^ÞtzpDeleteBlankLineTzp\$/d
 
-"%s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
+  %s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
+endif
 
 "
 

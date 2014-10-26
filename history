@@ -1,8 +1,12 @@
 2014 Oct 25
 
-Take out > for blockquote. Punctuation > markup. "Let them use
-quotes." For similar reason: remove special markup for bulleted
-list items.
+As in troff, flush-left line should continue previous line. (Only
+non-flush-left lines cause a linebreak of previous line.)
+
+If PLAINTZP is set, just let verbatim punctuation be
+enough and don't translate it as special layout.  Viz.,  take out
+> for blockquote. "Let them use quotes." For similar reason:
+remove special layout for bulleted list items.
 
 2014 Oct 22
 
