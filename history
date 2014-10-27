@@ -95,10 +95,6 @@ Call ex with -u NONE
 
 Use HTML5 doctype
 
-2014 Jun 12
-
-Use .!! for inserting jpegs
-
 2014 Jun 16
 
 ... shouldn't cause lisphilite to choke

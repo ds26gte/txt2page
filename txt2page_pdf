@@ -1,4 +1,4 @@
-# last modified 2014-10-26
+# last modified 2014-10-27
 # ds26gte@yahoo.com
 
 opts=""
@@ -281,7 +281,7 @@ g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
 %s/^ÞtzpFootnoteEnvTzp\(.*\)0\$/.FS \1/
 %s/^ÞtzpFootnoteEnvTzp.*1\$/.FE/
 
-%s:^\.!!\s:.JPEG :
+"%s:^\.!!\s:.JPEG :
 
 "%s:^\.LI\s\+\(.\+\)\$:.LI\r\1:
 
