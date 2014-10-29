@@ -17,12 +17,15 @@ test "$ext" = "$g" && ext=""
 
 g=${g%.*}
 
+loadtmac=1
+
 if test -f $g.tmac
 then tmacf=$g.tmac
 elif test -f txt2page.tmac
 then tmacf=txt2page.tmac
 elif test -f default.tmac
 then tmacf=default.tmac
+else loadtmac=0
 fi
 
 h=$g.txt.so
@@ -364,8 +367,8 @@ g/^ÞtzpBogusEndOfFileLineTzp/d
 
 %s/ÞtzpThornTzp/Þ/g
 
-if exists('$tmacf')
-  exec '0r ' . $tmacf
+if $loadtmac
+  0r $tmacf
 endif
 
 0i
