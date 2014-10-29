@@ -1,4 +1,4 @@
-ver=2014-10-27 # last modified
+ver=2014-10-29 # last modified
 
 # ds26gte@yahoo.com
 
@@ -51,7 +51,11 @@ for fn in ${g}__*.${ext}; do
     fi
 done
 
-if test -f default.css
+if test -f $g.css
+then cssf=$g.css
+elif test -f txt2page.css
+then cssf=txt2page.css
+elif test -f default.css
 then cssf=default.css
 else
     cssf=$(ls -1 .*.css *.css 2>/dev/null|head -1)
