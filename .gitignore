@@ -1,4 +1,6 @@
 *.html
 *.pdf
+*.sav
 *.so
 *~
+.gitignore
