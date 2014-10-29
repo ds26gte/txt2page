@@ -1,3 +1,10 @@
+2014 Oct 29
+
+HTML looks for <basename>.css, txt2page.css, default.css,
+<anyother>.css.  PDF looks for <basename>.tmac, txt2page.tmac,
+default.tmac.  Latter can be used to modify .TITLE and .SEC
+macros.
+
 2014 Oct 25
 
 As in troff, flush-left line should continue previous line. (Only
