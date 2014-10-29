@@ -1,4 +1,4 @@
-# last modified 2014-10-27
+# last modified 2014-10-29
 # ds26gte@yahoo.com
 
 opts=""
@@ -16,6 +16,14 @@ ext=${g##*.}
 test "$ext" = "$g" && ext=""
 
 g=${g%.*}
+
+if test -f $g.tmac
+then tmacf=$g.tmac
+elif test -f txt2page.tmac
+then tmacf=txt2page.tmac
+elif test -f default.tmac
+then tmacf=default.tmac
+fi
 
 h=$g.txt.so
 
@@ -250,9 +258,13 @@ g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
 "
 
-%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B ÞtzpDoubleQuoteTzp\1ÞtzpDoubleQuoteTzp\r.sp 1ex\r.ce\r.LP/
+"%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B ÞtzpDoubleQuoteTzp\1ÞtzpDoubleQuoteTzp\r.sp 1ex\r.ce\r.LP/
 
-%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
+"%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
+
+%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.TITLE \1\r.LP/
+
+%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.SEC \1 \2\r.LP/
 
 "drop cap
 
@@ -352,6 +364,10 @@ g/^ÞtzpBogusEndOfFileLineTzp/d
 
 %s/ÞtzpThornTzp/Þ/g
 
+if exists('$tmacf')
+  exec '0r ' . $tmacf
+endif
+
 0i
 .mso ms.tmac
 .de par*fp!0-no
@@ -370,6 +386,21 @@ g/^ÞtzpBogusEndOfFileLineTzp/d
 .de IX
 .mso index.tmac
 .IX \\\\\$*
+..
+.de TITLE
+.RT
+.LP
+.ce 10
+.B "\\\\\$*"
+.sp 1ex
+.ce
+.LP
+..
+.de SEC
+.@SH \\\\\$1
+.shift
+\\\\\$*
+.LP
 ..
 .if !'\\V[GROFF_FONT_FAM]'' .fam \\V[GROFF_FONT_FAM]
 .if !'\\V[GROFF_FONT_BOLD]'' .ftr B \\V[GROFF_FONT_BOLD]
