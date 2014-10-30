@@ -241,8 +241,6 @@ endwhile
 
 %s/^ÞtzpLeadingSpacesLineTzp//
 
-if $PLAINTZP != ""
-
 %s/^::\(.\)/::\r\1/
 
 g/^::\$/+1, /^\$/ s/^\$/ÞtzpObeyLinesEndTzp/
@@ -254,7 +252,6 @@ g/^ÞtzpObeyLinesEndTzp\$/,/./-1 j!
 %s/^ÞtzpObeyLinesStartTzp\$/.LP\r.nf/
 
 %s/^ÞtzpObeyLinesEndTzp\$/.fi\r.LP/
-endif
 
 "
 
@@ -343,13 +340,11 @@ g/^\.%%/d
 
 "bullet items
 
-if $PLAINTZP != ""
-  g/^\*\s\+\(.*\)/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
+g/^•\s\+.*/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
 
-  g/^ÞtzpDeleteBlankLineTzp\$/d
+g/^ÞtzpDeleteBlankLineTzp\$/d
 
-  %s/^\*\s\+\(.*\)/.IP \\\\(bu 2\r.nr nextGrafWithoutIndent 1\r\1/
-endif
+%s/^\*\s\+\(.*\)/.IP • 2\r.nr nextGrafWithoutIndent 1\r\1/
 
 "
 

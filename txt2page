@@ -133,10 +133,8 @@ func! RecognizeURLs()
     " FAKEHTTP has done its job by now -- remove it
     "s#FAKEHTTP://##g
 
-    if !exists('$PLAINTZP')
-      " :emoji:
-      s#:\([a-z0-9_\-]\{1,32}\):#<img class=emoji title=":\1:" alt=":\1:" src="https://assets.github.com/images/icons/emoji/\1.png" height=20 width=20 align=absmiddle/>#g
-    endif
+    " :emoji:
+    s#:\([a-z0-9_\-]\{1,32}\):#<img class=emoji title=":\1:" alt=":\1:" src="https://assets.github.com/images/icons/emoji/\1.png" height=20 width=20 align=absmiddle/>#g
 
     "images
 
@@ -259,14 +257,12 @@ func! SubAlternate(...)
   endif
 endfunc
 
-if !exists('$PLAINTZP')
-  func! LineAsIs()
-    while match(getline('.'), '^Ø*\s') > -1
-      s/^\(Ø*\)\s/\1Ø/
-    endwhile
-    s#\$#<br/>#
-  endfunc
-endif
+func! LineAsIs()
+  while match(getline('.'), '^Ø*\s') > -1
+    s/^\(Ø*\)\s/\1Ø/
+  endwhile
+  s#\$#<br/>#
+endfunc
 
 func! VerbatimLineAsIsWithContinuation()
   s/\s/Ø/g
@@ -402,17 +398,17 @@ endif
 
 "
 
-if !exists('$PLAINTZP')
-  %s/^::\(.\)/::\r\1/
+%s/^::\(.\)/::\r\1/
 
-  g/^::\$/+1, /^\$/ s/^\$/ÞtzpLineAsIsEndTzp/
+g/^::\$/+1, /^\$/ s/^\$/ÞtzpLineAsIsEndTzp/
 
-  %s/^::\$/ÞtzpLineAsIsStartTzp/
+%s/^::\$/ÞtzpLineAsIsStartTzp/
 
-  g/^ÞtzpLineAsIsStartTzp/+1,/^ÞtzpLineAsIsEndTzp/-1 call LineAsIs()
+g/^ÞtzpLineAsIsStartTzp/+1,/^ÞtzpLineAsIsEndTzp/-1 call LineAsIs()
 
-  %s:^ÞtzpLineAsIs\%(Start\|End\)Tzp:</p><p class=noindent>:
-endif
+%s:^ÞtzpLineAsIs\%(Start\|End\)Tzp:</p><p class=noindent>:
+
+"
 
 %s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
 %s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
@@ -471,9 +467,7 @@ v/^ÞtzpPreformattedTzp/ call SmartQuotes()
 
 "bullet items
 
-if !exists('$PLAINTZP')
-  %s:^\*\s\+:</p><p class=bulleted><span class=bullet>\&bull;Ø</span>:
-endif
+%s:^\*\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
 
 "Tables
 
