@@ -55,14 +55,11 @@ obeylines.
 
 * followed by space -- bulleted graf
    (compat with gfm pandoc)
+can also use actual •
 
 URLs as is
 *text* URL
   links to URL with text (with * shorn) as link-text
-[text](URL)
-  as in GFM
-URL[text]
-  as in asciidoc
 
 ./filename
   links to filename in current directory
@@ -116,14 +113,19 @@ footnote text (can be multiple grafs)
   on successive lines makes table
 
 for HTML:
-  txt2page will use default.css, and if that doesn't exist,
+  txt2page will first found of basename.css, txt2page.css, default.css, or
     the lexicographically first .css file in cwd
   this was to avoid markup for specifying CSS
   if you wish to include multiple .css files, simply have your main
     one @import the rest. (@import statments have to be the
     first in a CSS file!)
+  if no .css file found, a dummy default.css will be created
+    egging you to fill it -- this is because at least some css is
+    a good idea to get non-blah-looking HTML
 
 for PDF:
-  set env var GROFF_FONT_FAM GROFF_FONT_BOLD GROFF_FONT_MONO
+  set env vars GROFF_FONT_FAM GROFF_FONT_BOLD GROFF_FONT_MONO
     to use your neat fonts
+  will use first found of basename.tmac, txt2page.tmac,
+    default.tmac -- can modify sectioning macros here to taste
 ```
