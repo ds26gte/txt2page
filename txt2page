@@ -467,7 +467,7 @@ v/^ÞtzpPreformattedTzp/ call SmartQuotes()
 
 "bullet items
 
-%s:^\*\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
+%s:^[*•]\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
 
 "Tables
 

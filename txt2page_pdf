@@ -340,11 +340,11 @@ g/^\.%%/d
 
 "bullet items
 
-g/^•\s\+.*/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
+g/^[*•]\s\+.*/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
 
 g/^ÞtzpDeleteBlankLineTzp\$/d
 
-%s/^\*\s\+\(.*\)/.IP • 2\r.nr nextGrafWithoutIndent 1\r\1/
+%s/^[*•]\s\+\(.*\)/.IP • 2\r.nr nextGrafWithoutIndent 1\r\1/
 
 "
 
