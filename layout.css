@@ -1,4 +1,4 @@
-/* last modified 2014-10-22 */
+/* last modified 2014-10-30 */
 
 body {
     max-width: 40em;
@@ -47,10 +47,6 @@ h2 {
     font-size: 500%;
     float: left;
     padding-right: 5px;
-}
-
-p.blockquote {
-    padding-left: 2em;
 }
 
 p.bulleted {
