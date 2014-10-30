@@ -1,4 +1,4 @@
-# last modified 2014-10-29
+# last modified 2014-10-30
 # ds26gte@yahoo.com
 
 opts=""
@@ -197,6 +197,52 @@ g/^ÞtzpCodeDisplayEndTzp\$/,/./-1 j!
 
 "obeylines
 
+0
+let lastline = line('$')
+while 1
+  let currline = line('.')
+  if currline == 1 && match(getline('.'), '^\s') > -1
+    let m = 1
+  else
+    let m = search('^\s')
+  endif
+  if m == 0
+    break
+  endif
+  s/\$/ÞtzpLeadingSpacesStartLineTzp/
+  while 1
+    if match(getline('.'), '^\$') > -1
+      s/^\$/.fi\r.LP/
+      break
+    endif
+    s/^\S/ÞtzpVerbatimContinuationTzp&/
+    s/^ //
+    s/^/ÞtzpLeadingSpacesLineTzp/
+    if line('.') == lastline
+      break
+    endif
+    norm j
+  endwhile
+  g/ÞtzpLeadingSpacesStartLineTzp/ s/^/.LP\r.nf\r/
+
+  %s/ÞtzpLeadingSpacesStartLineTzp//
+
+  while 1
+    let m = search('^ÞtzpLeadingSpacesLineTzpÞtzpVerbatimContinuationTzp')
+    if m == 0
+      break
+    endif
+    s/^ÞtzpLeadingSpacesLineTzpÞtzpVerbatimContinuationTzp//
+    norm k
+    .,+1 j
+  endwhile
+
+endwhile
+
+%s/^ÞtzpLeadingSpacesLineTzp//
+
+if $PLAINTZP != ""
+
 %s/^::\(.\)/::\r\1/
 
 g/^::\$/+1, /^\$/ s/^\$/ÞtzpObeyLinesEndTzp/
@@ -208,6 +254,7 @@ g/^ÞtzpObeyLinesEndTzp\$/,/./-1 j!
 %s/^ÞtzpObeyLinesStartTzp\$/.LP\r.nf/
 
 %s/^ÞtzpObeyLinesEndTzp\$/.fi\r.LP/
+endif
 
 "
 
@@ -257,7 +304,9 @@ g/^ÞtzpSectionTzp\s\+blankbelowbreak\s/-1 s/ÞtzpSectionTzp\s\+breakbelowblank\
 
 g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
-%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.sp .1v\r.LP\r\1\r.sp .1v\r.LP/
+%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.SECBREAK \1\r.LP/
+
+"%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.sp .1v\r.LP\r\1\r.sp .1v\r.LP/
 
 "
 
@@ -277,18 +326,7 @@ g/^ÞtzpDropCapTzp\$/ , /./ j
 
 %s/^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\)\(\S*\)\s*/.if !d DC .mso dc.tmac\r.DC \1 \2\r/
 
-"blockquote
-
-if $PLAINTZP != ""
-  %s:^>\s\+\(\S\):>\r\1:
-
-  %s:^>\$:.LP\r.in \\\\n[PI]u\r.nr nextGrafWithoutIndent 1:
-endif
-
 "
-
-%s/^:+:\$/ÞtzpFootnoteEnvTzp/
-%s/^:+:\s*\(\S\+\)\$/ÞtzpFootnoteEnvTzp \1/
 
 call SubAlternate(0)
 g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
@@ -403,6 +441,13 @@ endif
 .@SH \\\\\$1
 .shift
 \\\\\$*
+.LP
+..
+.de SECBREAK
+.sp .1v
+.LP
+\\\\\$*
+.sp .1v
 .LP
 ..
 .if !'\\V[GROFF_FONT_FAM]'' .fam \\V[GROFF_FONT_FAM]
