@@ -1,4 +1,4 @@
-ver=2014-10-29 # last modified
+ver=2014-10-30 # last modified
 
 # ds26gte@yahoo.com
 
@@ -70,42 +70,42 @@ fi
 ex -u NONE $h <<EOF
 
 func! SmartQuotes()
-    "opening " becomes #x201c
+    "opening "
 
-    s:\(^\|\s\|(\|^\*\|\s\*\)":\1\&#x201c;:g
+    s:\(^\|\s\|(\|^\*\|\s\*\)":\1“:g
 
-    "opening ' becomes #x2018
+    "opening '
 
-    s:\(^\|\s\|(\|^\*\|\s\*\)':\1\&#x2018;:g
+    s:\(^\|\s\|(\|^\*\|\s\*\)':\1‘:g
 
-    "closing " becomes #x201d
+    "closing "
 
-    s:":\&#x201d;:g
+    s:":”:g
 
-    "closing ' becomes #x2019
+    "closing '
 
-    s:':\&#x2019;:g
+    s:':’:g
 
     " -- preceded by {bol, space} and
-    "followed by {space, comma-and-closing-quote, eol}
+    "followed by {space, comma, closing-quote, eol}
     "becomes emdash
 
-    s:\(^\|\s\|nbsp;\)--\(\s\|,\|&#x201[d9]\|\$\):\1\&#x2014;\2:g
+    s:\(^\|\s\|Ø\)--\(\s\|,\|[’”]\|\$\):\1\&#x2014;\2:g
 
     " -- followed by closing quote becomes emdash
 
-    s:--\(&#x201[d9];\):\&#x2014;\1:g
+    s:--\([’”]\):\&#x2014;\1:g
 
     s:\(^\|\s\)-\(&\|\s*\.\?[0-9]\):\1\&#x2212;\2:g
 endfunc
 
 func! RecognizeURLs()
 
-    s#\\\\\*\[::\s\+\(\S\{-}\)\s*\]#<a href="\1"><code>\1</code></a>#g
+    "s#\\\\\*\[::\s\+\(\S\{-}\)\s*\]#<a href="\1"><code>\1</code></a>#g
 
-    s_\\\\\*\[::\s\+\(\S\{-}\)\s\+&#x201c;\(.\{-}\)&#x201d;\s*\]_<a href="\1">\2</a>_g
+    "s_\\\\\*\[::\s\+\(\S\{-}\)\s\+&#x201c;\(.\{-}\)&#x201d;\s*\]_<a href="\1">\2</a>_g
 
-    s#\\\\\*\[::\s\+\(\S\{-}\)\s\+\(\S\{-}\)\s*\]#<a href="\1">\2</a>#g
+    "s#\\\\\*\[::\s\+\(\S\{-}\)\s\+\(\S\{-}\)\s*\]#<a href="\1">\2</a>#g
 
     " someone@gmail.com becomes mailto:someone@gmail.com
     " -- check not already preceded by mailto:
@@ -125,7 +125,7 @@ func! RecognizeURLs()
     s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]»]\)#<a\rÞtzpHrefTzphref="&"\r><code>&</code></a>#g
 
     " "./sth" becomes <a href="sth">sth</a>
-    s_&#x201c;\./\(.\{-}\)&#x201d;_<a href="\1"><code>\1</code></a>_g
+    s_“\./\(.\{-}\)”_<a href="\1"><code>\1</code></a>_g
 
     " ./pathname becomes <a href="pathname">pathname</a>
     s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><code>\1</code></a>#g
@@ -259,19 +259,20 @@ func! SubAlternate(...)
   endif
 endfunc
 
-func! LineAsIs()
-  while match(getline('.'), '^Ø*\s') > -1
-    s/^\(Ø*\)\s/\1Ø/
-  endwhile
-  s/Ø/\&nbsp;/g
-  s#\$#<br/>#
-endfunc
+if !exists('$PLAINTZP')
+  func! LineAsIs()
+    while match(getline('.'), '^Ø*\s') > -1
+      s/^\(Ø*\)\s/\1Ø/
+    endwhile
+    s#\$#<br/>#
+  endfunc
+endif
 
 func! VerbatimLineAsIsWithContinuation()
   s/\s/Ø/g
   s/^[^Ø]/ÞtzpVerbatimContinuationTzp&/
+  s/^Ø//
   s/\([^Ø]\)Ø\([^Ø]\)/\1 \2/g
-  s/Ø/\&nbsp;/g
   s#\$#<br/>#
 endfunc
 
@@ -279,7 +280,6 @@ func! VerbatimLineAsIs()
   s/^\$/Ø/
   s/\s/Ø/g
   s/\([^Ø]\)Ø\([^Ø]\)/\1 \2/g
-  s/Ø/\&nbsp;/g
   s#\$#<br/>#
 endfunc
 
@@ -315,6 +315,8 @@ g/^ÞtzpSoDoneTzp/d
 %s/Æ/ÞtzpAEligTzp/g
 %s/«/ÞtzpLangleLangleTzp/g
 %s/»/ÞtzpRangleRangleTzp/g
+%s/“/ÞtzpOpenDoubleQuoteTzp/g
+%s/”/ÞtzpCloseDoubleQuoteTzp/g
 
 \$a
 ÞtzpBogusEndOfFileLineTzp
@@ -374,7 +376,7 @@ endwhile
 %s/^\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
 %s/^\s*\`\`\`\$/ÞtzpListingTzp/
 
-if !exists('$PLAINTZP') && executable('lisphilite')
+if executable('lisphilite')
   g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/«/</g
   g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/»/>/g
   g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/Æ/\&/g
@@ -398,15 +400,19 @@ endif
 
 %s/^\.\s*TOC\s*//
 
-%s/^::\(.\)/::\r\1/
+"
 
-g/^::\$/+1, /^\$/ s/^\$/ÞtzpLineAsIsEndTzp/
+if !exists('$PLAINTZP')
+  %s/^::\(.\)/::\r\1/
 
-%s/^::\$/ÞtzpLineAsIsStartTzp/
+  g/^::\$/+1, /^\$/ s/^\$/ÞtzpLineAsIsEndTzp/
 
-g/^ÞtzpLineAsIsStartTzp/+1,/^ÞtzpLineAsIsEndTzp/-1 call LineAsIs()
+  %s/^::\$/ÞtzpLineAsIsStartTzp/
 
-%s:^ÞtzpLineAsIs\%(Start\|End\)Tzp:</p><p class=noindent>:
+  g/^ÞtzpLineAsIsStartTzp/+1,/^ÞtzpLineAsIsEndTzp/-1 call LineAsIs()
+
+  %s:^ÞtzpLineAsIs\%(Start\|End\)Tzp:</p><p class=noindent>:
+endif
 
 %s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
 %s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
@@ -427,40 +433,35 @@ g/^\s*ÞtzpNoFillEnvTzp[01]/d
 0
 let lastline = line('$')
 while 1
-    let currline = line('.')
-    if currline == 1
-        if match(getline('.'), '^\s') > -1
-            let m = 1
-        else
-            let m = search('^\s')
-        endif
-    else
-        let m = search('^\s')
+  let currline = line('.')
+  if currline == 1 && match(getline('.'), '^\s') > -1
+    let m = 1
+  else
+    let m = search('^\s')
+  endif
+  if m == 0
+    break
+  endif
+  s/\$/ÞtzpLeadingSpacesStartLineTzp/
+  while 1
+    if match(getline('.'), '^\$') > -1
+      s:^\$:</p>\r<p class=noindent>:
+      break
     endif
-    if m == 0
-        break
+    call VerbatimLineAsIsWithContinuation()
+    if line('.') == lastline
+      break
     endif
-    s/\$/ÞtzpLeadingSpacesStartLineTzp/
-    while 1
-        if match(getline('.'), '^\$') > -1
-          s:^\$:</p>\r<p class=noindent>:
-            break
-        endif
-        call VerbatimLineAsIsWithContinuation()
-        if line('.') == lastline
-            break
-        endif
-        norm j
-    endwhile
+    norm j
+  endwhile
+  g/ÞtzpLeadingSpacesStartLineTzp/ s#^#</p>\r<p class=noindent>\r#
+
+  %s/ÞtzpLeadingSpacesStartLineTzp//
+
+  g/^ÞtzpVerbatimContinuationTzp/-1 s:<br/>\$::
+
+  %s/^ÞtzpVerbatimContinuationTzp//
 endwhile
-
-g/ÞtzpLeadingSpacesStartLineTzp/ s#^#</p>\r<p class=noindent>\r#
-
-%s/ÞtzpLeadingSpacesStartLineTzp//
-
-g/^ÞtzpVerbatimContinuationTzp/-1 s:<br/>\$::
-
-%s/^ÞtzpVerbatimContinuationTzp//
 
 g/^\.\s*\\\"/d
 "g/^\.\s*HTL/d
@@ -471,7 +472,7 @@ v/^ÞtzpPreformattedTzp/ call SmartQuotes()
 "bullet items
 
 if !exists('$PLAINTZP')
-  %s:^\*\s\+:</p><p class=bulleted><span class=bullet>\&bull;\&nbsp;</span>:
+  %s:^\*\s\+:</p><p class=bulleted><span class=bullet>\&bull;Ø</span>:
 endif
 
 "Tables
@@ -514,7 +515,7 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 %s:^\.%%\s\+\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
 
 "visible anchor
-%s:^\.%%%\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]\&nbsp;</span>:
+%s:^\.%%%\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]Ø</span>:
 
 "sections
 
@@ -552,12 +553,6 @@ g/^ÞtzpDropCapTzp\$/ , +1 j
 
 %s:^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\):</p>\r<p class=noindent><span class=dropcap>\1</span>:
 
-"blockquote
-
-if !exists('$PLAINTZP')
-  %s:^»\s*:</p>\r<p class="blockquote noindent">:
-endif
-
 "
 
 v/^ÞtzpPreformattedTzp/ s/^\([^@].\{-}\\\*\[\%(\^\|::\)\s*[^]]\{-}\)\\\\\$/\1 ÞtzpContinuationLineTzp/
@@ -571,9 +566,6 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 v/^ÞtzpPreformattedTzp/ s:\`\@<!\[\^\(\S\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
 
 %s/^\.\s*F[SE]\(\s\+\S.*\)\?\$/ÞtzpFootnoteEnvTzp\1/
-
-%s/^:+:\$/ÞtzpFootnoteEnvTzp/
-%s/^:+:\s*\(\S\+\)\$/ÞtzpFootnoteEnvTzp \1/
 
 call SubAlternate(0)
 g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
@@ -690,7 +682,7 @@ v/^ÞtzpPreformattedTzp/ s#\`\(.\{-1,}\)\`#<code>\1</code>#g
 
 g/^ÞtzpBogusEndOfFileLineTzp/d
 
-%s:^\.JPEG\s:.!! :
+"%s:^\.JPEG\s:.!! :
 
 v/^ÞtzpPreformattedTzp/ call RecognizeURLs()
 
@@ -703,14 +695,18 @@ call RedirectIfNecessary()
 %s/^ÞtzpPreformattedTzp//
 %s/ÞtzpPreformattedTzp/\r/g
 
-%s/Æ/\&amp;/g
 %s/«/\&lt;/g
 %s/»/\&gt;/g
+%s/Æ/\&amp;/g
+%s/Ø/\&nbsp;/g
 
 %s/ÞtzpThornTzp/Þ/g
-%s/ÞtzpOslashTzp/Ø/g
+
 %s/ÞtzpAEligTzp/Æ/g
+%s/ÞtzpCloseDoubleQuoteTzp/”/g
 %s/ÞtzpLangleLangleTzp/«/g
+%s/ÞtzpOpenDoubleQuoteTzp/“/g
+%s/ÞtzpOslashTzp/Ø/g
 %s/ÞtzpRangleRangleTzp/»/g
 
 "add html boilerplate and title
