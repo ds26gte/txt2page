@@ -196,41 +196,6 @@ func! FindURLHs()
     " replace previous link text with true link text
     v/^ÞtzpPreformattedTzp/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
-    " GFM-style urlhs
-    " a line containing no [ followed by ](<a href= is a possible urlh
-
-    v/^ÞtzpPreformattedTzp/ s/^[^\[\]]\+\](<a href/ÞtzpPossibleURLHtzp&/
-
-    " its previous line contains a part of the link text
-    g/^ÞtzpPossibleURLHtzp/ -1s/\[[^\[\]]\+\$/&ÞtzpURLHcontinuationLineTzp/
-
-    %s/^ÞtzpPossibleURLHtzp//
-
-    " unite link text and url
-    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
-
-    %s/ÞtzpURLHcontinuationLineTzp//
-
-    " if image make an img element
-    v/^ÞtzpPreformattedTzp/ s#!\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<img src="\2" alt="\1">#g
-
-    v/^ÞtzpPreformattedTzp/ s#!\[\([^\[\]]*\)\](\(\S\+\))#<img src="\2" alt="\1">#g
-
-    " if urlh, replace link text with true link text
-    v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
-
-    " AsciiDoc-style urlhs
-    v/^ÞtzpPreformattedTzp/ s#<a href=".\{-}">.\{-}</a>\[[^\]]*\$#&ÞtzpPossibleURLHtwoTzp#
-
-    g/ÞtzpPossibleURLHtwoTzp/ +1s#^[^\[\]]*\]#ÞtzpContinuationLineTwoTzp&#
-
-    %s/ÞtzpPossibleURLHtwoTzp\$//
-
-    g/^ÞtzpContinuationLineTwoTzp/ .,-1 j
-
-    %s/ÞtzpContinuationLineTwoTzp//
-
-    v/^ÞtzpPreformattedTzp/ s#<a href="\(.\{-}\)">.\{-}</a>\[\(.\{-}\)\]#<a href="\1">\2</a>#g
 endfunc
 
 func! RedirectIfNecessary()
@@ -398,18 +363,6 @@ endif
 
 "
 
-%s/^::\(.\)/::\r\1/
-
-g/^::\$/+1, /^\$/ s/^\$/ÞtzpLineAsIsEndTzp/
-
-%s/^::\$/ÞtzpLineAsIsStartTzp/
-
-g/^ÞtzpLineAsIsStartTzp/+1,/^ÞtzpLineAsIsEndTzp/-1 call LineAsIs()
-
-%s:^ÞtzpLineAsIs\%(Start\|End\)Tzp:</p><p class=noindent>:
-
-"
-
 %s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
 %s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
 
@@ -557,7 +510,7 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
-v/^ÞtzpPreformattedTzp/ s:\`\@<!\[\^\(\S\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
+v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\(\S\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
 
 %s/^\.\s*F[SE]\(\s\+\S.*\)\?\$/ÞtzpFootnoteEnvTzp\1/
 

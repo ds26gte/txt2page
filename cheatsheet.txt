@@ -91,7 +91,7 @@ two hyphens become em-dash unless they're obviously not
   .so filename link-text
   links to filename (if -s option not used)
 
-[^symbol]
+^^[symbol]
   footnote mark in text (compat with pandoc)
 
 .FS
@@ -105,9 +105,6 @@ footnote text (can be multiple grafs)
 .JPEG -pos imgfile width
    pos is L C or R
    width is percentage (without %)
-
-![alt](imgfile)
-   as in GFM
 
 |cell|cell|cell
   on successive lines makes table

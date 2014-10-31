@@ -73,32 +73,6 @@ func! TroffFindURLHs()
 
     v/^ÞtzpPreformattedTzp/ s:\*\([^*]\+\)\*\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
-    " GFM-style urlhs
-    v/^ÞtzpPreformattedTzp/ s/^[^[\[\]]\+\](ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
-
-    g/^ÞtzpPossibleURLHtzp/ -1s/\[[^\[\]]\+\$/&ÞtzpURLHcontinuationLine/
-
-    %s/^ÞtzpPossibleURLHtzp//
-
-    g/ÞtzpURLHcontinuationLine\$/ .,+1 j
-
-    %s/ÞtzpURLHcontinuationLine//
-
-    v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp)#\1#g
-
-    " AsciiDoc-style urlhs
-    v/^ÞtzpPreformattedTzp/ s#ÞtzpURLendTzp\[[^\[\]]*\$#&ÞtzpPossibleURLHtwoTzp#
-
-    g/ÞtzpPossibleURLHtwoTzp/ +1s#^[^\[\]]*\]#ÞtzpContinuationLineTwoTzp&#
-
-    %s/ÞtzpPossibleURLHtwoTzp\$//
-
-    g/^ÞtzpContinuationLineTwoTzp/ .,-1 j
-
-    %s/ÞtzpContinuationLineTwoTzp//
-
-    v/^ÞtzpPreformattedTzp/ s#ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp\[\(.\{-}\)\]#\1#g
-
     " rm Url markers
     v/^ÞtzpPreformattedTzp/ s:ÞtzpURLbeginTzp\(.\{-}\)ÞtzpURLendTzp:\1:g
 endfunc
@@ -106,7 +80,7 @@ endfunc
 func! TroffPalatable()
     "s:\*\([^*]\+\)\*\s\+\./[^[:space:]()<>&]\+\%([[:punct:]]\)\@<!:\1:g
 
-    s:\`\@<!\[\^\(\S\+\)\]:\\\\*{\1\\\\*}:g
+    s:\`\@<!\^\^\[\(\S\+\)\]:\\\\*{\1\\\\*}:g
 
     s:\`\`\(.\{-1,}\)\`\`:\\\\fC\1\\\\fP:g
 
@@ -240,18 +214,6 @@ while 1
 endwhile
 
 %s/^ÞtzpLeadingSpacesLineTzp//
-
-%s/^::\(.\)/::\r\1/
-
-g/^::\$/+1, /^\$/ s/^\$/ÞtzpObeyLinesEndTzp/
-
-%s/^::\$/ÞtzpObeyLinesStartTzp/
-
-g/^ÞtzpObeyLinesEndTzp\$/,/./-1 j!
-
-%s/^ÞtzpObeyLinesStartTzp\$/.LP\r.nf/
-
-%s/^ÞtzpObeyLinesEndTzp\$/.fi\r.LP/
 
 "
 

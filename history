@@ -38,11 +38,6 @@ doesn't swallow it.
 
 Cleaner DC annotation.
 
-2014 Oct 15
-
-Use [^tag] for footnote marker for
-compatibility with pandoc
-
 2014 Oct 13
 
 .nf and ``` should preserve contiguous spaces even if they aren't
@@ -69,8 +64,6 @@ Allow ``` to be preceded by spaces
 
 2014 Sep 17
 
-Accept AsciiDoc-style links.
-
 URLs shouldn't contain brackets.
 
 2014 Sep 12
@@ -81,9 +74,6 @@ Recognize :emoji:.
 
 Clean up function Clean_up_urls -- shouldn't have space before >
 in <a href="...">
-
-Accept GFM-style links and image specs: [...](...) and
-![...](...)
 
 2014 Aug 21
 
