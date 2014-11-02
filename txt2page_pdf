@@ -224,15 +224,15 @@ endwhile
 
 %s/^ÞtzpLeadingSpacesLineTzp//
 
-"
+"comment
 
 g/^\.\s*\\\"/d
 
+"horiz bars
+
 %s/^\s*-\{5,}\$//
 
-%s:\\\\":ÞtzpBackslashTzpÞtzpDoubleQuoteTzp:g
-
-%s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
+"%s:\\\\":ÞtzpBackslashTzpÞtzpDoubleQuoteTzp:g
 
 "sections
 
@@ -274,13 +274,7 @@ g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
 %s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.SECBREAK \1\r.LP/
 
-"%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.sp .1v\r.LP\r\1\r.sp .1v\r.LP/
-
 "
-
-"%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.RT\r.LP\r.ce 10\r.LG\r.B ÞtzpDoubleQuoteTzp\1ÞtzpDoubleQuoteTzp\r.sp 1ex\r.ce\r.LP/
-
-"%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.@SH \1\r\2\r.LP/
 
 %s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.TITLE \1\r.LP/
 
@@ -296,15 +290,15 @@ g/^ÞtzpDropCapTzp\$/ , /./ j
 
 "
 
+v/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
+
+"
+
 call SubAlternate(0)
 g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
 
 %s/^ÞtzpFootnoteEnvTzp\(.*\)0\$/.FS \1/
 %s/^ÞtzpFootnoteEnvTzp.*1\$/.FE/
-
-"%s:^\.!!\s:.JPEG :
-
-"%s:^\.LI\s\+\(.\+\)\$:.LI\r\1:
 
 %s:^\.%%%\s\+\(.*\)\$:.LP\r[\1]\r.br:
 g/^\.%%/d
