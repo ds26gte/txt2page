@@ -1,3 +1,12 @@
+2014 Nov 2
+
+txt2page, if given multiple file arguments, creates HTML files
+for each of them, and adds previous/next nav bars to each. Got
+rid of explicit .NAV command as not needed.
+
+For -Tpdf, for single file, output pdf has same basename as that
+file. Otherwise, it's txt2pageout.pdf.
+
 2014 Oct 29
 
 HTML looks for <basename>.css, txt2page.css, default.css,
