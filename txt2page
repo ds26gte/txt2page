@@ -369,12 +369,7 @@ g/^ÞtzpListingTzp.*0\$/+1,/^ÞtzpListingTzp.*1\$/-1 call CodeLineAsIs()
 
 "
 
-if $soelim
-    g/^\.\s*TOC/ d
-    g/^\.\s*NAV/ d
-endif
-
-%s/^\.\s*TOC\s*//
+g/^\.\s*TOC\$/d
 
 "
 
