@@ -1,13 +1,15 @@
-ver=2014-10-30 # last modified
+ver=2014-11-02 # last modified
 
 # ds26gte@yahoo.com
 
-test $# -ge 1 || { echo error: no argument provided; exit; }
+if test $# -eq 0
+then echo error: no argument provided; exit;
+fi
 
 opts=""
 pdf=0
 soelim=0
-while test $# -gt 1
+while test $# -ne 0
 do
     if test "$1" = "-s"
     then soelim=1
@@ -18,57 +20,70 @@ do
     shift
 done
 
-f=$1
-
-test "$f" = "--version" && { echo txt2page $ver; exit; }
-
-test "$f" = "--help" && { echo txt2page "[-s] [-Tpdf [groff_options]] [--version|--help|<file>]"; exit; }
-
-test -f $f || { echo error: $f does not exist; exit; }
-
-g=${f##*/}
-ext=${g##*.}
-
-# above sets ext=$g if there is no extension, so...
-
-test "$ext" = "$g" && ext=""
-
-test "$ext" != "html" -a "$ext" != "ps" -a "$ext" != "pdf" ||
-    { echo error: $f is a $ext file; exit; }
-
-test "$pdf" = 1 && { exec txt2page_pdf $opts $f; exit; }
-
-# the exit above shouldn't be needed: just being careful
-
-g=${g%.*}
-
-h=$g.html
-cp -p $f $h
-
-for fn in ${g}__*.${ext}; do
-    if test -f $fn
-    then cat $fn >> $h
-    fi
-done
-
-if test -f $g.css
-then cssf=$g.css
-elif test -f txt2page.css
-then cssf=txt2page.css
-elif test -f default.css
-then cssf=default.css
-else
-    cssf=$(ls -1 .*.css *.css 2>/dev/null|head -1)
-    #cssf=$(ls -x .*.css *.css 2>/dev/null|sed -e 's/^\([^ ]*\) *.*/\1/'|head -1)
-    if test -z $cssf
-    then
-        echo '/* insert style here */' > default.css
-        cssf=default.css
-    fi
+if test "$pdf" = 1
+then exec txt2page_pdf $opts; exit
 fi
 
-ex -u NONE $h <<EOF
+txt2pageLoop() {
+  prev=
+  while test $# -ne 0
+  do
+    curr="$1"
+    shift
+    if test $# -ne 0
+    then next="$1"
+    else next=
+    fi
+    txt2pageEachFile "$curr" "$prev" "$next"
+    prev="$curr"
+  done
+}
 
+txt2pageEachFile() {
+  f=$1
+  prevPage=$2
+  nextPage=$3
+  if test ! -f "$f"
+  then
+    if test "$f" = "--version"
+    then echo txt2page $ver; exit
+    elif test "$f" = "--help"
+    then echo txt2page "[-s] [-Tpdf [groff_options]] [--version|--help|<file> ...]"; exit
+    else echo error: $f does not exist; exit
+    fi
+  else
+    g=${f##*/}
+    ext=${g##*.}
+    if test "$ext" = "$g"
+    then ext=""
+    fi
+    if test "$ext" = html -o "$ext" = ps -o "$ext" = pdf
+    then echo error: $f is a $ext file; exit
+    fi
+    g=${g%.*}
+    h=$g.html
+    cp -p $f $h
+    if test -f $g.css
+    then cssf=$g.css
+    elif test -f txt2page.css
+    then cssf=txt2page.css
+    elif test -f default.css
+    then cssf=default.css
+    else
+      cssf=$(ls -1 .*.css *.css 2> /dev/null | head -1)
+      if test -z $cssf
+      then
+        echo '/* insert style here */' > default.css
+        cssf=default.css
+      fi
+    fi
+    txt2pageExCommands $h
+  fi
+}
+
+txt2pageExCommands() {
+joke=99
+  ex -u NONE $1 <<EOF
 func! SmartQuotes()
     "opening "
 
@@ -596,16 +611,16 @@ g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
 "
 
-/^\.NAV/ m \$
-
-\$ /^\.NAV/ co 0
-
-%s:^\.NAV.*:\r\0\r:
-
-%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>; <a href="\4">index</a>:
-%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>:
-%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page:
-%s:^\.NAV\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">next</a> page:
+if "$prevPage" != "" && "$nextPage" != ""
+  1s:^:ÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="$nextPage">next</a> page\r:
+  \$s:\$:\rÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="$nextPage">next</a> page:
+elseif "$prevPage" != ""
+  1s:^:ÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="_">next</a> page\r:
+  \$s:\$:\rÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="_">next</a> page:
+elseif "$nextPage" != ""
+  1s:^:ÞtzpNavbarTzp<a href="_">previous</a>, <a href="$nextPage">next</a> page\r:
+  \$s:\$:\rÞtzpNavbarTzp<a href="_">previous</a>, <a href="$nextPage">next</a> page:
+endif
 
 g/^ÞtzpNavbarTzp/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
 
@@ -694,3 +709,6 @@ call Txt2page()
 
 w
 EOF
+}
+
+txt2pageLoop $opts
