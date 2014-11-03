@@ -599,18 +599,12 @@ g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
 "
 
-if "$prevPage" != "" && "$nextPage" != ""
+if "$prevPage" != "" || "$nextPage" != ""
   1s:^:ÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="$nextPage">next</a> page\r:
   \$s:\$:\rÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="$nextPage">next</a> page:
-elseif "$prevPage" != ""
-  1s:^:ÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="_">next</a> page\r:
-  \$s:\$:\rÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="_">next</a> page:
-elseif "$nextPage" != ""
-  1s:^:ÞtzpNavbarTzp<a href="_">previous</a>, <a href="$nextPage">next</a> page\r:
-  \$s:\$:\rÞtzpNavbarTzp<a href="_">previous</a>, <a href="$nextPage">next</a> page:
 endif
 
-g/^ÞtzpNavbarTzp/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
+g/^ÞtzpNavbarTzp/ s:<a href="">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
 
 %s:^ÞtzpNavbarTzp\(.*\)\$:<div align=right><span class=navbar>[Go to \1]</span></div>:
 
