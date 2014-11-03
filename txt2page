@@ -115,12 +115,6 @@ endfunc
 
 func! RecognizeURLs()
 
-    "s#\\\\\*\[::\s\+\(\S\{-}\)\s*\]#<a href="\1"><code>\1</code></a>#g
-
-    "s_\\\\\*\[::\s\+\(\S\{-}\)\s\+&#x201c;\(.\{-}\)&#x201d;\s*\]_<a href="\1">\2</a>_g
-
-    "s#\\\\\*\[::\s\+\(\S\{-}\)\s\+\(\S\{-}\)\s*\]#<a href="\1">\2</a>#g
-
     " someone@gmail.com becomes mailto:someone@gmail.com
     " -- check not already preceded by mailto:
     s#\%(mailto:\)\@<!\<[[:alnum:]]\+@[[:alnum:].]\+\.\%(ca\|com\|edu\|gov\|in\|net\|org\|us\)\>#mailto:&#g
