@@ -626,8 +626,6 @@ v/^ÞtzpPreformattedTzp/ s#\`\(.\{-1,}\)\`#<code>\1</code>#g
 
 g/^ÞtzpBogusEndOfFileLineTzp/d
 
-"%s:^\.JPEG\s:.!! :
-
 v/^ÞtzpPreformattedTzp/ call RecognizeURLs()
 
 g/^ÞtzpHrefTzphref=/ call CleanUpURLs()
