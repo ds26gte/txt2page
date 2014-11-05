@@ -1,4 +1,4 @@
-# last modified 2014-11-02
+# last modified 2014-11-04
 # ds26gte@yahoo.com
 
 opts=""
@@ -260,7 +260,9 @@ g/^ÞtzpSectionTzp\s\+break\s/+1 s/^\$/ÞtzpSectionTzp blankbelowbreak x/
 
 g/^ÞtzpSectionTzp\s\+blankabovebreak\s/+1 s/ÞtzpSectionTzp\s\+break\s/ÞtzpSectionTzp breakbelowblank /
 
-%s/^ÞtzpSectionTzp\s\+blankabovebreak\s.*//
+g/^ÞtzpSectionTzp\s\+blankabovebreak\s/d
+
+"%s/^ÞtzpSectionTzp\s\+blankabovebreak\s.*//
 
 %s/^ÞtzpSectionTzp\s\+break\s//
 
@@ -404,11 +406,10 @@ endif
 .LP
 ..
 .de SECBREAK
-.sp .1v
 .LP
+.sp .7v
 \\\\\$*
-.sp .1v
-.LP
+.sp .5v
 ..
 .if !'\\V[GROFF_FONT_FAM]'' .fam \\V[GROFF_FONT_FAM]
 .if !'\\V[GROFF_FONT_BOLD]'' .ftr B \\V[GROFF_FONT_BOLD]
