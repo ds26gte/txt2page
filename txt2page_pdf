@@ -1,4 +1,4 @@
-# last modified 2014-11-04
+# last modified 2014-11-10
 # ds26gte@yahoo.com
 
 opts=""
@@ -307,11 +307,11 @@ g/^\.%%/d
 
 "bullet items
 
-g/^[*•]\s\+.*/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
+g/^•\s\+.*/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
 
 g/^ÞtzpDeleteBlankLineTzp\$/d
 
-%s/^[*•]\s\+\(.*\)/.IP • 2\r.nr nextGrafWithoutIndent 1\r\1/
+%s/^•\s\+\(.*\)/.IP • 2\r.nr nextGrafWithoutIndent 1\r\1/
 
 "
 

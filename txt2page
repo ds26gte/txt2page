@@ -1,4 +1,4 @@
-ver=2014-11-03 # last modified
+ver=2014-11-10 # last modified
 
 # ds26gte@yahoo.com
 
@@ -423,7 +423,7 @@ v/^ÞtzpPreformattedTzp/ call SmartQuotes()
 
 "bullet items
 
-%s:^[*•]\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
+%s:^•\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
 
 "Tables
 
