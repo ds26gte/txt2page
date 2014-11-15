@@ -1,4 +1,4 @@
-# last modified 2014-11-10
+# last modified 2014-11-14
 # ds26gte@yahoo.com
 
 opts=""
@@ -274,13 +274,13 @@ g/^ÞtzpSectionTzp\s\+blankbelowbreak\s/-1 s/ÞtzpSectionTzp\s\+breakbelowblank\
 
 g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
-%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.SECBREAK \1\r.LP/
+%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.SECBREAK \1/
 
 "
 
-%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.TITLE \1\r.LP/
+%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.TITLE \1/
 
-%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.if d WRITETOCLINE .WRITETOCLINE \1 \2\r.SEC \1 \2\r.LP/
+%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.SEC \1 \2/
 
 "drop cap
 
@@ -351,7 +351,9 @@ g/^\.deletedGrafSeparatorLine/d
 
 %s/^\.LP\$/.nr nextGrafWithoutIndent 0\r&/
 
-%s/^\.grafSeparatorLine\$/.ie \\\\n[nextGrafWithoutIndent] \\\\{\\\\\r.nr nextGrafWithoutIndent 0\r.LP\r.\\\\}\r.el .PP/
+"%s/^\.grafSeparatorLine\$/.ie \\\\n[nextGrafWithoutIndent] \\\\{\\\\\r.nr nextGrafWithoutIndent 0\r.LP\r.\\\\}\r.el .PP/
+
+%s/^\.grafSeparatorLine\$/.p/
 
 "g/^\.grafSeparatorLine/+1 s/^\s\+/.LP\r&/
 
@@ -397,19 +399,31 @@ endif
 .B "\\\\\$*"
 .sp 1ex
 .ce
+.nr nextGrafWithoutIndent 0
 .LP
 ..
 .de SEC
+.if d WRITETOCLINE .WRITETOCLINE \\\\\$*
 .@SH \\\\\$1
 .shift
 \\\\\$*
 .LP
+.nr nextGrafWithoutIndent 0
 ..
 .de SECBREAK
 .LP
 .sp .7v
 \\\\\$*
 .sp .5v
+.LP
+.nr nextGrafWithoutIndent 0
+..
+.de p
+.ie \\\\n[nextGrafWithoutIndent] \\{\\\\
+.nr nextGrafWithoutIndent 0
+.LP
+.\\}
+.el .PP
 ..
 .if !'\\V[GROFF_FONT_FAM]'' .fam \\V[GROFF_FONT_FAM]
 .if !'\\V[GROFF_FONT_BOLD]'' .ftr B \\V[GROFF_FONT_BOLD]
