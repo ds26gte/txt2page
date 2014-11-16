@@ -1,4 +1,4 @@
-ver=2014-11-10 # last modified
+ver=2014-11-16 # last modified
 
 # ds26gte@yahoo.com
 
@@ -83,35 +83,6 @@ txt2pageEachFile() {
 
 txt2pageExCommands() {
   ex -u NONE $1 <<EOF
-func! SmartQuotes()
-    "opening "
-
-    s:\(^\|\s\|(\|^\*\|\s\*\)":\1“:g
-
-    "opening '
-
-    s:\(^\|\s\|(\|^\*\|\s\*\)':\1‘:g
-
-    "closing "
-
-    s:":”:g
-
-    "closing '
-
-    s:':’:g
-
-    " -- preceded by {bol, space} and
-    "followed by {space, comma, closing-quote, eol}
-    "becomes emdash
-
-    s:\(^\|\s\|Ø\)--\(\s\|,\|[’”]\|\$\):\1\&#x2014;\2:g
-
-    " -- followed by closing quote becomes emdash
-
-    s:--\([’”]\):\&#x2014;\1:g
-
-    s:\(^\|\s\)-\(&\|\s*\.\?[0-9]\):\1\&#x2212;\2:g
-endfunc
 
 func! RecognizeURLs()
 
@@ -174,36 +145,23 @@ func! CleanUpURLs()
     s:«\(<a href.\{-}/a>\)»:\1:g
 endfunc
 
-func! FindURLHs()
-    " a line that starts with <a href is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^<a href/ÞtzpPossibleURLHtzp&/
+let g:initFcounterValue = 2718
+func! BumpFcounter(...)
+  if !exists('b:FcounterValue')
+    let b:FcounterValue = g:initFcounterValue - 1
+  endif
+  if a:0
+    let b:FcounterValue = g:initFcounterValue - 1
+  else
+    let b:FcounterValue += 1
+    return b:FcounterValue
+  endif
+endfunc
 
-    " its previous line would contain the link text
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLineTzp/
-
-    %s/^ÞtzpPossibleURLHtzp//
-
-    " unite link text and url
-    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
-
-    %s/ÞtzpURLHcontinuationLineTzp//
-
-    " a line that contains an unmatched * followed by <a href is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+<a href/ÞtzpPossibleURLHtzp&/
-
-    " if its previous line contains a *, it contains (part of) the link text
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*[^*]\+\$/&ÞtzpURLHcontinuationLineTzp/
-
-    %s/^ÞtzpPossibleURLHtzp//
-
-    " unite link text and url
-    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
-
-    %s/ÞtzpURLHcontinuationLineTzp//
-
-    " replace previous link text with true link text
-    v/^ÞtzpPreformattedTzp/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
-
+func! FindURLfootnotes()
+  call BumpFcounter(0)
+  v/^ÞtzpPreformattedTzp/ s:(<a href="\(.\{-}\)">.\{-}</a>):[<a href="\1">❧ÞtzpURLfootnoteTzp</a>]:g
+  %s/ÞtzpURLfootnoteTzp/\=BumpFcounter()
 endfunc
 
 func! RedirectIfNecessary()
@@ -419,7 +377,7 @@ g/^\.\s*\\\"/d
 "g/^\.\s*HTL/d
 "g/^#\s\+.\{-}\s*##\$/d
 
-v/^ÞtzpPreformattedTzp/ call SmartQuotes()
+"v/^ÞtzpPreformattedTzp/ call SmartQuotes()
 
 "bullet items
 
@@ -513,7 +471,7 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
-v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\(\S\+\)\]:<sup><a name="callFootnote_\1" href="#footnote_\1">\1</a></sup>:g
+v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\(\S\+\)\]:[<a name="callFootnote_\1" href="#footnote_\1">❧\1</a>]:g
 
 %s/^\.\s*F[SE]\(\s\+\S.*\)\?\$/ÞtzpFootnoteEnvTzp\1/
 
@@ -555,7 +513,7 @@ g/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp/ m\$
 
 %s:^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp ÞtzpUnmarkedFootnoteTzp0\$:\r:
 
-%s:^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp \(\S\+\)0\$:\r<sup><a name="footnote_\1" href="#callFootnote_\1">\1</a></sup>:
+%s:^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp \(\S\+\)0\$:\r[<a name="footnote_\1" href="#callFootnote_\1">\1</a>]:
 
 %s:^ÞtzpFootnoteTzp::
 
@@ -630,7 +588,7 @@ v/^ÞtzpPreformattedTzp/ call RecognizeURLs()
 
 g/^ÞtzpHrefTzphref=/ call CleanUpURLs()
 
-call FindURLHs()
+call FindURLfootnotes()
 
 call RedirectIfNecessary()
 
