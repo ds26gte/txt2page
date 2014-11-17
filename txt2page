@@ -1,4 +1,4 @@
-ver=2014-11-16 # last modified
+ver=2014-11-17 # last modified
 
 # ds26gte@yahoo.com
 
@@ -103,11 +103,11 @@ func! RecognizeURLs()
     " URL becomes <a href="URL">URL</a>
     s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]»]\)#<a\rÞtzpHrefTzphref="&"\r><code>&</code></a>#g
 
-    " "./sth" becomes <a href="sth">sth</a>
-    s_“\./\(.\{-}\)”_<a href="\1"><code>\1</code></a>_g
+    " “./sth” becomes <a href="sth">sth</a>
+    s#“\./\(.\{-}\)”#<a href="\1"><cOde>\1</code></a>#g
 
     " ./pathname becomes <a href="pathname">pathname</a>
-    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><code>\1</code></a>#g
+    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><cODe>\1</code></a>#g
 
     " FAKEHTTP has done its job by now -- remove it
     "s#FAKEHTTP://##g
@@ -145,7 +145,24 @@ func! CleanUpURLs()
     s:«\(<a href.\{-}/a>\)»:\1:g
 endfunc
 
-let g:initFcounterValue = 2718
+func! UpcaseDigits(x)
+  let l:y = a:x
+  let l:y = substitute(l:y, '0', '⁰', 'g')
+  let l:y = substitute(l:y, '1', '¹', 'g')
+  let l:y = substitute(l:y, '2', '²', 'g')
+  let l:y = substitute(l:y, '3', '³', 'g')
+  let l:y = substitute(l:y, '4', '⁴', 'g')
+  let l:y = substitute(l:y, '5', '⁵', 'g')
+  let l:y = substitute(l:y, '6', '⁶', 'g')
+  let l:y = substitute(l:y, '7', '⁷', 'g')
+  let l:y = substitute(l:y, '8', '⁸', 'g')
+  let l:y = substitute(l:y, '9', '⁹', 'g')
+  return l:y
+endfunc
+
+"let g:initFcounterValue = 2718
+let g:initFcounterValue = 1
+
 func! BumpFcounter(...)
   if !exists('b:FcounterValue')
     let b:FcounterValue = g:initFcounterValue - 1
@@ -154,14 +171,46 @@ func! BumpFcounter(...)
     let b:FcounterValue = g:initFcounterValue - 1
   else
     let b:FcounterValue += 1
-    return b:FcounterValue
+    return UpcaseDigits('*' . b:FcounterValue)
   endif
 endfunc
 
 func! FindURLfootnotes()
   call BumpFcounter(0)
-  v/^ÞtzpPreformattedTzp/ s:(<a href="\(.\{-}\)">.\{-}</a>):[<a href="\1">❧ÞtzpURLfootnoteTzp</a>]:g
+  v/^ÞtzpPreformattedTzp/ s_:<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpURLfootnoteTzp</a>_g
   %s/ÞtzpURLfootnoteTzp/\=BumpFcounter()
+endfunc
+
+func! FindURLHs()
+    " a line that starts with <a href is a possible urlh
+    v/^ÞtzpPreformattedTzp/ s/^<a href/ÞtzpPossibleURLHtzp&/
+
+    " its previous line would contain the link text
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLineTzp/
+
+    %s/^ÞtzpPossibleURLHtzp//
+
+    " unite link text and url
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+
+    %s/ÞtzpURLHcontinuationLineTzp//
+
+    " a line that contains an unmatched * followed by <a href is a possible urlh
+    v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+<a href/ÞtzpPossibleURLHtzp&/
+
+    " if its previous line contains a *, it contains (part of) the link text
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*[^*]\+\$/&ÞtzpURLHcontinuationLineTzp/
+
+    %s/^ÞtzpPossibleURLHtzp//
+
+    " unite link text and url
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+
+    %s/ÞtzpURLHcontinuationLineTzp//
+
+    " replace previous link text with true link text
+    v/^ÞtzpPreformattedTzp/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+
 endfunc
 
 func! RedirectIfNecessary()
@@ -242,8 +291,6 @@ g/^ÞtzpSoDoneTzp/d
 %s/Æ/ÞtzpAEligTzp/g
 %s/«/ÞtzpLangleLangleTzp/g
 %s/»/ÞtzpRangleRangleTzp/g
-%s/“/ÞtzpOpenDoubleQuoteTzp/g
-%s/”/ÞtzpCloseDoubleQuoteTzp/g
 
 \$a
 ÞtzpBogusEndOfFileLineTzp
@@ -471,7 +518,7 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
-v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\(\S\+\)\]:[<a name="callFootnote_\1" href="#footnote_\1">❧\1</a>]:g
+v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\(\S\+\)\]:<a name="callFootnote_\1" href="#footnote_\1">ÞtzpFootnoteMarkTzp\1ÞtzpFootnoteMarkEndTzp</a>:g
 
 %s/^\.\s*F[SE]\(\s\+\S.*\)\?\$/ÞtzpFootnoteEnvTzp\1/
 
@@ -513,9 +560,11 @@ g/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp/ m\$
 
 %s:^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp ÞtzpUnmarkedFootnoteTzp0\$:\r:
 
-%s:^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp \(\S\+\)0\$:\r[<a name="footnote_\1" href="#callFootnote_\1">\1</a>]:
+%s:^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp \(\S\+\)0\$:\r<a name="footnote_\1" href="#callFootnote_\1">ÞtzpFootnoteMarkTzp\1ÞtzpFootnoteMarkEndTzp</a>:
 
 %s:^ÞtzpFootnoteTzp::
+
+%s:ÞtzpFootnoteMarkTzp\(.\{-}\)ÞtzpFootnoteMarkEndTzp:\=UpcaseDigits(submatch(1)):g
 
 "end footnotes
 
@@ -590,6 +639,8 @@ g/^ÞtzpHrefTzphref=/ call CleanUpURLs()
 
 call FindURLfootnotes()
 
+call FindURLHs()
+
 call RedirectIfNecessary()
 
 %s/^ÞtzpPreformattedTzp//
@@ -603,9 +654,7 @@ call RedirectIfNecessary()
 %s/ÞtzpThornTzp/Þ/g
 
 %s/ÞtzpAEligTzp/Æ/g
-%s/ÞtzpCloseDoubleQuoteTzp/”/g
 %s/ÞtzpLangleLangleTzp/«/g
-%s/ÞtzpOpenDoubleQuoteTzp/“/g
 %s/ÞtzpOslashTzp/Ø/g
 %s/ÞtzpRangleRangleTzp/»/g
 
