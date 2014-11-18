@@ -1,4 +1,4 @@
-.\" last modified 2014-10-30
+.\” last modified 2014–10–30
 ```
 blank lines separate grafs
 
@@ -91,14 +91,11 @@ two hyphens become em-dash unless they're obviously not
   .so filename link-text
   links to filename (if -s option not used)
 
-^^[symbol]
-  footnote mark in text (compat with pandoc)
+†symbol
+  footnote mark in text
 
-.FS
-footnote text (can be multiple grafs)
-.FE
-    (can't really achieve compat with pandoc, which supports
-    only one-graf footnotes)
+† [symbol]
+footnote text (can be multiple grafs)‡
 
 .JPEG imgfile
 .JPEG -pos imgfile
