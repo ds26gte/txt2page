@@ -1,4 +1,4 @@
-ver=2014-11-17 # last modified
+ver=2014-11-18 # last modified
 
 # ds26gte@yahoo.com
 
@@ -518,12 +518,13 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
-v/^ÞtzpPreformattedTzp/ s:\`\@<!\^\^\[\(\S\+\)\]:<a name="callFootnote_\1" href="#footnote_\1">ÞtzpFootnoteMarkTzp\1ÞtzpFootnoteMarkEndTzp</a>:g
+v/^ÞtzpPreformattedTzp/ s:†\(\S\+\%([:punct:]\)\@<!\):<a name="callFootnote_\1" href="#footnote_\1">ÞtzpFootnoteMarkTzp\1ÞtzpFootnoteMarkEndTzp</a>:g
 
-%s/^\.\s*F[SE]\(\s\+\S.*\)\?\$/ÞtzpFootnoteEnvTzp\1/
+v/^ÞtzpPreformattedTzp/ s/\(.\)\(‡\)\s*\$/\1\r\2/
 
-call SubAlternate(0)
-g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
+%s/^†\(\s\+\S.*\)\?\$/ÞtzpFootnoteEnvTzp\10/
+
+%s/^‡\$/ÞtzpFootnoteEnvTzp1/
 
 %s/^\(ÞtzpFootnoteEnvTzp\)0\$/\1 ÞtzpUnmarkedFootnoteTzp0/
 

@@ -1,4 +1,4 @@
-# last modified 2014-11-17
+# last modified 2014-11-18
 # ds26gte@yahoo.com
 
 opts=""
@@ -92,7 +92,7 @@ endfunc
 
 func! TroffPalatable()
 
-    s:\`\@<!\^\^\[\(\S\+\)\]:\\\\*{\1\\\\*}:g
+    s:†\(\S\+\%([:punct:]\)\@<!\):\\\\*{\1\\\\*}:g
 
     s:\`\`\(.\{-1,}\)\`\`:\\\\fC\1\\\\fP:g
 
@@ -285,11 +285,11 @@ v/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
 
 "
 
-call SubAlternate(0)
-g/^ÞtzpFootnoteEnvTzp/ s/\$/\=SubAlternate()
+v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 
-%s/^ÞtzpFootnoteEnvTzp\(.*\)0\$/.FS \1/
-%s/^ÞtzpFootnoteEnvTzp.*1\$/.FE/
+%s/^†\(\s\+\S.*\)\?\$/.FS\1/
+
+%s/^‡\$/.FE/
 
 %s:^\.%%%\s\+\(.*\)\$:.LP\r[\1]\r.br:
 g/^\.%%/d
