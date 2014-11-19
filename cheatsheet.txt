@@ -91,11 +91,16 @@ two hyphens become em-dash unless they're obviously not
   .so filename link-text
   links to filename (if -s option not used)
 
-†symbol
+in-text †mark
   footnote mark in text
 
-† [symbol]
-footnote text (can be multiple grafs)‡
+†mark          -or-
+† mark         -or-
+† mark text
+followed by
+footnote text
+
+.can be multiple grafs.‡
 
 .JPEG imgfile
 .JPEG -pos imgfile
