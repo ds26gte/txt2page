@@ -1,16 +1,14 @@
-*this should show* evalwhen.com/lkajdf?=lakjd&lajdf=lkj =this
+this should show:evalwhen.com/lkajdf?=lakjd&lajdf=lkj =this
 should show=
 
-.FS 1
-alkdj
-.FE
+footnote†1
+
+†1 alkdj‡
 
 alkdjf
 alkdjf
 
-.FS 2
-alkdf
-alkdj
-.FE
+†2 alkdf
+alkdj‡
 
 endklajdf

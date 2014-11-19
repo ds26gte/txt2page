@@ -1,15 +1,13 @@
 Voluptas in officia omnis quod id consequatur. Quas omnis
 officiis non est. Eveniet est dolorem alias perspiciatis beatae
-et[^1] quasi aut. Omnis sed dolorum atque tenetur aspernatur animi.
+et†1 quasi aut. Omnis sed dolorum atque tenetur aspernatur animi.
 Provident non quod veritatis consequatur modi illum animi aut.
 
-.FS 1
-FN1.1 Non reprehenderit laborum aperiam numquam explicabo et ratione.
+†1 FN1.1 Non reprehenderit laborum aperiam numquam explicabo et ratione.
 Debitis sed reiciendis sit fugit et perspiciatis voluptatibus
 illo. Quod sed dignissimos voluptas aspernatur. Enim voluptatibus
 quos ea nemo. Non autem ipsum sit velit quo. Sed magnam
-consequuntur perferendis tempora eum porro commodi.
-.FE
+consequuntur perferendis tempora eum porro commodi.‡
 
 Earum aliquid fuga autem sed ad numquam quia non. Quasi fuga
 consequuntur illo ullam rerum sunt tempore ut. Et natus dolore
@@ -18,18 +16,16 @@ accusantium eligendi. Eligendi aut enim omnis.
 
 Ut quidem quo occaecati. Et quod consectetur voluptas excepturi
 similique. Quia nulla voluptas enim debitis minima est est ad.
-Quaerat[^2] odit odio maiores iure consequatur ad aut.
+Quaerat†2 odit odio maiores iure consequatur ad aut.
 
-.FS 2
-FN2.1 Doloribus ut consequatur suscipit. Saepe earum consectetur quae
+†2 FN2.1 Doloribus ut consequatur suscipit. Saepe earum consectetur quae
 est aut. Culpa soluta dolor praesentium et rerum. Delectus
 excepturi fuga ea vero omnis odit.
 
 FN2.2 Recusandae beatae eos debitis est iure. Dolore ut praesentium
 minima placeat eius occaecati. Modi earum incidunt laborum
 repudiandae qui est delectus enim. Necessitatibus dolorem autem
-amet explicabo.
-.FE
+amet explicabo.‡
 
 Enim eaque nulla velit fuga. Eos debitis doloribus voluptatem
 rerum vel nesciunt et. Illo non ut dicta necessitatibus culpa
