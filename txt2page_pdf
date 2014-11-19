@@ -91,8 +91,7 @@ func! TroffFindURLHs()
 endfunc
 
 func! TroffPalatable()
-
-    s:†\(\S\+\%([:punct:]\)\@<!\):\\\\*{\1\\\\*}:g
+    s:\(.\)†\(\S\+\%([:punct:]\)\@<!\):\1\\\\*{\2\\\\*}:g
 
     s:\`\`\(.\{-1,}\)\`\`:\\\\fC\1\\\\fP:g
 
@@ -287,7 +286,7 @@ v/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
 
 v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 
-%s/^†\(\s\+\S.*\)\?\$/.FS\1/
+%s/^†\s*\(\S.*\)\?\s*\$/.FS \1/
 
 %s/^‡\$/.FE/
 

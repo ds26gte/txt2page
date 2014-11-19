@@ -1,4 +1,4 @@
-ver=2014-11-18 # last modified
+ver=2014-11-19 # last modified
 
 # ds26gte@yahoo.com
 
@@ -171,14 +171,15 @@ func! BumpFcounter(...)
     let b:FcounterValue = g:initFcounterValue - 1
   else
     let b:FcounterValue += 1
-    return UpcaseDigits('*' . b:FcounterValue)
+    return UpcaseDigits('¶' . b:FcounterValue)
   endif
 endfunc
 
 func! FindURLfootnotes()
   call BumpFcounter(0)
   v/^ÞtzpPreformattedTzp/ s_:<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpURLfootnoteTzp</a>_g
-  %s/ÞtzpURLfootnoteTzp/\=BumpFcounter()
+  %s/ÞtzpURLfootnoteTzp/‣‣‣/g
+  "%s/ÞtzpURLfootnoteTzp/\=BumpFcounter()
 endfunc
 
 func! FindURLHs()
@@ -518,11 +519,11 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
-v/^ÞtzpPreformattedTzp/ s:†\(\S\+\%([:punct:]\)\@<!\):<a name="callFootnote_\1" href="#footnote_\1">ÞtzpFootnoteMarkTzp\1ÞtzpFootnoteMarkEndTzp</a>:g
+v/^ÞtzpPreformattedTzp/ s:\(.\)†\(\S\+\%([:punct:]\)\@<!\):\1<a name="callFootnote_\2" href="#footnote_\2">ÞtzpFootnoteMarkTzp\2ÞtzpFootnoteMarkEndTzp</a>:g
 
 v/^ÞtzpPreformattedTzp/ s/\(.\)\(‡\)\s*\$/\1\r\2/
 
-%s/^†\(\s\+\S.*\)\?\$/ÞtzpFootnoteEnvTzp\10/
+%s/^†\s*\(\S\+\)\?\s*\$/ÞtzpFootnoteEnvTzp \10/
 
 %s/^‡\$/ÞtzpFootnoteEnvTzp1/
 
