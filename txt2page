@@ -523,6 +523,8 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)†\(\S\+\%([:punct:]\)\@<!\):\1<a name="callFoo
 
 v/^ÞtzpPreformattedTzp/ s/\(.\)\(‡\)\s*\$/\1\r\2/
 
+%s/^\(†\s*\S\+\)\s\+\(\S\)/\1\r\2/
+
 %s/^†\s*\(\S\+\)\?\s*\$/ÞtzpFootnoteEnvTzp \10/
 
 %s/^‡\$/ÞtzpFootnoteEnvTzp1/

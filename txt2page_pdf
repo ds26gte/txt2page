@@ -1,4 +1,4 @@
-# last modified 2014-11-18
+# last modified 2014-11-19
 # ds26gte@yahoo.com
 
 opts=""
@@ -285,6 +285,8 @@ v/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
 "
 
 v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
+
+%s/^\(†\s*\S\+\)\s\+\(\S\)/\1\r\2/
 
 %s/^†\s*\(\S.*\)\?\s*\$/.FS \1/
 
