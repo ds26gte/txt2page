@@ -1,4 +1,4 @@
-# last modified 2014-11-19
+# last modified 2014-11-25
 # ds26gte@yahoo.com
 
 opts=""
@@ -64,27 +64,45 @@ endfunc
 
 func! TroffFindURLHs()
     " a line that starts with ÞtzpURLbeginTzp is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
+    %s/^ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLine/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
-    g/ÞtzpURLHcontinuationLine\$/ .,+1 j
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
 
-    %s/ÞtzpURLHcontinuationLine//
+    %s/ÞtzpURLHcontinuationLineTzp//
+
+    " ***
 
     v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*[^*]\+\$/&ÞtzpURLHcontinuationLine/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*[^*]\+\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
-    g/ÞtzpURLHcontinuationLine\$/ .,+1 j
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
 
-    %s/ÞtzpURLHcontinuationLine//
+    %s/ÞtzpURLHcontinuationLineTzp//
+
+    " ***
+
+    v/^ÞtzpPreformattedTzp/ s/^[^\[]\+\](ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
+
+    g/^ÞtzpPossibleURLHtzp/ -1s/\[[^\]]\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+
+    %s/^ÞtzpPossibleURLHtzp//
+
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+
+    %s/ÞtzpURLHcontinuationLineTzp//
+
+    " ***
 
     v/^ÞtzpPreformattedTzp/ s:\*\([^*]\+\)\*\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
+
+    v/^ÞtzpPreformattedTzp/ s:\[\([^\]]\+\)\](ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
     " rm Url markers
     v/^ÞtzpPreformattedTzp/ s:ÞtzpURLbeginTzp\(.\{-}\)ÞtzpURLendTzp:\1:g
