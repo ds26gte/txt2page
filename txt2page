@@ -1,4 +1,4 @@
-ver=2014-11-19 # last modified
+ver=2014-11-25 # last modified
 
 # ds26gte@yahoo.com
 
@@ -184,9 +184,9 @@ endfunc
 
 func! FindURLHs()
     " a line that starts with <a href is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^<a href/ÞtzpPossibleURLHtzp&/
+    %s/^<a href/ÞtzpPossibleURLHtzp&/
 
-    " its previous line would contain the link text
+    " its previous line could contain the link text
     g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
@@ -196,11 +196,13 @@ func! FindURLHs()
 
     %s/ÞtzpURLHcontinuationLineTzp//
 
+    " ***
+
     " a line that contains an unmatched * followed by <a href is a possible urlh
     v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+<a href/ÞtzpPossibleURLHtzp&/
 
     " if its previous line contains a *, it contains (part of) the link text
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*[^*]\+\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/\*.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
@@ -209,8 +211,25 @@ func! FindURLHs()
 
     %s/ÞtzpURLHcontinuationLineTzp//
 
+    " ***
+
+    " a line containing no [ preceding a ](<a href= is a possible urlh
+    v/^ÞtzpPreformattedTzp/ s/^[\[]\+\](<a href=/ÞtzpPossibleURLHtzp&/
+
+    " if its prev line contains a [, it contains (parf of) the link text
+    g/^ÞtzpPossibleURLHtzp/ -1s/\[.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+
+    %s/^ÞtzpPossibleURLHtzp//
+
+    " unite link text and url
+    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+
+    %s/ÞtzpURLHcontinuationLine//
+
     " replace previous link text with true link text
     v/^ÞtzpPreformattedTzp/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+
+    v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
 
 endfunc
 
