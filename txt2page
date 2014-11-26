@@ -1,4 +1,4 @@
-ver=2014-11-25 # last modified
+ver=2014-11-26 # last modified
 
 # ds26gte@yahoo.com
 
@@ -245,15 +245,12 @@ func! RedirectIfNecessary()
   endif
 endfunc
 
-func! SubAlternate(...)
-  if !exists('b:subAlternateP')
-    let b:subAlternateP = 1
-  endif
+func! Toggle01(...)
   if a:0
-    let b:subAlternateP = 1
+    let b:toggle01Value = 1
   else
-    let b:subAlternateP = !b:subAlternateP
-    return b:subAlternateP
+    let b:toggle01Value = !b:toggle01Value
+    return b:toggle01Value
   endif
 endfunc
 
@@ -368,7 +365,7 @@ endwhile
 %s/^\.\s*E[XE]\$/\`\`\`/
 
 %s/^\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
-%s/^\s*\`\`\`\$/ÞtzpListingTzp/
+%s/^\s*\`\`\`\+$/ÞtzpListingTzp/
 
 if executable('lisphilite')
   g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/«/</g
@@ -377,8 +374,8 @@ if executable('lisphilite')
   g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 !lisphilite
 endif
 
-call SubAlternate(0)
-g/^ÞtzpListingTzp/ s/\$/\=SubAlternate()
+call Toggle01(0)
+g/^ÞtzpListingTzp/ s/\$/\=Toggle01()
 
 g/^ÞtzpListingTzp.*0\$/+1,/^ÞtzpListingTzp.*1\$/-1 call CodeLineAsIs()
 
@@ -394,10 +391,10 @@ g/^\.\s*TOC\$/d
 %s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
 %s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
 
-call SubAlternate(0)
-g/^ÞtzpNoFillEnvTzp\$/ s/\$/\=SubAlternate()
+call Toggle01(0)
+g/^ÞtzpNoFillEnvTzp\$/ s/\$/\=Toggle01()
 
-if (b:subAlternateP != 1)
+if (b:toggle01Value != 1)
       \$a
   ÞtzpNoFillEnvTzp1
 .

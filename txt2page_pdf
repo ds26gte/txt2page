@@ -1,4 +1,4 @@
-# last modified 2014-11-25
+# last modified 2014-11-26
 # ds26gte@yahoo.com
 
 opts=""
@@ -143,15 +143,12 @@ func! TroffTables()
 
 endfunc
 
-func! SubAlternate(...)
-  if !exists('b:subAlternateP')
-    let b:subAlternateP = 1
-  endif
+func! Toggle01(...)
   if a:0
-    let b:subAlternateP = 1
+    let b:toggle01Value = 1
   else
-    let b:subAlternateP = !b:subAlternateP
-    return b:subAlternateP
+    let b:toggle01Value = !b:toggle01Value
+    return b:toggle01Value
   endif
 endfunc
 
@@ -169,8 +166,8 @@ func! Txt2pdf()
 
 %s/^\s*\`\`\`.\+\$/\`\`\`/
 
-call SubAlternate(0)
-g/^\s*\`\`\`\$/ s/\$/\=SubAlternate()
+call Toggle01(0)
+g/^\s*\`\`\`\$/ s/\$/\=Toggle01()
 
 g/^\s*\`\`\`0\$/+1,/^\s*\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
 
