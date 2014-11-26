@@ -1,4 +1,4 @@
-.\” last modified 2014–10–30
+.\” last modified 2014–11–26
 ```
 blank lines separate grafs
 
@@ -53,10 +53,6 @@ Lines that have leading spaces create linebreaks, as in troff.
 The first leading space is eaten so you can get flush-left
 obeylines.
 
-* followed by space -- bulleted graf
-   (compat with gfm pandoc)
-can also use actual •
-
 URLs as is
 *text* URL
   links to URL with text (with * shorn) as link-text
@@ -72,20 +68,6 @@ URLs as is
 :emoji:
   image of emoji (see emoji-cheat-sheet.com)
 
-quotes are smart
-two hyphens become em-dash unless they're obviously not
-  (e.g. i-- --version)
-
-.NAV next_page
-.NAV prev_page next_page
-.NAV prev_page next_page ToC_page
-.NAV prev_page next_page ToC_page index_page
-  navigation bar (if -s option not used)
-  if any of the .NAV args aren't relevant, use _ as placeholder
-    so nav bars on related pages don't jerk about
-  you can put .NAV (or anything) relevant to filename.txt
-    in filename__something.txt, which will be sourced first
-
   .so filename
   inserts filename's contents
   .so filename link-text
@@ -100,7 +82,13 @@ in-text †mark
 followed by
 footnote text
 
-.can be multiple grafs.‡
+can be multiple grafs.‡
+
+†† name
+  creates invisible anchor
+
+††† name
+  creates visible one (suitable for bibliographies)
 
 .JPEG imgfile
 .JPEG -pos imgfile
@@ -127,4 +115,4 @@ for PDF:
     to use your neat fonts
   will use first found of basename.tmac, txt2page.tmac,
     default.tmac -- can modify sectioning macros here to taste
-```
+````
