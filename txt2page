@@ -104,10 +104,10 @@ func! RecognizeURLs()
     s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]»]\)#<a\rÞtzpHrefTzphref="&"\r><code>&</code></a>#g
 
     " “./sth” becomes <a href="sth">sth</a>
-    s#“\./\(.\{-}\)”#<a href="\1"><cOde>\1</code></a>#g
+    s#“\./\(.\{-}\)”#<a href="\1"><code>\1</code></a>#g
 
     " ./pathname becomes <a href="pathname">pathname</a>
-    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><cODe>\1</code></a>#g
+    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><code>\1</code></a>#g
 
     " FAKEHTTP has done its job by now -- remove it
     "s#FAKEHTTP://##g
@@ -187,7 +187,7 @@ func! FindURLHs()
     %s/^<a href/ÞtzpPossibleURLHtzp&/
 
     " its previous line could contain the link text
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/⋆\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
@@ -199,10 +199,10 @@ func! FindURLHs()
     " ***
 
     " a line that contains an unmatched * followed by <a href is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+<a href/ÞtzpPossibleURLHtzp&/
+    v/^ÞtzpPreformattedTzp/ s/^[^⋆]\+⋆\s\+<a href/ÞtzpPossibleURLHtzp&/
 
     " if its previous line contains a *, it contains (part of) the link text
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/⋆.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
@@ -227,7 +227,7 @@ func! FindURLHs()
     %s/ÞtzpURLHcontinuationLine//
 
     " replace previous link text with true link text
-    v/^ÞtzpPreformattedTzp/ s#\*\([^*]\+\)\*\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+    v/^ÞtzpPreformattedTzp/ s#⋆\([^⋆]\+\)⋆\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
     v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
 
@@ -484,10 +484,10 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 "g/^ÞtzpBogusEndOfFileLineTzp/d
 
 "invisible anchor
-%s:^\.%%\s\+\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
+%s:^††\s\+\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
 
 "visible anchor
-%s:^\.%%%\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]Ø</span>:
+%s:^†††\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]Ø</span>:
 
 "sections
 

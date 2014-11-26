@@ -66,7 +66,7 @@ func! TroffFindURLHs()
     " a line that starts with ÞtzpURLbeginTzp is a possible urlh
     %s/^ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/⋆\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
@@ -76,9 +76,9 @@ func! TroffFindURLHs()
 
     " ***
 
-    v/^ÞtzpPreformattedTzp/ s/^[^*]\+\*\s\+ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
+    v/^ÞtzpPreformattedTzp/ s/^[^⋆]\+⋆\s\+ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
-    g/^ÞtzpPossibleURLHtzp/ -1s/\*[^*]\+\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/⋆[^⋆]\+\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
@@ -100,7 +100,7 @@ func! TroffFindURLHs()
 
     " ***
 
-    v/^ÞtzpPreformattedTzp/ s:\*\([^*]\+\)\*\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
+    v/^ÞtzpPreformattedTzp/ s:⋆\([^⋆]\+\)⋆\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
     v/^ÞtzpPreformattedTzp/ s:\[\([^\]]\+\)\](ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
@@ -307,8 +307,9 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 
 %s/^‡\$/.FE/
 
-%s:^\.%%%\s\+\(.*\)\$:.LP\r[\1]\r.br:
-g/^\.%%/d
+%s:^†††\s\+\(.*\)\$:.LP\r[\1]\r.br:
+
+g/^††/d
 
 "bullet items
 
