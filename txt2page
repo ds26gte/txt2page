@@ -535,15 +535,17 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
-v/^ÞtzpPreformattedTzp/ s:\(.\)†\(\S\+\%([:punct:]\)\@<!\):\1<a name="callFootnote_\2" href="#footnote_\2">ÞtzpFootnoteMarkTzp\2ÞtzpFootnoteMarkEndTzp</a>:g
+v/^ÞtzpPreformattedTzp/ s:(†\([^()[:space:]]\+\)):<a name="callFootnote_\1" href="#footnote_\1">(\1)</a>:g
 
-v/^ÞtzpPreformattedTzp/ s/\(.\)\(‡\)\s*\$/\1\r\2/
+v/^ÞtzpPreformattedTzp/ s:\(.\)\((†\|†)\):\1\r\2:g
 
-%s/^\(†\s*\S\+\)\s\+\(\S\)/\1\r\2/
+%s:^\((†\s*\S\+\)\s\+\(\S\):\1\r\2:
 
-%s/^†\s*\(\S\+\)\?\s*\$/ÞtzpFootnoteEnvTzp \10/
+%s:^\(†)\)\s*\(\S\):\1\r\2:
 
-%s/^‡\$/ÞtzpFootnoteEnvTzp1/
+%s:^(†\s*\(\S\+\)\?\s*\$:ÞtzpFootnoteEnvTzp \10:
+
+%s:^†)\s*\$:ÞtzpFootnoteEnvTzp1:
 
 %s/^\(ÞtzpFootnoteEnvTzp\)0\$/\1 ÞtzpUnmarkedFootnoteTzp0/
 

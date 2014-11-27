@@ -73,16 +73,13 @@ URLs as is
   .so filename link-text
   links to filename (if -s option not used)
 
-in-text †mark
+... (†mark) ...
   footnote mark in text
 
-†mark          -or-
-† mark         -or-
-† mark text
-followed by
+(†mark followed by
 footnote text
 
-can be multiple grafs.‡
+can be multiple grafs.†)
 
 †† name
   creates invisible anchor
