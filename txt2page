@@ -535,7 +535,7 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
-v/^ÞtzpPreformattedTzp/ s:(†\([^()[:space:]]\+\)):<a name="callFootnote_\1" href="#footnote_\1">(\1)</a>:g
+v/^ÞtzpPreformattedTzp/ s:(†\([^()[:space:]]\+\)):<a name="callFootnote_\1" href="#footnote_\1">ÞtzpFootnoteMarkTzp\1ÞtzpFootnoteMarkEndTzp</a>:g
 
 v/^ÞtzpPreformattedTzp/ s:\(.\)\((†\|†)\):\1\r\2:g
 
