@@ -1,4 +1,4 @@
-/* last modified 2014-10-22 */
+/* last modified 2014-12-04 */
 
 a {
     /* color: #dd4814; /* ubuntu orange */
@@ -19,8 +19,8 @@ a:hover {
 h1,
 h2,
 h3 {
-    /* color: #a14743; /* roof terracotta */
-    color: #333333; /* ubuntu cool gray */
+     color: #a14743; /* roof terracotta */
+    /* color: #333333; /* ubuntu cool gray */
 }
 
 .navbar {

@@ -6,10 +6,9 @@
 
 body,
 .dropcap {
-  /*
-    font-family: 'libre baskerville', georgia, times, ubuntu, serif;
-    line-height: 1.4; for baskerville only
-    word-spacing: .07em; for ubuntu only */
+    /* font-family: 'libre baskerville', georgia, times, ubuntu, serif;
+    /* line-height: 1.4; /* for baskerville only */
+    /* word-spacing: .07em; /* for ubuntu only */
 }
 
 code {
