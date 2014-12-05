@@ -1,4 +1,4 @@
-# last modified 2014-12-04
+# last modified 2014-12-05
 # ds26gte@yahoo.com
 
 opts=""
@@ -153,6 +153,8 @@ func! Toggle01(...)
 endfunc
 
 func! Txt2pdf()
+
+%s/⋆/*/g
 
 %s/Þ/ÞtzpThornTzp/g
 
@@ -327,11 +329,11 @@ g/^††/d
 
 "bullet items
 
-g/^•\s\+.*/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
+"g/^•\s\+.*/ -1s/^\$/ÞtzpDeleteBlankLineTzp/
 
-g/^ÞtzpDeleteBlankLineTzp\$/d
+"g/^ÞtzpDeleteBlankLineTzp\$/d
 
-%s/^•\s\+\(.*\)/.IP • 2\r.nr nextGrafWithoutIndent 1\r\1/
+"%s/^•\s\+\(.*\)/.IP • 2\r.nr nextGrafWithoutIndent 1\r\1/
 
 "
 
