@@ -1,4 +1,4 @@
-ver=2014-11-28 # last modified
+ver=2014-12-04 # last modified
 
 # ds26gte@yahoo.com
 
@@ -199,10 +199,10 @@ func! FindURLHs()
     " ***
 
     " a line that contains an unmatched * followed by <a href is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^[^⋆]\+⋆\s\+<a href/ÞtzpPossibleURLHtzp&/
+    v/^ÞtzpPreformattedTzp/ s/^[^⋆*]\+[⋆*]\s\+<a href/ÞtzpPossibleURLHtzp&/
 
     " if its previous line contains a *, it contains (part of) the link text
-    g/^ÞtzpPossibleURLHtzp/ -1s/⋆.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/[⋆*].\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
@@ -227,7 +227,7 @@ func! FindURLHs()
     %s/ÞtzpURLHcontinuationLine//
 
     " replace previous link text with true link text
-    v/^ÞtzpPreformattedTzp/ s#⋆\([^⋆]\+\)⋆\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+    v/^ÞtzpPreformattedTzp/ s#[⋆*]\([^⋆*]\+\)[⋆*]\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
     v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g
 

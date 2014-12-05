@@ -1,4 +1,4 @@
-# last modified 2014-11-28
+# last modified 2014-12-04
 # ds26gte@yahoo.com
 
 opts=""
@@ -76,9 +76,9 @@ func! TroffFindURLHs()
 
     " ***
 
-    v/^ÞtzpPreformattedTzp/ s/^[^⋆]\+⋆\s\+ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
+    v/^ÞtzpPreformattedTzp/ s/^[^⋆*]\+[⋆*]\s\+ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
-    g/^ÞtzpPossibleURLHtzp/ -1s/⋆[^⋆]\+\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleURLHtzp/ -1s/[⋆*][^⋆*]\+\$/&ÞtzpURLHcontinuationLineTzp/
 
     %s/^ÞtzpPossibleURLHtzp//
 
@@ -100,7 +100,7 @@ func! TroffFindURLHs()
 
     " ***
 
-    v/^ÞtzpPreformattedTzp/ s:⋆\([^⋆]\+\)⋆\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
+    v/^ÞtzpPreformattedTzp/ s:[⋆*]\([^⋆*]\+\)[⋆*]\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
     v/^ÞtzpPreformattedTzp/ s:\[\([^\]]\+\)\](ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
