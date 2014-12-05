@@ -1,4 +1,4 @@
-.\” last modified 2014–11–26
+.\” last modified 2014–12–05
 ```
 blank lines separate grafs
 
@@ -54,8 +54,9 @@ The first leading space is eaten so you can get flush-left
 obeylines.
 
 URLs as is
-*text* URL
-  links to URL with text (with * shorn) as link-text
+
+‣ text URL
+  links to URL with text as link-text
 
 ./filename
   links to filename in current directory
