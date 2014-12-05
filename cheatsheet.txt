@@ -56,7 +56,9 @@ obeylines.
 URLs as is
 
 ‣ text URL
-  links to URL with text as link-text
+  links to URL with text as link-text.
+  For PDF, only text is shown, provided there is space following
+  the ‣. If not, even the text is discarded
 
 ./filename
   links to filename in current directory

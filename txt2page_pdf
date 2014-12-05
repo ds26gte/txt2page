@@ -112,6 +112,8 @@ func! TroffFindURLHs()
 
     " ***
 
+    v/^ÞtzpPreformattedTzp/ s:‣\S.\{-}ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp::g
+
     v/^ÞtzpPreformattedTzp/ s:‣\s*\([^‣]\{-}\)\s*ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
     v/^ÞtzpPreformattedTzp/ s:[⋆*]\([^⋆*]\+\)[⋆*]\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
@@ -370,6 +372,14 @@ v/^ÞtzpPreformattedTzp/ call TroffPalatable()
 %s:ÞtzpDoubleQuoteTzp:":g
 
 "
+
+      \$ g/^\$/ s/^/ÞtzpLastLineTzp/
+
+v/./,/./-j
+
+1 g/^\$/d
+
+      \$ g/^ÞtzpLastLineTzp/ \$-1,\$d
 
 %s/^\$/.grafSeparatorLine/
 
