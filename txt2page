@@ -1,4 +1,4 @@
-ver=2014-12-04 # last modified
+ver=2014-12-05 # last modified
 
 # ds26gte@yahoo.com
 
@@ -183,6 +183,18 @@ func! FindURLfootnotes()
 endfunc
 
 func! FindURLHs()
+  %s/^[^‣]*<a href="/ÞtzpPossibleURLHtzp&/
+
+  g/^ÞtzpPossibleURLHtzp/ -1s/‣.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+
+  %s/^ÞtzpPossibleURLHtzp//
+
+  g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+
+  %s/ÞtzpURLHcontinuationLineTzp//
+
+  " ***
+
     " a line that starts with <a href is a possible urlh
     %s/^<a href/ÞtzpPossibleURLHtzp&/
 
@@ -227,6 +239,9 @@ func! FindURLHs()
     %s/ÞtzpURLHcontinuationLine//
 
     " replace previous link text with true link text
+
+    v/^ÞtzpPreformattedTzp/ s#‣\s*\([^‣]\{-}\)\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+
     v/^ÞtzpPreformattedTzp/ s#[⋆*]\([^⋆*]\+\)[⋆*]\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
     v/^ÞtzpPreformattedTzp/ s#\[\([^\[\]]*\)\](<a href="\(.\{-}\)">.\{-}</a>)#<a href="\2">\1</a>#g

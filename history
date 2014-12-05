@@ -1,3 +1,9 @@
+2014 Dec 5
+
+‣ text URL
+
+gets converted to <a href="URL">text</a>
+
 2014 Nov 2
 
 txt2page, if given multiple file arguments, creates HTML files

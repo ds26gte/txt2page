@@ -63,6 +63,18 @@ func! TroffFindURLfootnotes()
 endfunc
 
 func! TroffFindURLHs()
+  %s/^[^‣]*ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
+
+  g/^ÞtzpPossibleURLHtzp/ -1s/‣.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+
+  %s/^ÞtzpPossibleURLHtzp//
+
+  g/^ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+
+  %s/ÞtzpURLHcontinuationLineTzp//
+
+  " ***
+
     " a line that starts with ÞtzpURLbeginTzp is a possible urlh
     %s/^ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
 
@@ -99,6 +111,8 @@ func! TroffFindURLHs()
     %s/ÞtzpURLHcontinuationLineTzp//
 
     " ***
+
+    v/^ÞtzpPreformattedTzp/ s:‣\s*\([^‣]\{-}\)\s*ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
     v/^ÞtzpPreformattedTzp/ s:[⋆*]\([^⋆*]\+\)[⋆*]\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
