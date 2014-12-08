@@ -1,4 +1,4 @@
-ver=2014-12-05 # last modified
+ver=2014-12-08 # last modified
 
 # ds26gte@yahoo.com
 
@@ -686,7 +686,7 @@ call RedirectIfNecessary()
 %s/«/\&lt;/g
 %s/»/\&gt;/g
 %s/Æ/\&amp;/g
-%s/Ø/\&nbsp;/g
+%s/Ø/ /g "space is actually u+00a0
 
 %s/ÞtzpThornTzp/Þ/g
 
