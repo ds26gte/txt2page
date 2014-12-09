@@ -1,4 +1,4 @@
-ver=2014-12-08 # last modified
+ver=2014-12-09 # last modified
 
 # ds26gte@yahoo.com
 
@@ -267,13 +267,6 @@ func! Toggle01(...)
     let b:toggle01Value = !b:toggle01Value
     return b:toggle01Value
   endif
-endfunc
-
-func! LineAsIs()
-  while match(getline('.'), '^Ø*\s') > -1
-    s/^\(Ø*\)\s/\1Ø/
-  endwhile
-  s#\$#<br/>#
 endfunc
 
 func! VerbatimLineAsIsWithContinuation()
