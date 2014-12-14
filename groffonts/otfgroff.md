@@ -1,6 +1,6 @@
 # Adding OpenType Fonts to groff #
 
-The following is summarized from posts by Pierre-Jean circa 2010 in the
+The following is summarized from posts by Pierre-Jean in 2010 in the
 groff mailing list.
 
 groff comes with a set of fonts in its
