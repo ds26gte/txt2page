@@ -1,7 +1,8 @@
 # Adding OpenType Fonts to groff #
 
-The following is summarized from posts by Pierre-Jean in 2010 in the
-groff mailing list.
+The following is summarized from [posts by Pierre-Jean in 2010 in
+the groff mailing
+list](https://lists.gnu.org/archive/html/groff/2010–09/msg00000.html).
 
 groff comes with a set of fonts in its
 default font directory, which is something like
