@@ -1,4 +1,4 @@
-# last modified 2014-12-11
+# last modified 2014-12-14
 # ds26gte@yahoo.com
 
 opts=""
@@ -63,9 +63,9 @@ func! TroffFindURLfootnotes()
 endfunc
 
 func! TroffFindURLHs()
-  g/\%(·.*\)\@<!ÞtzpURLbeginTzp/ s/^/ÞtzpPossibleURLHtzp/
+  g/\%(᛫.*\)\@<!ÞtzpURLbeginTzp/ s/^/ÞtzpPossibleURLHtzp/
 
-  g/^ÞtzpPossibleURLHtzp/ -1s/·.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+  g/^ÞtzpPossibleURLHtzp/ -1s/᛫.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
   %s/^ÞtzpPossibleURLHtzp//
 
@@ -112,9 +112,9 @@ func! TroffFindURLHs()
 
     " ***
 
-    v/^ÞtzpPreformattedTzp/ s/·\S.\{-}ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp//g
+    v/^ÞtzpPreformattedTzp/ s/᛫\S.\{-}ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp//g
 
-    v/^ÞtzpPreformattedTzp/ s/·\s*\(.\{-}\)\s*ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp/\1/g
+    v/^ÞtzpPreformattedTzp/ s/᛫\s*\(.\{-}\)\s*ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp/\1/g
 
     v/^ÞtzpPreformattedTzp/ s:[⋆*]\([^⋆*]\+\)[⋆*]\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
