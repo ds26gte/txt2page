@@ -226,7 +226,7 @@ func! FindURLHs()
     " ***
 
     " a line containing no [ preceding a ](<a href= is a possible urlh
-    v/^ÞtzpPreformattedTzp/ s/^[\[]\+\](<a href=/ÞtzpPossibleURLHtzp&/
+    v/^ÞtzpPreformattedTzp/ s/^[^\[]\+\](<a href=/ÞtzpPossibleURLHtzp&/
 
     " if its prev line contains a [, it contains (parf of) the link text
     g/^ÞtzpPossibleURLHtzp/ -1s/\[.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
