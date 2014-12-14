@@ -1,4 +1,4 @@
-# last modified 2014-12-05
+# last modified 2014-12-11
 # ds26gte@yahoo.com
 
 opts=""
@@ -63,9 +63,9 @@ func! TroffFindURLfootnotes()
 endfunc
 
 func! TroffFindURLHs()
-  %s/^[^‣]*ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
+  g/\%(·.*\)\@<!ÞtzpURLbeginTzp/ s/^/ÞtzpPossibleURLHtzp/
 
-  g/^ÞtzpPossibleURLHtzp/ -1s/‣.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+  g/^ÞtzpPossibleURLHtzp/ -1s/·.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
   %s/^ÞtzpPossibleURLHtzp//
 
@@ -112,9 +112,9 @@ func! TroffFindURLHs()
 
     " ***
 
-    v/^ÞtzpPreformattedTzp/ s:‣\S.\{-}ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp::g
+    v/^ÞtzpPreformattedTzp/ s/·\S.\{-}ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp//g
 
-    v/^ÞtzpPreformattedTzp/ s:‣\s*\([^‣]\{-}\)\s*ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
+    v/^ÞtzpPreformattedTzp/ s/·\s*\(.\{-}\)\s*ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp/\1/g
 
     v/^ÞtzpPreformattedTzp/ s:[⋆*]\([^⋆*]\+\)[⋆*]\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
 
@@ -195,9 +195,9 @@ g/^\s*\`\`\`0\$/+1,/^\s*\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
 
 g/^ÞtzpCodeDisplayEndTzp\$/,/./-1 j!
 
-%s/^ÞtzpCodeDisplayStartTzp\$/.LP\r.nf\r.ft C\r.KS/
+%s/^ÞtzpCodeDisplayStartTzp\$/.\`\`\`/
 
-%s/^ÞtzpCodeDisplayEndTzp\$/.KE\r.fi\r.LP/
+%s/^ÞtzpCodeDisplayEndTzp\$/.\`\`\`\`/
 
 "obeylines
 
@@ -397,11 +397,12 @@ g/^\.deletedGrafSeparatorLine/d
 
 %s/^.obeylinesSeparatorLine/.sp .1v\r.LP/
 
-%s/^\.LP\$/.nr nextGrafWithoutIndent 0\r&/
+"%s/^\.LP\$/.nr nextGrafWithoutIndent 0\r&/
 
 "%s/^\.grafSeparatorLine\$/.ie \\\\n[nextGrafWithoutIndent] \\\\{\\\\\r.nr nextGrafWithoutIndent 0\r.LP\r.\\\\}\r.el .PP/
 
-%s/^\.grafSeparatorLine\$/.p/
+"%s/^\.grafSeparatorLine\$/.p/
+%s/^\.grafSeparatorLine\$/.PP/
 
 "g/^\.grafSeparatorLine/+1 s/^\s\+/.LP\r&/
 
@@ -465,6 +466,17 @@ endif
 .sp .5v
 .LP
 .nr nextGrafWithoutIndent 0
+..
+.de \`\`\`
+.LP
+.nf
+.ft C
+.KS
+..
+.de \`\`\`\`
+.KE
+.fi
+.LP
 ..
 .de p
 .ie \\\\n[nextGrafWithoutIndent] \\{\\\\
