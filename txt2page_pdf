@@ -339,9 +339,9 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 
 %s/^‡\$/.FE/
 
-%s:^†††\s*\(.*\)\$:.LP\r[\1]\r.br:
+%s:^※\s*\(.*\)\$:.LP\r[\1]\r.br:
 
-g/^††/d
+g/^⚓/d
 
 "bullet items
 

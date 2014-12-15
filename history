@@ -1,3 +1,7 @@
+2014 Dec 14
+
+Use ⚓ for invisible anchor; ※ for visible anchor (reference).
+
 2014 Dec 5
 
 U+16EB text URL
@@ -153,11 +157,11 @@ for greyed-out parts (e.g., for first and last page).
 
 Allow *...* URL to be split across (2 or 3?) lines.
 
-.%%% creates visible anchors.
+※ (changed 2014 Dec 14) creates visible anchors. 
 
 2013 Mar 11
 
-.%% to create anchors (HTML node names).  Refer to them as
+※※ (changed 2014 Dec 14) to create (invisible) anchors (HTML node names).  Refer to them as
 ./#anchor for anchor in own file, and ./anotherfile#anchor for
 anchors in another file.
 
