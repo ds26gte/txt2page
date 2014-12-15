@@ -1,6 +1,6 @@
 # Adding OpenType Fonts to groff #
 
-The following is summarized from [posts by Pierre-Jean in 2010 in
+The following is summarized from [posts by Pierre-Jean Fichet in 2010 in
 the groff mailing
 list](https://lists.gnu.org/archive/html/groff/2010–09/msg00000.html).
 
@@ -31,7 +31,7 @@ BaskervaldADFStd-BoldItalic.otf
 ````
 
 to your `groffonts/devps` directory.  These are now to be
-transformed into a four-element ⋆font family⋆ that is suitable for groff.
+transformed into a four-element ⎈font family⎈ that is suitable for groff.
 For this, use the provided script [otf2groff.sh](./otf2groff.sh),
 which takes two arguments: the
 name of the OTF font and the name preferred for the corresponding
@@ -123,4 +123,4 @@ document, call
 
 ----
 
-Last modified: 2014–12–14
+Last modified: 2014-12-14
