@@ -1,4 +1,4 @@
-ver=2014-12-14 # last modified
+ver=2014-12-16 # last modified
 
 # ds26gte@yahoo.com
 
@@ -183,9 +183,9 @@ func! FindURLfootnotes()
 endfunc
 
 func! FindURLHs()
-  g/\%(᛫.*\)\@<!<a href="/ s/^/ÞtzpPossibleURLHtzp/
+  g/\%([᛫‡].*\)\@<!<a href="/ s/^/ÞtzpPossibleURLHtzp/
 
-  g/^ÞtzpPossibleURLHtzp/ -1s/᛫.\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+  g/^ÞtzpPossibleURLHtzp/ -1s/[᛫‡].\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
   %s/^ÞtzpPossibleURLHtzp//
 
@@ -240,7 +240,7 @@ func! FindURLHs()
 
     " replace previous link text with true link text
 
-    v/^ÞtzpPreformattedTzp/ s#᛫\s*\(.\{-}\)\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+    v/^ÞtzpPreformattedTzp/ s#[᛫‡]\s*\(.\{-}\)\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
     v/^ÞtzpPreformattedTzp/ s#[⋆*]\([^⋆*]\+\)[⋆*]\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
@@ -445,8 +445,10 @@ while 1
   %s/^ÞtzpVerbatimContinuationTzp//
 endwhile
 
-v/᛫/ s/^\.\s*\\\"/ÞtzpDeleteCommentTzp&/
+v/[᛫‡]/ s/^\.\s*\\\"/ÞtzpDeleteCommentTzp&/
 g/^ÞtzpDeleteCommentTzp/d
+
+%s/^\.\s*\\\"//
 
 "g/^\.\s*\\\"/d
 "g/^\.\s*HTL/d

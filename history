@@ -1,10 +1,16 @@
+2014 Dec 16 
+
+‡ text URL
+
+for urlh.
+
 2014 Dec 14
 
 Use ⚓ for invisible anchor; ※ for visible anchor (reference).
 
 2014 Dec 5
 
-U+16EB text URL
+᛫ text URL
 
 (spaces optional) gets converted to <a href="URL">text</a>
 
