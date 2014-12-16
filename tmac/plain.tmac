@@ -35,7 +35,7 @@
 .
 .rn @SH @SHorig
 .
-.de section
+.de Section
 .if d writeTocLine .writeTocLine \\$*
 .@SHorig \\n[\\$1]
 .shift
@@ -45,28 +45,28 @@
 .nr nextGrafWithoutIndent 1
 ..
 .de #
-.section 1 \\$*
+.Section 1 \\$*
 ..
 .de ##
-.section 2 \\$*
+.Section 2 \\$*
 ..
 .de ###
-.section 3 \\$*
+.Section 3 \\$*
 ..
 .de ####
-.section 4 \\$*
+.Section 4 \\$*
 ..
 .de #####
-.section 5 \\$*
+.Section 5 \\$*
 ..
 .de ######
-.section 6 \\$*
+.Section 6 \\$*
 ..
 .de @SH
-.section 1 \\$*
+.Section 1 \\$*
 ..
 .de SS
-.section 2 \\$*
+.Section 2 \\$*
 ..
 .
 .de TH
@@ -82,6 +82,15 @@
 .nr nextGrafWithoutIndent 1
 ..
 .
+.de ::
+.LP
+.sp .7v
+\\$*
+.sp .5v
+.LP
+.nr nextGrafWithoutIndent 1
+..
+.
 .mso code.tmac
 .
 .de JPEG
@@ -92,6 +101,11 @@
 .de TOC
 .mso toc.tmac
 .TOC
+..
+.
+.de DC
+.mso dc.tmac
+.DC \\$*
 ..
 .
 .de IX

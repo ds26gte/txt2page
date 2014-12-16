@@ -370,6 +370,10 @@ endwhile
 
 "code display
 
+" troff-friendly .```
+
+%s/^\.\s*\(\`\`\`\+\)/\1/
+
 %s/^\.\s*E[XE]\$/\`\`\`/
 
 %s/^\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
@@ -503,6 +507,10 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 %s:^⚓\s*\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
 
 "sections
+
+" troff-friendly .#...
+
+%s/^\.\s*\(#\+\)/\1/
 
 %s/^\.\s*TH\s\+\(.*\)\$/ÞtzpSectionTzp title \1/
 %s/^\.\s*SH\s\+\(.*\)\$/ÞtzpSectionTzp 1 \1/

@@ -295,13 +295,13 @@ g/^ÞtzpSectionTzp\s\+blankbelowbreak\s/-1 s/ÞtzpSectionTzp\s\+breakbelowblank\
 
 g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
-%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.SECBREAK \1/
+%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.:: \1/
 
 "
 
-%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.TITLE \1/
+%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.TH \1/
 
-%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.SEC \1 \2/
+%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.Section \1 \2/
 
 "drop cap
 
@@ -309,7 +309,7 @@ g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
 g/^ÞtzpDropCapTzp\$/ , /./ j
 
-%s/^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\)\(\S*\)\s*/.if !d DC .mso dc.tmac\r.DC \1 \2\r/
+%s/^ÞtzpDropCapTzp\s*\(.\{-}[[:alnum:]]\)\(\S*\)\s*/.DC \1 \2\r/
 
 "
 
