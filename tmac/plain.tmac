@@ -1,0 +1,100 @@
+.\" last modified 2014-12-16
+.mso ms.tmac
+.
+.if d blankLineMacro .nx
+.
+.de blankLineMacro
+.ec
+.if !\\n[.u] \{\
+.sp .5v
+.eo
+.return
+.\}
+.ie \\n[obeylines] \{\
+.nr obeylines 0
+.LP
+.\}
+.el .ie \\n[nextGrafWithoutIndent] \{\
+.nr nextGrafWithoutIndent 0
+.LP
+.\}
+.el .PP
+..
+.blm blankLineMacro
+.
+.de leadingSpacesMacro
+.ie \\n[obeylines] .br
+.el \{\
+.nr obeylines 1
+.ns
+.LP
+.\}
+\h'\\n[lsn]n'
+..
+.lsm leadingSpacesMacro
+.
+.rn @SH @SHorig
+.
+.de section
+.if d writeTocLine .writeTocLine \\$*
+.@SHorig \\n[\\$1]
+.shift
+\\$*
+.LP
+.ns
+.nr nextGrafWithoutIndent 1
+..
+.de #
+.section 1 \\$*
+..
+.de ##
+.section 2 \\$*
+..
+.de ###
+.section 3 \\$*
+..
+.de ####
+.section 4 \\$*
+..
+.de #####
+.section 5 \\$*
+..
+.de ######
+.section 6 \\$*
+..
+.de @SH
+.section 1 \\$*
+..
+.de SS
+.section 2 \\$*
+..
+.
+.de TH
+.RT
+.if '\\$1'' .return
+.LP
+.ce 10
+.LG
+\fB\\$*
+.sp 1ex
+.ce
+.LP
+.nr nextGrafWithoutIndent 1
+..
+.
+.mso code.tmac
+.
+.de JPEG
+.mso jpeg.tmac
+.JPEG \\$*
+..
+.
+.de TOC
+.mso toc.tmac
+.TOC
+..
+.
+.de IX
+.mso index.tmac
+.IX \\$*
+..

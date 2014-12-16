@@ -1,0 +1,32 @@
+.\" last modified 2014-12-10
+.
+.if d writeTocLine .nx
+.
+.if '\*[AUXF]'' .ds AUXF .trofftemp
+.
+.de writeTocLine
+.if !\\n[enableTocEntries] .return
+.if !\\n[.U] .return
+.nr headerLevel \\$1
+.shift
+.if (\\n[headerLevel] > \\n[GROWPS]) .return
+.if !\\n[tocOpened] \{\
+.nr tocOpened 1
+.open toc:port \\*[AUXF].toc
+.\}
+.write toc:port .tocLine \\n[headerLevel] \\n[%] \\$*
+..
+.
+.de tocLine
+.nr headerLevel \\$1
+.ds pageNum \\$2
+.shift 2
+.IP " " \ n[headerLevel]m
+\\$*, \\*[pageNum]
+..
+.
+.de TOC
+.so \\*[AUXF].toc
+.nr nextGrafWithoutIndent 1
+.nr enableTocEntries 1
+..
