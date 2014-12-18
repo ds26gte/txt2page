@@ -1,4 +1,4 @@
-.\” last modified 2014–12–05
+.\” last modified 2014-12-18
 ```
 blank lines separate grafs
 
@@ -55,10 +55,10 @@ obeylines.
 
 URLs as is
 
-‣ text URL
+‡ text URL
   links to URL with text as link-text.
   For PDF, only text is shown, provided there is space following
-  the ‣. If not, even the text is discarded
+  the ‡. If not, even the text is discarded
 
 ./filename
   links to filename in current directory
@@ -84,10 +84,10 @@ footnote text
 
 can be multiple grafs.†)
 
-†† name
+⚓ name
   creates invisible anchor
 
-††† name
+※ name
   creates visible one (suitable for bibliographies)
 
 .JPEG imgfile
