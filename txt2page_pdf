@@ -1,4 +1,4 @@
-# last modified 2014-12-16
+# last modified 2014-12-18
 # ds26gte@yahoo.com
 
 opts=""
@@ -268,7 +268,7 @@ g/^\.\s*\\\"/d
 %s/^#####\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 5 \1/
 %s/^######\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 6 \1/
 
-g/^ÞtzpSectionTzp/,/./-1 j!
+"g/^ÞtzpSectionTzp/,/./-1 j!
 
 g/^ÞtzpSectionTzp\s\+htmltitle\s/d
 
@@ -281,9 +281,9 @@ g/^ÞtzpSectionTzp\s\+break\s/+1 s/^\$/ÞtzpSectionTzp blankbelowbreak x/
 
 g/^ÞtzpSectionTzp\s\+blankabovebreak\s/+1 s/ÞtzpSectionTzp\s\+break\s/ÞtzpSectionTzp breakbelowblank /
 
-g/^ÞtzpSectionTzp\s\+blankabovebreak\s/d
+"g/^ÞtzpSectionTzp\s\+blankabovebreak\s/d
 
-"%s/^ÞtzpSectionTzp\s\+blankabovebreak\s.*//
+%s/^ÞtzpSectionTzp\s\+blankabovebreak\s.*//
 
 %s/^ÞtzpSectionTzp\s\+break\s//
 
@@ -293,9 +293,9 @@ g/^ÞtzpSectionTzp\s\+blankbelowbreak\s/-1 s/ÞtzpSectionTzp\s\+breakbelowblank\
 
 %s/^ÞtzpSectionTzp\s\+breakbelowblank\s//
 
-g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
+"g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
 
-%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.:: \1/
+%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.Newsection \1/
 
 "
 
@@ -336,8 +336,6 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 %s/^\(†\s*\S\+\)\s\+\(\S\)/\1\r\2/
 
 %s/^†\s*\(\S.*\)\?\s*\$/.FS \1/
-
-%s/^‡\$/.FE/
 
 %s:^※\s*\(.*\)\$:.LP\r[\1]\r.br:
 
@@ -402,7 +400,8 @@ g/^\.deletedGrafSeparatorLine/d
 "%s/^\.grafSeparatorLine\$/.ie \\\\n[nextGrafWithoutIndent] \\\\{\\\\\r.nr nextGrafWithoutIndent 0\r.LP\r.\\\\}\r.el .PP/
 
 "%s/^\.grafSeparatorLine\$/.p/
-%s/^\.grafSeparatorLine\$/.PP/
+"%s/^\.grafSeparatorLine\$/.PP/
+%s/^\.grafSeparatorLine\$//
 
 "g/^\.grafSeparatorLine/+1 s/^\s\+/.LP\r&/
 

@@ -1,4 +1,4 @@
-ver=2014-12-16 # last modified
+ver=2014-12-17 # last modified
 
 # ds26gte@yahoo.com
 
@@ -370,7 +370,7 @@ endwhile
 
 "code display
 
-" troff-friendly .```
+" troff-friendly triple-backquote env
 
 %s/^\.\s*\(\`\`\`\+\)/\1/
 
@@ -556,17 +556,31 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp\$/ .,+1 j!
 
 "footnotes
 
+" (†sym) becomes call to footnote
+
 v/^ÞtzpPreformattedTzp/ s:(†\([^()[:space:]]\+\)):<a name="callFootnote_\1" href="#footnote_\1">ÞtzpFootnoteMarkTzp\1ÞtzpFootnoteMarkEndTzp</a>:g
+
+" ensure footnote text start/end is at bol
 
 v/^ÞtzpPreformattedTzp/ s:\(.\)\((†\|†)\):\1\r\2:g
 
-%s:^\((†\s*\S\+\)\s\+\(\S\):\1\r\2:
+" put footnote text's symbol line on own line
+
+%s:^(†\s*\(\S\+\)\s\+\(\S\):(†\1\r\2:
+
+" move text following footnote text's end to a new line after
 
 %s:^\(†)\)\s*\(\S\):\1\r\2:
 
+" mark footnote text start line
+
 %s:^(†\s*\(\S\+\)\?\s*\$:ÞtzpFootnoteEnvTzp \10:
 
+" mark its end line
+
 %s:^†)\s*\$:ÞtzpFootnoteEnvTzp1:
+
+" if footnote text has no symbol, specify a dummy symbol
 
 %s/^\(ÞtzpFootnoteEnvTzp\)0\$/\1 ÞtzpUnmarkedFootnoteTzp0/
 
