@@ -167,7 +167,7 @@ Allow *...* URL to be split across (2 or 3?) lines.
 
 2013 Mar 11
 
-※※ (changed 2014 Dec 14) to create (invisible) anchors (HTML node names).  Refer to them as
+⚓ (changed 2014 Dec 14) to create (invisible) anchors (HTML node names).  Refer to them as
 ./#anchor for anchor in own file, and ./anotherfile#anchor for
 anchors in another file.
 

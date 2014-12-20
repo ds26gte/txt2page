@@ -1,4 +1,4 @@
-.\" last modified 2014-12-17
+.\" last modified 2014-12-18
 .mso ms.tmac
 .
 .if d blankLineMacro .nx
@@ -103,12 +103,14 @@
 .TOC
 ..
 .
-.de DC
-.mso dc.tmac
-.DC \\$*
-..
-.
 .de IX
 .mso index.tmac
 .IX \\$*
+..
+.
+.if \n[.troff2page] .nx
+.
+.de DC
+.mso dc.tmac
+.DC \\$*
 ..
