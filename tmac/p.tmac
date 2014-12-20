@@ -1,4 +1,4 @@
-.\" last modified 2014-12-18
+.\" last modified 2014-12-20
 .mso ms.tmac
 .
 .if d blankLineMacro .nx
@@ -44,10 +44,10 @@
 .ns
 .nr nextGrafWithoutIndent 1
 ..
-.de #
+.de @SH
 .Section 1 \\$*
 ..
-.de ##
+.de SS
 .Section 2 \\$*
 ..
 .de ###
@@ -61,12 +61,6 @@
 ..
 .de ######
 .Section 6 \\$*
-..
-.de @SH
-.Section 1 \\$*
-..
-.de SS
-.Section 2 \\$*
 ..
 .
 .de TH
@@ -91,7 +85,31 @@
 .nr nextGrafWithoutIndent 1
 ..
 .
-.mso code.tmac
+.de EX
+.LP
+.lsm
+.nf
+.in 0
+.ft C
+.KS
+.eo
+..
+.
+.de EE
+.ec
+.KE
+.fi
+.lsm leadingSpacesMacro
+.LP
+.nr nextGrafWithoutIndent 1
+..
+.
+.de ```
+.EX
+..
+.de ````
+.EE
+..
 .
 .de JPEG
 .mso jpeg.tmac
@@ -99,6 +117,10 @@
 ..
 .
 .de TOC
+.if !\\n[GROWPS] \{\
+.tm GROWPS should be > 0 for ToC to materialize
+.return
+.\}
 .mso toc.tmac
 .TOC
 ..
@@ -106,6 +128,12 @@
 .de IX
 .mso index.tmac
 .IX \\$*
+..
+.
+.de theIndex
+.sy test -f \\*[AUXF].ind
+.ie \\n[systat] .tm \\*[AUXF].ind not yet created
+.el .so \\*[AUXF].ind
 ..
 .
 .if \n[.troff2page] .nx
