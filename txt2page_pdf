@@ -159,15 +159,6 @@ func! TroffTables()
 
 endfunc
 
-func! Toggle01(...)
-  if a:0
-    let b:toggle01Value = 1
-  else
-    let b:toggle01Value = !b:toggle01Value
-    return b:toggle01Value
-  endif
-endfunc
-
 func! Txt2pdf()
 
 %s/⋆/*/g
@@ -182,22 +173,13 @@ func! Txt2pdf()
 
 "code display
 
-%s/^\s*\`\`\`.\+\$/\`\`\`/
+%s/^\s*\(\`\`\`\+\)/.\1/
 
-call Toggle01(0)
-g/^\s*\`\`\`\$/ s/\$/\=Toggle01()
+%s/^\.\s*\`\`\`\`\+/.EE/
 
-g/^\s*\`\`\`0\$/+1,/^\s*\`\`\`1\$/-1 s/^/ÞtzpPreformattedTzp/
+%s/^\.\s*\`\`\`/.EX/
 
-%s/^\s*\`\`\`0\$/ÞtzpCodeDisplayStartTzp/
-
-%s/^\s*\`\`\`1\$/ÞtzpCodeDisplayEndTzp/
-
-g/^ÞtzpCodeDisplayEndTzp\$/,/./-1 j!
-
-%s/^ÞtzpCodeDisplayStartTzp\$/.\`\`\`/
-
-%s/^ÞtzpCodeDisplayEndTzp\$/.\`\`\`\`/
+g/^\.\s*EX/+1, /^\.\s*EE/-1 s/^/ÞtzpPreformattedTzp/
 
 "comment
 
