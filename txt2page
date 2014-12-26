@@ -1,4 +1,4 @@
-ver=2014-12-17 # last modified
+ver=2014-12-26 # last modified
 
 # ds26gte@yahoo.com
 
@@ -260,15 +260,6 @@ func! RedirectIfNecessary()
   endif
 endfunc
 
-func! Toggle01(...)
-  if a:0
-    let b:toggle01Value = 1
-  else
-    let b:toggle01Value = !b:toggle01Value
-    return b:toggle01Value
-  endif
-endfunc
-
 func! VerbatimLineAsIsWithContinuation()
   s/\s/Ø/g
   s/^[^Ø]/ÞtzpVerbatimContinuationTzp&/
@@ -372,27 +363,26 @@ endwhile
 
 " troff-friendly triple-backquote env
 
-%s/^\.\s*\(\`\`\`\+\)/\1/
+%s/^\s*\(\`\`\`\+\)/.\1/
 
-%s/^\.\s*E[XE]\$/\`\`\`/
+%s/^\.\s*\`\`\`\`\+/.EE/
 
-%s/^\s*\`\`\`\s*[[:alpha:]]\+\$/ÞtzpListingTzp scheme/
-%s/^\s*\`\`\`\+$/ÞtzpListingTzp/
+%s/^\.\s*\`\`\`/.EX/
+
+%s/^\.\s*EX\s*[[:alpha:]]\+\$/.EX scheme/
 
 if executable('lisphilite')
-  g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/«/</g
-  g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/»/>/g
-  g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 s/Æ/\&/g
-  g/^ÞtzpListingTzp scheme/+1,/^ÞtzpListingTzp/-1 !lisphilite
+  g/^\.\s*EX scheme/+1,/^\.\s*EE/-1 s/«/</g
+  g/^\.\s*EX scheme/+1,/^\.\s*EE/-1 s/»/>/g
+  g/^\.\s*EX scheme/+1,/^\.\s*EE/-1 s/Æ/\&/g
+  g/^\.\s*EX scheme/+1,/^\.\s*EE/-1 !lisphilite
 endif
 
-call Toggle01(0)
-g/^ÞtzpListingTzp/ s/\$/\=Toggle01()
+g/^\.\s*EX/+1, /^\.\s*EE/-1 call CodeLineAsIs()
 
-g/^ÞtzpListingTzp.*0\$/+1,/^ÞtzpListingTzp.*1\$/-1 call CodeLineAsIs()
+%s#^\.\s*EX\(.*\)#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
 
-%s#^ÞtzpListingTzp\(.*\)0\$#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
-%s#^ÞtzpListingTzp\(.*\)1\$#ÞtzpPreformattedTzp</code></div>\r<p class=noindent>#
+%s#^\.\s*EE.*#ÞtzpPreformattedTzp</code></div>\r<p class=noindent>#
 
 "
 
@@ -400,21 +390,15 @@ g/^\.\s*TOC\$/d
 
 "
 
-%s/^\.\s*nf\$/ÞtzpNoFillEnvTzp/
-%s/^\.\s*fi\$/ÞtzpNoFillEnvTzp/
-
-call Toggle01(0)
-g/^ÞtzpNoFillEnvTzp\$/ s/\$/\=Toggle01()
-
-if (b:toggle01Value != 1)
       \$a
-  ÞtzpNoFillEnvTzp1
+ÞtzpFiTzp
 .
-endif
 
-g/^ÞtzpNoFillEnvTzp0/+1,/^\s*ÞtzpNoFillEnvTzp1/-1 call VerbatimLineAsIs()
+g/^\.\s*nf\$/+1,/^\%(\.\s*fi\|ÞtzpFiTzp\)\$/-1 call VerbatimLineAsIs()
 
-g/^\s*ÞtzpNoFillEnvTzp[01]/d
+g/^\.\s*\%(nf\|fi\)\$/d
+
+g/^ÞtzpFiTzp/d
 
 0
 let lastline = line('$')
