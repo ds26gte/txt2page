@@ -1,4 +1,4 @@
-# last modified 2014-12-20
+# last modified 2014-12-26
 # ds26gte@yahoo.com
 
 opts=""
@@ -199,52 +199,6 @@ g/^ÞtzpCodeDisplayEndTzp\$/,/./-1 j!
 
 %s/^ÞtzpCodeDisplayEndTzp\$/.\`\`\`\`/
 
-"obeylines
-
-0
-let lastline = line('$')
-while 1
-  let currline = line('.')
-  if currline == 1 && match(getline('.'), '^\s') > -1
-    let m = 1
-  else
-    let m = search('^\s')
-  endif
-  if m == 0
-    break
-  endif
-  s/\$/ÞtzpLeadingSpacesStartLineTzp/
-  while 1
-    if match(getline('.'), '^\$') > -1
-      s/^\$/.fi\r.LP/
-      break
-    endif
-    s/^\S/ÞtzpVerbatimContinuationTzp&/
-    s/^ //
-    s/^/ÞtzpLeadingSpacesLineTzp/
-    if line('.') == lastline
-      break
-    endif
-    norm j
-  endwhile
-  g/ÞtzpLeadingSpacesStartLineTzp/ s/^/.LP\r.nf\r/
-
-  %s/ÞtzpLeadingSpacesStartLineTzp//
-
-  while 1
-    let m = search('^ÞtzpLeadingSpacesLineTzpÞtzpVerbatimContinuationTzp')
-    if m == 0
-      break
-    endif
-    s/^ÞtzpLeadingSpacesLineTzpÞtzpVerbatimContinuationTzp//
-    norm k
-    .,+1 j
-  endwhile
-
-endwhile
-
-%s/^ÞtzpLeadingSpacesLineTzp//
-
 "comment
 
 g/^\.\s*\\\"/d
@@ -378,34 +332,6 @@ v/./,/./-j
 1 g/^\$/d
 
       \$ g/^ÞtzpLastLineTzp/ \$-1,\$d
-
-%s/^\$/.grafSeparatorLine/
-
-g/^\.LP\$/-1 s/^\.grafSeparatorLine/.deletedGrafSeparatorLine/
-
-g/^\.grafSeparatorLine/+1 s/^\s\+/.obeylinesSeparatorLine\r&/
-
-g/^\.obeylinesSeparatorLine/-1 s/^\.grafSeparatorLine/.deletedGrafSeparatorLine/
-
-g/^\.grafSeparatorLine/-1 s/^\s\+.*\$/&\r.obeylinesSeparatorLine/
-
-g/^.obeylinesSeparatorLine/+1 s/^\.grafSeparatorLine/.deletedGrafSeparatorLine/
-
-g/^\.deletedGrafSeparatorLine/d
-
-%s/^.obeylinesSeparatorLine/.sp .1v\r.LP/
-
-"%s/^\.LP\$/.nr nextGrafWithoutIndent 0\r&/
-
-"%s/^\.grafSeparatorLine\$/.ie \\\\n[nextGrafWithoutIndent] \\\\{\\\\\r.nr nextGrafWithoutIndent 0\r.LP\r.\\\\}\r.el .PP/
-
-"%s/^\.grafSeparatorLine\$/.p/
-"%s/^\.grafSeparatorLine\$/.PP/
-%s/^\.grafSeparatorLine\$//
-
-"g/^\.grafSeparatorLine/+1 s/^\s\+/.LP\r&/
-
-"g/^\.grafSeparatorLine/-1 s/^\s\+.*/&\r.nr nextGrafWithoutIndent 1/
 
 "
 
