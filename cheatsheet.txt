@@ -1,4 +1,4 @@
-.\” last modified 2014-12-18
+.\" last modified 2015-01-02
 ```
 blank lines separate grafs
 
@@ -98,6 +98,10 @@ can be multiple grafs.†)
 
 |cell|cell|cell
   on successive lines makes table
+
+.NAV  [prev] next [contents] [index]
+  create nav bar at head and foot of page. Only for HTML.
+  prev, contents, index are optional
 
 for HTML:
   txt2page will first found of basename.css, txt2page.css, default.css, or

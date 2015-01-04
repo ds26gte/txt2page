@@ -1,4 +1,4 @@
-# last modified 2014-12-26
+# last modified 2015-01-02
 # ds26gte@yahoo.com
 
 opts=""
@@ -25,17 +25,6 @@ ext=${g##*.}
 test "$ext" = "$g" && ext=""
 
 g=${g%.*}
-
-loadtmac=1
-
-if test -f $g.tmac
-then tmacf=$g.tmac
-elif test -f txt2page.tmac
-then tmacf=txt2page.tmac
-elif test -f default.tmac
-then tmacf=default.tmac
-else loadtmac=0
-fi
 
 h=$g.txt.so
 
@@ -208,31 +197,6 @@ g/^\.\s*\\\"/d
 
 g/^ÞtzpSectionTzp\s\+htmltitle\s/d
 
-"section break
-
-%s/^[^[:alnum:]]\+\$/ÞtzpSectionTzp break &/
-
-g/^ÞtzpSectionTzp\s\+break\s/-1 s/^\$/ÞtzpSectionTzp blankabovebreak x/
-g/^ÞtzpSectionTzp\s\+break\s/+1 s/^\$/ÞtzpSectionTzp blankbelowbreak x/
-
-g/^ÞtzpSectionTzp\s\+blankabovebreak\s/+1 s/ÞtzpSectionTzp\s\+break\s/ÞtzpSectionTzp breakbelowblank /
-
-"g/^ÞtzpSectionTzp\s\+blankabovebreak\s/d
-
-%s/^ÞtzpSectionTzp\s\+blankabovebreak\s.*//
-
-%s/^ÞtzpSectionTzp\s\+break\s//
-
-g/^ÞtzpSectionTzp\s\+blankbelowbreak\s/-1 s/ÞtzpSectionTzp\s\+breakbelowblank\s/ÞtzpSectionTzp breakbetweenblanks /
-
-%s/^ÞtzpSectionTzp\s\+blankbelowbreak\s.*//
-
-%s/^ÞtzpSectionTzp\s\+breakbelowblank\s//
-
-"g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
-
-%s/^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\)\$/.Newsection \1/
-
 "
 
 %s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.TH \1/
@@ -276,6 +240,8 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 %s:^※\s*\(.*\)\$:.LP\r[\1]\r.br:
 
 g/^⚓/d
+
+g/^\.NAV\s/d
 
 "bullet items
 
@@ -324,10 +290,6 @@ v/./,/./-j
 g/^ÞtzpBogusEndOfFileLineTzp/d
 
 %s/ÞtzpThornTzp/Þ/g
-
-if $loadtmac
-  0r $tmacf
-endif
 
 0i
 .mso p.tmac

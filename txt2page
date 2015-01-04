@@ -1,4 +1,4 @@
-ver=2014-12-26 # last modified
+ver=2015-01-03 # last modified
 
 # ds26gte@yahoo.com
 
@@ -24,25 +24,13 @@ if test "$pdf" = 1
 then exec txt2page_pdf $opts; exit
 fi
 
-txt2pageLoop() {
-  prev=
-  while test $# -ne 0
-  do
-    curr="$1"
-    shift
-    if test $# -ne 0
-    then next="$1"
-    else next=
-    fi
-    txt2pageEachFile "$curr" "$prev" "$next"
-    prev="$curr"
-  done
-}
-
-txt2pageEachFile() {
+txt2pageFile() {
+  if test $# -eq 0
+  then echo error: no file argument provided; exit;
+  elif test $# -ne 1
+  then echo error: too many arguments provided; exit;
+  fi
   f=$1
-  prevPage=$2
-  nextPage=$3
   if test ! -f "$f"
   then
     if test "$f" = "--version"
@@ -160,26 +148,9 @@ func! UpcaseDigits(x)
   return l:y
 endfunc
 
-"let g:initFcounterValue = 2718
-let g:initFcounterValue = 1
-
-func! BumpFcounter(...)
-  if !exists('b:FcounterValue')
-    let b:FcounterValue = g:initFcounterValue - 1
-  endif
-  if a:0
-    let b:FcounterValue = g:initFcounterValue - 1
-  else
-    let b:FcounterValue += 1
-    return UpcaseDigits('¶' . b:FcounterValue)
-  endif
-endfunc
-
 func! FindURLfootnotes()
-  call BumpFcounter(0)
   v/^ÞtzpPreformattedTzp/ s_:<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpURLfootnoteTzp</a>_g
   %s/ÞtzpURLfootnoteTzp/‣‣‣/g
-  "%s/ÞtzpURLfootnoteTzp/\=BumpFcounter()
 endfunc
 
 func! FindURLHs()
@@ -433,12 +404,12 @@ while 1
   %s/^ÞtzpVerbatimContinuationTzp//
 endwhile
 
-v/[᛫‡]/ s/^\.\s*\\\"/ÞtzpDeleteCommentTzp&/
-g/^ÞtzpDeleteCommentTzp/d
+"v/[᛫‡]/ s/^\.\s*\\\"/ÞtzpDeleteCommentTzp&/
+"g/^ÞtzpDeleteCommentTzp/d
 
-%s/^\.\s*\\\"//
+"%s/^\.\s*\\\"//
 
-"g/^\.\s*\\\"/d
+g/^\.\s*\\\"/d
 "g/^\.\s*HTL/d
 "g/^#\s\+.\{-}\s*##\$/d
 
@@ -502,7 +473,6 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 
 %s/^#\s\+\(.\{-}\)\s\+#\$/ÞtzpSectionTzp title \1/
 %s/^#\s\+\(.\{-}\)\s\+##\$/ÞtzpSectionTzp htmltitle \1/
-"%s/^##\s\+##\$/ÞtzpSectionTzp sectionbreak x/
 %s/^###\s\+###\$/ÞtzpSectionTzp dropcap x/
 
 %s/^#\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 1 \1/
@@ -518,7 +488,6 @@ g/^ÞtzpSectionTzp\s\+htmltitle\s\+/d
 
 %s:^ÞtzpSectionTzp\s\+\(title\)\s\+\(.*\):</p>\r<h1 class=\1>\2</h1>\r<p class=noindent>:
 %s:^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\):</p>\r<h\1 class=section>\2</h\1>\r<p class=noindent>:
-"%s:^ÞtzpSectionTzp\s\+\(sectionbreak\)\s\+.*:</p>\r<h3 class=\1>\&#x3091;</h3>\r<p class=noindent>:
 
 " possible ornaments: * &#x203b &#x2217
 
@@ -609,50 +578,38 @@ g/^ÞtzpFootnoteTzpÞtzpFootnoteEnvTzp/ m\$
 
 "end footnotes
 
-"%s#^:\$#</p>\r<div class=sectionbreak></div>\r<p>#
-
 "%s#^:\([^:]\+\):#</p>\r<p class=noindent><span class=dropcap>\1</span>#
 
 "%s#^:\s\+\(\%([0-9]\+\.\)*[0-9]\+\)\.\s#</p>\r<p class=beginsection><span class=dropcap>\1</span> #
 "%s#^:\s\+\([^A-Z0-9]*[A-Z0-9]\)#</p>\r<p class=beginsection><span class=dropcap>\1</span>#
 
-"g/^<p class=FOLLOWINGANCHOR>/,/^<\/p>/d
-
 %s#^\s*-\{5,}\$#<hr/>#
 %s#^\.\s*--\(\s.*\)\?\$#<hr noshade size="1"/>#
 %s#^\.\s*==\(\s.*\)\?\$#<hr noshade size="5"/>#
 
-"arbitrary section-break ornament
-
-%s/^[^[:alnum:]]\+\$/ÞtzpSectionTzp break &/
-
-g/^ÞtzpSectionTzp\s\+break\s/-1 s/^\$/ÞtzpSectionTzp blankabovebreak x/
-g/^ÞtzpSectionTzp\s\+break\s/+1 s/^\$/ÞtzpSectionTzp blankbelowbreak x/
-
-g/^ÞtzpSectionTzp\s\+blankabovebreak\s/+1 s/ÞtzpSectionTzp\s\+break\s/ÞtzpSectionTzp breakbelowblank /
-
-%s/^ÞtzpSectionTzp\s\+blankabovebreak\s.*//
-
-%s/^ÞtzpSectionTzp\s\+break\s//
-
-g/^ÞtzpSectionTzp\s\+blankbelowbreak\s/-1 s/ÞtzpSectionTzp\s\+breakbelowblank\s/ÞtzpSectionTzp breakbetweenblanks /
-
-%s/^ÞtzpSectionTzp\s\+blankbelowbreak\s.*//
-
-%s/^ÞtzpSectionTzp\s\+breakbelowblank\s//
-
-g/^ÞtzpSectionTzp\s\+breakbetweenblanks\s/,/./-1 j!
-
-%s:^ÞtzpSectionTzp\s\+breakbetweenblanks\s\+\(.*\):</p>\r<p class="dinkus noindent">\1\r</p>\r<p class=noindent>:
-
 "
 
-if "$prevPage" != "" || "$nextPage" != ""
-  1s:^:ÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="$nextPage">next</a> page\r:
-  \$s:\$:\rÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="$nextPage">next</a> page:
-endif
+"if "$prevPage" != "" || "$nextPage" != ""
+"  1s:^:ÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="$nextPage">next</a> page\r:
+"  \$s:\$:\rÞtzpNavbarTzp<a href="$prevPage">previous</a>, <a href="$nextPage">next</a> page:
+"endif
+"
+"g/^ÞtzpNavbarTzp/ s:<a href="">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
+"
+"%s:^ÞtzpNavbarTzp\(.*\)\$:<div align=right><span class=navbar>[Go to \1]</span></div>:
 
-g/^ÞtzpNavbarTzp/ s:<a href="">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
+/^\.NAV/ m \$
+
+      \$ /^\.NAV/ co 0
+
+%s:^\.NAV.*:\r\0\r:
+
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>; <a href="\4">index</a>:
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page; <a href="\3">contents</a>:
+%s:^\.NAV\s\+\(\S\+\)\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">previous</a>, <a href="\2">next</a> page:
+%s:^\.NAV\s\+\(\S\+\):ÞtzpNavbarTzp<a href="\1">next</a> page:
+
+g/^ÞtzpNavbarTzp/ s:<a href="_">\(.\{-}\)</a>:<span class=grayed>\1</span>:g
 
 %s:^ÞtzpNavbarTzp\(.*\)\$:<div align=right><span class=navbar>[Go to \1]</span></div>:
 
@@ -739,4 +696,5 @@ w
 EOF
 }
 
-txt2pageLoop $opts
+txt2pageFile $opts
+exit 0

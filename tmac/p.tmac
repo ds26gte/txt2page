@@ -1,4 +1,4 @@
-.\" last modified 2014-12-20
+.\" last modified 2014-12-29
 .mso ms.tmac
 .
 .if d blankLineMacro .nx
@@ -76,15 +76,6 @@
 .nr nextGrafWithoutIndent 1
 ..
 .
-.de Newsection
-.LP
-.sp .5v
-\\$*
-.sp .3v
-.LP
-.nr nextGrafWithoutIndent 1
-..
-.
 .de EX
 .LP
 .lsm
@@ -134,6 +125,10 @@
 .sy test -f \\*[AUXF].ind
 .ie \\n[systat] .tm \\*[AUXF].ind not yet created
 .el .so \\*[AUXF].ind
+..
+.
+.am par@init
+.nr FL \\n[LL]
 ..
 .
 .if \n[.troff2page] .nx
