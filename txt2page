@@ -1,4 +1,4 @@
-ver=2015-01-03 # last modified
+ver=2015-01-04 # last modified
 
 # ds26gte@yahoo.com
 
@@ -456,10 +456,12 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 "g/^ÞtzpBogusEndOfFileLineTzp/d
 
 "visible anchor
-%s:^※\s*\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]Ø</span>:
+"%s:^※\s*\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]Ø</span>:
+%s:^\.\s*BB\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]Ø</span>:
 
 "invisible anchor
-%s:^⚓\s*\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
+"%s:^⚓\s*\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
+%s:^\.\s*AN\s\+\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
 
 "sections
 

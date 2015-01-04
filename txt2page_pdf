@@ -1,4 +1,4 @@
-# last modified 2015-01-02
+# last modified 2015-01-04
 # ds26gte@yahoo.com
 
 opts=""
@@ -166,7 +166,7 @@ func! Txt2pdf()
 
 %s/^\.\s*\`\`\`\`\+/.EE/
 
-%s/^\.\s*\`\`\`/.EX/
+%s/^\.\s*\`\`\`/.EX /
 
 g/^\.\s*EX/+1, /^\.\s*EE/-1 s/^/ÞtzpPreformattedTzp/
 
@@ -237,11 +237,15 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 
 %s/^†\s*\(\S.*\)\?\s*\$/.FS \1/
 
-%s:^※\s*\(.*\)\$:.LP\r[\1]\r.br:
+"%s:^※\s*\(.*\)\$:.LP\r[\1]\r.br:
 
-g/^⚓/d
+%s:^\.\s*BB\s\+\(.*\)\$:.LP\r[\1]\r.br:
 
-g/^\.NAV\s/d
+"g/^⚓/d
+
+g/^\.\s*AN\s/d
+
+g/^\.\s*NAV\s/d
 
 "bullet items
 
