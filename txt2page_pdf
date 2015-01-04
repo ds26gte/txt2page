@@ -45,6 +45,8 @@ func! TroffRecognizeURLs()
     " ./pathname
     s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#ÞtzpURLbeginTzp\1ÞtzpURLendTzp#g
 
+    s:\(ÞtzpURLbeginTzp\)[^#]\{-}#\([^#]\{-}\)\(ÞtzpURLendTzp\):\1[\2]\3:g
+
 endfunc
 
 func! TroffFindURLfootnotes()
@@ -239,13 +241,13 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 
 "%s:^※\s*\(.*\)\$:.LP\r[\1]\r.br:
 
-%s:^\.\s*BB\s\+\(.*\)\$:.LP\r[\1]\r.br:
+"%s:^\.\s*BB\s\+\(.*\)\$:.LP\r[\1]\r.br:
 
 "g/^⚓/d
 
-g/^\.\s*AN\s/d
+"g/^\.\s*AN\s/d
 
-g/^\.\s*NAV\s/d
+"g/^\.\s*NAV\s/d
 
 "bullet items
 

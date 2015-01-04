@@ -457,7 +457,7 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 
 "visible anchor
 "%s:^※\s*\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]Ø</span>:
-%s:^\.\s*BB\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]Ø</span>:
+%s:^\.\s*BB\s\+\([^[:space:]()<>&#]\+\)\$:<span class=anchor><a name="\1"></a>[\1]</span>:
 
 "invisible anchor
 "%s:^⚓\s*\([^[:space:]()<>&#]\+\)\$:<a name="\1"></a>:
