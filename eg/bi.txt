@@ -1,0 +1,6 @@
+See ./bi.txt#book.
+
+## section
+
+.BB book
+Some book
