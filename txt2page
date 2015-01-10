@@ -1,4 +1,4 @@
-ver=2015-01-04 # last modified
+ver=2015-01-10 # last modified
 
 # ds26gte@yahoo.com
 
@@ -236,7 +236,7 @@ func! VerbatimLineAsIsWithContinuation()
   s/^[^Ø]/ÞtzpVerbatimContinuationTzp&/
   s/^Ø//
   s/\([^Ø]\)Ø\([^Ø]\)/\1 \2/g
-  s#\$#<br/>#
+  s#\$#ÞtzpBreakLineTzp#
 endfunc
 
 func! VerbatimLineAsIs()
@@ -374,6 +374,7 @@ g/^ÞtzpFiTzp/d
 0
 let lastline = line('$')
 while 1
+  " find the first line with a leading space
   let currline = line('.')
   if currline == 1 && match(getline('.'), '^\s') > -1
     let m = 1
@@ -383,26 +384,36 @@ while 1
   if m == 0
     break
   endif
+  " and mark its end
   s/\$/ÞtzpLeadingSpacesStartLineTzp/
   while 1
+    " if blank line found, make it a parsep
     if match(getline('.'), '^\$') > -1
-      s:^\$:</p>\r<p class=noindent>:
+      s:^\$:</p>ÞtzpCarriageReturnTzp<p class=noindent>:
+      . -1s:ÞtzpBreakLineTzp\$::
       break
     endif
+    " if not a blank line, verbatimize it
     call VerbatimLineAsIsWithContinuation()
+    " break on eof
     if line('.') == lastline
       break
     endif
     norm j
   endwhile
-  g/ÞtzpLeadingSpacesStartLineTzp/ s#^#</p>\r<p class=noindent>\r#
+  " put a parsep before the start too
+  g/ÞtzpLeadingSpacesStartLineTzp/ s#^#</p>ÞtzpCarriageReturnTzp<p class=noindent>ÞtzpCarriageReturnTzp#
 
   %s/ÞtzpLeadingSpacesStartLineTzp//
 
-  g/^ÞtzpVerbatimContinuationTzp/-1 s:<br/>\$::
+  g/^ÞtzpVerbatimContinuationTzp/-1 s:ÞtzpBreakLineTzp\$::
 
   %s/^ÞtzpVerbatimContinuationTzp//
 endwhile
+" make the parseps neat
+%s:ÞtzpCarriageReturnTzp:\r:g
+
+%s:ÞtzpBreakLineTzp\$:<br/>:
 
 "v/[᛫‡]/ s/^\.\s*\\\"/ÞtzpDeleteCommentTzp&/
 "g/^ÞtzpDeleteCommentTzp/d
