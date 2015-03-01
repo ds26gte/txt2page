@@ -1,4 +1,4 @@
-ver=2015-01-10 # last modified
+ver=2015-03-01 # last modified
 
 # ds26gte@yahoo.com
 
@@ -320,15 +320,7 @@ while 1
     norm j
 endwhile
 
-let ln = 0
-while ln < 100 && ln < lastline
-    let x = getline(ln)
-    if match(x, '^\%(\.\s*\%(TH\|SH\|SS\)\|#\+\)\s\+\S') > -1
-        let titleText = substitute(x, '^\%(\.\s*\%(TH\|SH\|SS\)\|#\+\)\s\+\(.\{-}\)\s*#*\$', '\1', '')
-        break
-    endif
-    let ln+=1
-endwhile
+"calc titleText here?
 
 "code display
 
@@ -495,12 +487,34 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 %s/^#####\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 5 \1/
 %s/^######\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 6 \1/
 
+%s/^\.\s*\*\{1}\s\+\(\S\)/ÞtzpTroffSectionTzp 1 \1/
+%s/^\.\s*\*\{2}\s\+\(\S\)/ÞtzpTroffSectionTzp 2 \1/
+%s/^\.\s*\*\{3}\s\+\(\S\)/ÞtzpTroffSectionTzp 3 \1/
+%s/^\.\s*\*\{4}\s\+\(\S\)/ÞtzpTroffSectionTzp 4 \1/
+%s/^\.\s*\*\{5}\s\+\(\S\)/ÞtzpTroffSectionTzp 5 \1/
+%s/^\.\s*\*\{6}\s\+\(\S\)/ÞtzpTroffSectionTzp 6 \1/
+
+g/^ÞtzpTroffSectionTzp/,/^\$/-1 j
+
 g/^ÞtzpSectionTzp/,/./-1 j!
+
+%s/^ÞtzpTroffSectionTzp/ÞtzpSectionTzp/
 
 g/^ÞtzpSectionTzp\s\+htmltitle\s\+/d
 
 %s:^ÞtzpSectionTzp\s\+\(title\)\s\+\(.*\):</p>\r<h1 class=\1>\2</h1>\r<p class=noindent>:
 %s:^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\):</p>\r<h\1 class=section>\2</h\1>\r<p class=noindent>:
+
+let lastline = line('$')
+let ln = 0
+while ln < 100 && ln < lastline
+  let x = getline(ln)
+  if match(x, '^<h[0-9]\+.\{-}>') > -1
+    let titleText = substitute(x, '^<h[0-9]\+.\{-}>\(.\{-}\)<\/h[0-9]>', '\1', '')
+    break
+  endif
+  let ln+=1
+endwhile
 
 " possible ornaments: * &#x203b &#x2217
 

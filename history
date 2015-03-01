@@ -1,3 +1,12 @@
+2015 Mar 1
+
+.* etc for troff-like headers that allow heading to spill across
+lines. 
+
+Determine title-text after headers have all been determined, so
+troff-like headers can contribute a potential multiple-line
+title.
+
 2014 Dec 16 
 
 ‡ text URL
