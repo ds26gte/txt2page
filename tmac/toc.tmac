@@ -1,0 +1,35 @@
+.\" last modified 2015-02-21
+.\" Dorai Sitaram
+.
+.if d write-toc-line .nx
+.
+.if '\*[AUXF]'' .ds AUXF .trofftemp
+.
+.if !r TOCD .nr TOCD 1
+.
+.de write-toc-line
+.if !\\n[enable-toc-entries] .return
+.if !\\n[.U] .return
+.nr header-level \\$1
+.shift
+.if (\\n[header-level] > \\n[TOCD]) .return
+.if !\\n[toc-opened] \{\
+.nr toc-opened 1
+.open toc-port \\*[AUXF].toc
+.\}
+.write toc-port .toc-line \\n[header-level] \\n[%] \\$*
+..
+.
+.de toc-line
+.nr header-level \\$1
+.ds page-num \\$2
+.shift 2
+.IP " " \\n[header-level]m
+\\$*, \\*[page-num]
+..
+.
+.de TOC
+.so \\*[AUXF].toc
+.nr next-graf-without-indent 1
+.nr enable-toc-entries 1
+..

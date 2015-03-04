@@ -1,130 +1,31 @@
 .\" last modified 2015-03-03
+.\" Dorai Sitaram
+.
 .mso ms.tmac
 .
 .if d blankLineMacro .nx
 .
-.de blankLineMacro
-.ec
-.if !\\n[.u] \{\
-.sp .5v
-.eo
-.return
-.\}
-.ie \\n[obeylines] \{\
-.nr obeylines 0
-.LP
-.\}
-.el .ie \\n[nextGrafWithoutIndent] \{\
-.nr nextGrafWithoutIndent 0
-.LP
-.\}
-.el .PP
-..
-.blm blankLineMacro
+.mso blparsep.tmac
 .
-.de leadingSpacesMacro
-.ie \\n[obeylines] .br
-.el \{\
-.nr obeylines 1
-.ns
-.LP
-.\}
-\h'\\n[lsn]n'
-..
-.lsm leadingSpacesMacro
+.mso lsnoparind.tmac
 .
-.rn @SH @SHorig
+.mso section.tmac
 .
-.de Section
-.if d writeTocLine .writeTocLine \\$*
-.@SHorig \\$1
-.shift
-\\$*
-.LP
-.ns
-.nr nextGrafWithoutIndent 1
-..
-.de @SH
-.Section 1 \\$*
-..
-.de SS
-.Section 2 \\$*
-..
-.de ###
-.Section 3 \\$*
-..
-.de ####
-.Section 4 \\$*
-..
-.de #####
-.Section 5 \\$*
-..
-.de ######
-.Section 6 \\$*
-..
+.mso verbenv.tmac
 .
-.de TH
-.RT
-.if '\\$1'' .return
-.LP
-.ce 10
-.LG
-\fB\\$*
-.sp 1ex
-.ce
-.LP
-.nr nextGrafWithoutIndent 1
-..
-.
-.de EX
-.LP
-.lsm
-.nf
-.in 0
-.ft C
-.KS
-.eo
-..
-.
-.de EE
-.ec
-.KE
-.fi
-.lsm leadingSpacesMacro
-.LP
-.nr nextGrafWithoutIndent 1
-..
-.
-.de ```
-.EX
-..
-.de ````
-.EE
-..
-.
-.de JPEG
-.mso jpeg.tmac
-.JPEG \\$*
+.de IMG
+.mso insrtimg.tmac
+.IMG \\$*
 ..
 .
 .de TOC
-.if !\\n[GROWPS] \{\
-.tm GROWPS should be > 0 for ToC to materialize
-.return
-.\}
 .mso toc.tmac
 .TOC
 ..
 .
 .de IX
-.mso index.tmac
+.mso mkindex.tmac
 .IX \\$*
-..
-.
-.de theIndex
-.sy test -f \\*[AUXF].ind
-.ie \\n[systat] .tm \\*[AUXF].ind not yet created
-.el .so \\*[AUXF].ind
 ..
 .
 .am par@init
@@ -148,3 +49,10 @@
 .mso dc.tmac
 .DC \\$*
 ..
+.
+.char \[u2216] \[u005C]
+.
+.char \[uFE4F] *
+.
+.char ⌈ \\fC
+.char ⌋ \\fP

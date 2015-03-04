@@ -1,0 +1,12 @@
+.\" last modified 2015-02-21
+.
+.de leading-spaces-macro
+.ie \\n[obey-lines] .br
+.el \{\
+.nr obey-lines 1
+.ns
+.LP
+.\}
+\h'\\n[lsn]n'
+..
+.lsm leading-spaces-macro

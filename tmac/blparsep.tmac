@@ -1,0 +1,20 @@
+.\" last modified 2015-02-21
+.
+.de blank-line-macro
+.ec
+.if !\\n[.u] \{\
+.sp .5v
+.eo
+.return
+.\}
+.ie \\n[obey-lines] \{\
+.nr obey-lines 0
+.LP
+.\}
+.el .ie \\n[next-graf-without-indent] \{\
+.nr next-graf-without-indent 0
+.LP
+.\}
+.el .PP
+..
+.blm blank-line-macro

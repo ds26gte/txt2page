@@ -1,0 +1,20 @@
+.\" last modified 2015-03-03
+.\" Dorai Sitaram
+.
+.de Section
+.if d write-toc-line .write-toc-line \\$*
+.SH \\$1
+.shift
+.nr next-graf-without-indent 1
+\\$*
+..
+.
+.de *
+.Section 1 \\$*
+..
+.de **
+.Section 2 \\$*
+..
+.de ***
+.Section 3 \\$*
+..
