@@ -1,4 +1,4 @@
-ver=2015-03-04 # last modified
+ver=2015-03-09 # last modified
 
 # ds26gte@yahoo.com
 
@@ -105,15 +105,15 @@ func! RecognizeURLs()
 
     "images
 
-    s#^\.\s*JPEG\s\+\([^-[:space:]]\)#.JPEG -center \1#
+    s#^\.\s*IMG\s\+\([^-[:space:]]\)#.IMG -center \1#
 
-    s#^\.\s*JPEG\s\+-L\s#.JPEG -left #
-    s#^\.\s*JPEG\s\+-C\s#.JPEG -center #
-    s#^\.\s*JPEG\s\+-R\s#.JPEG -right #
+    s#^\.\s*IMG\s\+-L\s#.IMG -left #
+    s#^\.\s*IMG\s\+-C\s#.IMG -center #
+    s#^\.\s*IMG\s\+-R\s#.IMG -right #
 
-    s#^\.\s*\(JPEG\s\+-[leftcnrigh]\+\s\+\S\+\)\s*\$#.\1 50#
+    s#^\.\s*\(IMG\s\+-[leftcnrigh]\+\s\+\S\+\)\s*\$#.\1 50#
 
-    s#^\.\s*JPEG\s\+-\([leftcnrigh]\+\)\s\+\(\S\+\)\s\+\([0-9]\+\)#<div class=figure align=\1><img src="\2" width="\3%" border="0" alt=""></div>#
+    s#^\.\s*IMG\s\+-\([leftcnrigh]\+\)\s\+\(\S\+\)\s\+\([0-9]\+\)#<div class=figure align=\1><img src="\2" width="\3%" border="0" alt=""></div>#
 
     exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '"><code>\(.\{-}\)\.' . g:fileExtension . '</code></a>:<a href="\1.html"><code>\2.html</code></a>:g'
 
