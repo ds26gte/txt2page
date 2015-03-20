@@ -1,4 +1,4 @@
-ver=2015-03-09 # last modified
+ver=2015-03-20 # last modified
 
 # ds26gte@yahoo.com
 
@@ -492,12 +492,12 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 %s/^#####\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 5 \1/
 %s/^######\s\+\(.\{-}\)\s*#*\$/ÞtzpSectionTzp 6 \1/
 
-%s/^\.\s*\*\{1}\s\+\(\S\)/ÞtzpTroffSectionTzp 1 \1/
-%s/^\.\s*\*\{2}\s\+\(\S\)/ÞtzpTroffSectionTzp 2 \1/
-%s/^\.\s*\*\{3}\s\+\(\S\)/ÞtzpTroffSectionTzp 3 \1/
-%s/^\.\s*\*\{4}\s\+\(\S\)/ÞtzpTroffSectionTzp 4 \1/
-%s/^\.\s*\*\{5}\s\+\(\S\)/ÞtzpTroffSectionTzp 5 \1/
-%s/^\.\s*\*\{6}\s\+\(\S\)/ÞtzpTroffSectionTzp 6 \1/
+%s/^\.\s*=\{1}\s\+\(\S\)/ÞtzpTroffSectionTzp 1 \1/
+%s/^\.\s*=\{2}\s\+\(\S\)/ÞtzpTroffSectionTzp 2 \1/
+%s/^\.\s*=\{3}\s\+\(\S\)/ÞtzpTroffSectionTzp 3 \1/
+%s/^\.\s*=\{4}\s\+\(\S\)/ÞtzpTroffSectionTzp 4 \1/
+%s/^\.\s*=\{5}\s\+\(\S\)/ÞtzpTroffSectionTzp 5 \1/
+%s/^\.\s*=\{6}\s\+\(\S\)/ÞtzpTroffSectionTzp 6 \1/
 
 g/^ÞtzpTroffSectionTzp/,/^\$/-1 j
 

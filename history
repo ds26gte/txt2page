@@ -1,7 +1,9 @@
-2015 Mar 1
+2015 Mar 20
 
-.* etc for troff-like headers that allow heading to spill across
+.= etc for troff-like headers that allow heading to spill across
 lines. 
+
+2015 Mar 1
 
 Determine title-text after headers have all been determined, so
 troff-like headers can contribute a potential multiple-line
