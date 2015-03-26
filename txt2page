@@ -1,4 +1,4 @@
-ver=2015-03-20 # last modified
+ver=2015-03-26 # last modified
 
 # ds26gte@yahoo.com
 
@@ -80,7 +80,7 @@ func! RecognizeURLs()
 
     " evalwhen.com becomes FAKEHTTP://evalwhen.com
     " -- check not preceded by @ or ://
-    s#\%(@\|://\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|se\)\>#FAKEHTTP://&#g
+    s#\%(@\|://\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|[[:lower:]]\{2}\%(js\|on\)\@<!\)\>#FAKEHTTP://&#g
 
     " mailto:addr becomes <a href="mailto:addr">mailto:addr</a>
     s#\<mailto:\([[:alnum:]]\+@[[:alnum:].]\+[[:alpha:]]\)\>#<a href="&"><code>\1</code></a>#g
@@ -361,6 +361,8 @@ g/^\.\s*TOC\$/d
       \$a
 ÞtzpFiTzp
 .
+
+%s/^\.\s*\(nf\|fi\)\(\s\+.*\)\?/.\1/
 
 g/^\.\s*nf\$/+1,/^\%(\.\s*fi\|ÞtzpFiTzp\)\$/-1 call VerbatimLineAsIs()
 
