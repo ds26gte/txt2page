@@ -1,4 +1,4 @@
-# last modified 2015-01-04
+# last modified 2015-03-28
 # ds26gte@yahoo.com
 
 opts=""
@@ -298,7 +298,7 @@ g/^ÞtzpBogusEndOfFileLineTzp/d
 %s/ÞtzpThornTzp/Þ/g
 
 0i
-.mso p.tmac
+.mso pca.tmac
 .
 
 endfunc
