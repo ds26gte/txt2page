@@ -378,8 +378,6 @@ g/^\.\s*\\\"/d
 "g/^\.\s*HTL/d
 "g/^#\s\+.\{-}\s*##\$/d
 
-"v/^ÞtzpPreformattedTzp/ call SmartQuotes()
-
 "bullet items
 
 %s:^•\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
@@ -652,7 +650,7 @@ call RedirectIfNecessary()
 <html lang="en">
 <!--
 Generated from $f by txt2page, version $ver
-Copyright (C) 2010-2014 Dorai Sitaram
+Copyright (C) 2010-2015 Dorai Sitaram
 -->
 <head>
 <meta charset="utf-8">
