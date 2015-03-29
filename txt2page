@@ -1,4 +1,4 @@
-ver=2015-03-28 # last modified
+ver=2015-03-29 # last modified
 
 # ds26gte@yahoo.com
 
@@ -80,7 +80,7 @@ func! RecognizeURLs()
 
     " evalwhen.com becomes FAKEHTTP://evalwhen.com
     " -- check not preceded by @ or ://
-    s#\%(@\|://\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|[[:lower:]]\{2}\%(js\|on\)\@<!\)\>#FAKEHTTP://&#g
+    s#\%(@\|://\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|[[:lower:]]\{2}\%(js\|ms\|on\|ps\|sh\)\@<!\)\>#FAKEHTTP://&#g
 
     " mailto:addr becomes <a href="mailto:addr">mailto:addr</a>
     s#\<mailto:\([[:alnum:]]\+@[[:alnum:].]\+[[:alpha:]]\)\>#<a href="&"><code>\1</code></a>#g
@@ -158,9 +158,15 @@ func! FindURLHs()
 
   g/^ÞtzpPossibleURLHtzp/ -1s/[᛫‡].\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
-  %s/^ÞtzpPossibleURLHtzp//
+  g/^ÞtzpPossibleURLHtzp/ -2s/[᛫‡].\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
-  g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+  g/ÞtzpURLHcontinuationLineTzp\$/ -1s/ÞtzpURLHcontinuationLineTzp\$//
+
+  g/ÞtzpURLHcontinuationLineTzp\$/ .,/^ÞtzpPossibleURLHtzp/ j
+
+  %s/ÞtzpPossibleURLHtzp//
+
+  "g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
 
   %s/ÞtzpURLHcontinuationLineTzp//
 
