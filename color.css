@@ -1,15 +1,4 @@
-/* last modified 2014-12-04 */
-
-a {
-    /* color: #dd4814; /* ubuntu orange */
-    /* color: #cc7722; */
-    /* color: #b7410e; /* rust */
-}
-
-a:visited {
-    /* color: #9400d3; /* dark violet */
-    /* color: #b44e3d; /* burnt ochre */
-}
+/* last modified 2015-04-05 */
 
 a:hover {
     color: #333333; /* ubuntu cool gray */
@@ -20,7 +9,6 @@ h1,
 h2,
 h3 {
      color: #a14743; /* roof terracotta */
-    /* color: #333333; /* ubuntu cool gray */
 }
 
 .navbar {

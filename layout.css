@@ -1,4 +1,4 @@
-/* last modified 2014-10-30 */
+/* last modified 2015-04-05 */
 
 body {
     max-width: 40em;
@@ -18,7 +18,6 @@ a {
     margin-bottom: 2em;
     text-align: center;
     font-size: 200%;
-    /* font-weight: normal; */
 }
 
 h1,
@@ -43,7 +42,6 @@ h2 {
 
 .dropcap {
     line-height: 80%;
-    /* font-size: 410%; */
     font-size: 500%;
     float: left;
     padding-right: 5px;
@@ -69,18 +67,6 @@ p.bulleted .bullet {
 
 .navbar {
     font-style: italic;
-}
-
-.title {
-    /* font-size: 161.8%; /* φ */
-}
-
-h1 {
-/*    font-size: 127.2%; /* √φ */
-}
-
-h2 {
- /*   font-size: 112.8%; /* √(√φ) */
 }
 
 @media print {

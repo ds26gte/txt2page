@@ -1,18 +1,9 @@
-/* last modified 2014-12-04 */
+/* last modified 2015-04-05 */
 
 @import url(http://fonts.googleapis.com/css?family=Ubuntu);
 @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono);
-@import url(http://fonts.googleapis.com/css?family=Libre+Baskerville);
-
-body,
-.dropcap {
-    /* font-family: 'libre baskerville', georgia, times, ubuntu, serif;
-    /* line-height: 1.4; /* for baskerville only */
-    /* word-spacing: .07em; /* for ubuntu only */
-}
 
 code {
-    /* font-size: 120%; */
     font-family: 'ubuntu mono', monospace;
 }
 
