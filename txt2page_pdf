@@ -1,4 +1,4 @@
-# last modified 2015-03-28
+# last modified 2015-04-18
 # ds26gte@yahoo.com
 
 opts=""
@@ -201,7 +201,7 @@ g/^ÞtzpSectionTzp\s\+htmltitle\s/d
 
 "
 
-%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.TH \1/
+%s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)\$/.Title \1/
 
 %s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)\$/.Section \1 \2/
 
