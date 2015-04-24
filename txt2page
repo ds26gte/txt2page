@@ -1,4 +1,4 @@
-ver=2015-03-29 # last modified
+ver=2015-04-24 # last modified
 
 # ds26gte@yahoo.com
 
@@ -154,11 +154,11 @@ func! FindURLfootnotes()
 endfunc
 
 func! FindURLHs()
-  g/\%([᛫‡].*\)\@<!<a href="/ s/^/ÞtzpPossibleURLHtzp/
+  g/\%(\%(-:\|[᛫‡]\).*\)\@<!<a href="/ s/^/ÞtzpPossibleURLHtzp/
 
-  g/^ÞtzpPossibleURLHtzp/ -1s/[᛫‡].\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+  g/^ÞtzpPossibleURLHtzp/ -1s/\%(-:\|[᛫‡]\).\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
-  g/^ÞtzpPossibleURLHtzp/ -2s/[᛫‡].\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+  g/^ÞtzpPossibleURLHtzp/ -2s/\%(-:\|[᛫‡]\).\{-}\$/&ÞtzpURLHcontinuationLineTzp/
 
   g/ÞtzpURLHcontinuationLineTzp\$/ -1s/ÞtzpURLHcontinuationLineTzp\$//
 
@@ -170,7 +170,7 @@ func! FindURLHs()
 
   %s/ÞtzpURLHcontinuationLineTzp//
 
-  v/^ÞtzpPreformattedTzp/ s#[᛫‡]\s*\(.\{-}\)\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
+  v/^ÞtzpPreformattedTzp/ s#\%(-:\|[᛫‡]\)\s*\(.\{-}\)\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
 endfunc
 
@@ -369,7 +369,7 @@ endwhile
 
 %s:ÞtzpBreakLineTzp\$:<br/>:
 
-"v/[᛫‡]/ s/^\.\s*\\\"/ÞtzpDeleteCommentTzp&/
+"v/\%(-:\|[᛫‡]\)/ s/^\.\s*\\\"/ÞtzpDeleteCommentTzp&/
 "g/^ÞtzpDeleteCommentTzp/d
 
 "%s/^\.\s*\\\"//
