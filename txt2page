@@ -1,4 +1,4 @@
-ver=2015-04-24 # last modified
+ver=2015-04-28 # last modified
 
 # ds26gte@yahoo.com
 
@@ -72,7 +72,7 @@ txt2pageFile() {
 txt2pageExCommands() {
   ex -u NONE $1 <<EOF
 
-func! RecognizeURLs()
+func! RecognizeUrls()
 
     " someone@gmail.com becomes mailto:someone@gmail.com
     " -- check not already preceded by mailto:
@@ -125,7 +125,7 @@ func! RecognizeURLs()
 
 endfunc
 
-func! CleanUpURLs()
+func! CleanUpUrls()
     s/ÞtzpHrefTzphref/ href/
     s#href="FAKEHTTP://#href="http://#
     -1,+1 jo!
@@ -148,27 +148,28 @@ func! UpcaseDigits(x)
   return l:y
 endfunc
 
-func! FindURLfootnotes()
-  v/^ÞtzpPreformattedTzp/ s_:<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpURLfootnoteTzp</a>_g
-  %s/ÞtzpURLfootnoteTzp/‣‣‣/g
+func! FindQvUrls()
+  v/^ÞtzpPreformattedTzp/ s_:\s*<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpQvUrlTzp</a>_g
+  "%s/ÞtzpQvUrlTzp/‣‣‣/g
+  %s/ÞtzpQvUrlTzp/(<i>q.v.<\/i>)/g
 endfunc
 
-func! FindURLHs()
-  g/\%(\%(-:\|[᛫‡]\).*\)\@<!<a href="/ s/^/ÞtzpPossibleURLHtzp/
+func! FindUrlhs()
+  g/\%(\%(-:\|[᛫‡]\).*\)\@<!<a href="/ s/^/ÞtzpPossibleUrlhTzp/
 
-  g/^ÞtzpPossibleURLHtzp/ -1s/\%(-:\|[᛫‡]\).\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+  g/^ÞtzpPossibleUrlhTzp/ -1s/\%(-:\|[᛫‡]\).\{-}\$/&ÞtzpUrlhContinuationLineTzp/
 
-  g/^ÞtzpPossibleURLHtzp/ -2s/\%(-:\|[᛫‡]\).\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+  g/^ÞtzpPossibleUrlhTzp/ -2s/\%(-:\|[᛫‡]\).\{-}\$/&ÞtzpUrlhContinuationLineTzp/
 
-  g/ÞtzpURLHcontinuationLineTzp\$/ -1s/ÞtzpURLHcontinuationLineTzp\$//
+  g/ÞtzpUrlhContinuationLineTzp\$/ -1s/ÞtzpUrlhContinuationLineTzp\$//
 
-  g/ÞtzpURLHcontinuationLineTzp\$/ .,/^ÞtzpPossibleURLHtzp/ j
+  g/ÞtzpUrlhContinuationLineTzp\$/ .,/^ÞtzpPossibleUrlhTzp/ j
 
-  %s/ÞtzpPossibleURLHtzp//
+  %s/ÞtzpPossibleUrlhTzp//
 
-  "g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+  "g/ÞtzpUrlhContinuationLineTzp\$/ .,+1 j
 
-  %s/ÞtzpURLHcontinuationLineTzp//
+  %s/ÞtzpUrlhContinuationLineTzp//
 
   v/^ÞtzpPreformattedTzp/ s#\%(-:\|[᛫‡]\)\s*\(.\{-}\)\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
@@ -181,7 +182,7 @@ func! RedirectIfNecessary()
   if redirectFoundP
     /ÞtzpRedirectTzp/
     norm f{lyi}
-    let g:redirectURL = @0
+    let g:redirectUrl = @0
     g/ÞtzpRedirectTzp{.\{-}}/ s#ÞtzpRedirectTzp{\(.\{-}\)}#If not redirected automatically, go to <a href="\1">\1</a>.#
   endif
 endfunc
@@ -618,13 +619,13 @@ v/^ÞtzpPreformattedTzp/ s#\`\(.\{-1,}\)\`#<code>\1</code>#g
 
 g/^ÞtzpBogusEndOfFileLineTzp/d
 
-v/^ÞtzpPreformattedTzp/ call RecognizeURLs()
+v/^ÞtzpPreformattedTzp/ call RecognizeUrls()
 
-g/^ÞtzpHrefTzphref=/ call CleanUpURLs()
+g/^ÞtzpHrefTzphref=/ call CleanUpUrls()
 
-call FindURLfootnotes()
+call FindQvUrls()
 
-call FindURLHs()
+call FindUrlhs()
 
 call RedirectIfNecessary()
 
@@ -669,10 +670,10 @@ Copyright (C) 2010-2015 Dorai Sitaram
 
 exec '5,10s#^<title>MYTITLE</title>#<title>' . titleText . '</title>#'
 
-if exists('g:redirectURL')
-  5,15s#</head>#<meta http-equiv="refresh" content="1;ÞtzpRedirectURLtzp">\r\0#
-  let @0 = g:redirectURL
-  5,15s/ÞtzpRedirectURLtzp/\=@0/
+if exists('g:redirectUrl')
+  5,15s#</head>#<meta http-equiv="refresh" content="1;ÞtzpRedirectUrlTzp">\r\0#
+  let @0 = g:redirectUrl
+  5,15s/ÞtzpRedirectUrlTzp/\=@0/
 endif
 
 endfunc

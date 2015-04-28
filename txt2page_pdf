@@ -1,4 +1,4 @@
-# last modified 2015-04-24
+# last modified 2015-04-28
 # ds26gte@yahoo.com
 
 opts=""
@@ -32,87 +32,87 @@ soelim $f > $h
 
 ex $h <<EOF
 
-func! TroffRecognizeURLs()
+func! TroffRecognizeUrls()
     " evalwhen.com
     " -- check not preceded by @
-    s#\%(@\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|se\)\>#FAKEHTTP://&#g
+    s#\%(@\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|[[:lower:]]\{2}\%(js\|ms\|on\|ps\|sh\)\@<!\)\>#FAKEHTTP://&#g
 
     " URL
-    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#ÞtzpURLbeginTzp&ÞtzpURLendTzp#g
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]]\)#ÞtzpUrlBeginTzp&ÞtzpUrlEndTzp#g
 
     s#FAKEHTTP://##g
 
     " ./pathname
-    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#ÞtzpURLbeginTzp\1ÞtzpURLendTzp#g
+    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#ÞtzpUrlBeginTzp\1ÞtzpUrlEndTzp#g
 
-    s:\(ÞtzpURLbeginTzp\)[^#]\{-}#\([^#]\{-}\)\(ÞtzpURLendTzp\):\1[\2]\3:g
+    s:\(ÞtzpUrlBeginTzp\)[^#]\{-}#\([^#]\{-}\)\(ÞtzpUrlEndTzp\):\1[\2]\3:g
 
 endfunc
 
-func! TroffFindURLfootnotes()
-  v/^ÞtzpPreformattedTzp/ s/:ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp//g
+func! TroffFindQvUrls()
+  v/^ÞtzpPreformattedTzp/ s/\s*:\s*ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
 endfunc
 
-func! TroffFindURLHs()
-  g/\%(\%(-:\|[᛫‡]\).*\)\@<!ÞtzpURLbeginTzp/ s/^/ÞtzpPossibleURLHtzp/
+func! TroffFindUrlhs()
+  g/\%(\%(-:\|[᛫‡]\).*\)\@<!ÞtzpUrlBeginTzp/ s/^/ÞtzpPossibleUrlhTzp/
 
-  g/^ÞtzpPossibleURLHtzp/ -1s/\%(-:\|[᛫‡]\).\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+  g/^ÞtzpPossibleUrlhTzp/ -1s/\%(-:\|[᛫‡]\).\{-}\$/&ÞtzpUrlhContinuationLineTzp/
 
-  %s/^ÞtzpPossibleURLHtzp//
+  %s/^ÞtzpPossibleUrlhTzp//
 
-  g/^ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+  g/^ÞtzpUrlhContinuationLineTzp\$/ .,+1 j
 
-  %s/ÞtzpURLHcontinuationLineTzp//
+  %s/ÞtzpUrlhContinuationLineTzp//
 
   " ***
 
-    " a line that starts with ÞtzpURLbeginTzp is a possible urlh
-    %s/^ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
+    " a line that starts with ÞtzpUrlBeginTzp is a possible urlh
+    %s/^ÞtzpUrlBeginTzp/ÞtzpPossibleUrlhTzp&/
 
-    g/^ÞtzpPossibleURLHtzp/ -1s/⋆\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleUrlhTzp/ -1s/⋆\$/&ÞtzpUrlhContinuationLineTzp/
 
-    %s/^ÞtzpPossibleURLHtzp//
+    %s/^ÞtzpPossibleUrlhTzp//
 
-    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+    g/ÞtzpUrlhContinuationLineTzp\$/ .,+1 j
 
-    %s/ÞtzpURLHcontinuationLineTzp//
-
-    " ***
-
-    v/^ÞtzpPreformattedTzp/ s/^[^⋆*]\+[⋆*]\s\+ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
-
-    g/^ÞtzpPossibleURLHtzp/ -1s/[⋆*][^⋆*]\+\$/&ÞtzpURLHcontinuationLineTzp/
-
-    %s/^ÞtzpPossibleURLHtzp//
-
-    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
-
-    %s/ÞtzpURLHcontinuationLineTzp//
+    %s/ÞtzpUrlhContinuationLineTzp//
 
     " ***
 
-    v/^ÞtzpPreformattedTzp/ s/^[^\[]\+\](ÞtzpURLbeginTzp/ÞtzpPossibleURLHtzp&/
+    v/^ÞtzpPreformattedTzp/ s/^[^⋆*]\+[⋆*]\s\+ÞtzpUrlBeginTzp/ÞtzpPossibleUrlhTzp&/
 
-    g/^ÞtzpPossibleURLHtzp/ -1s/\[[^\]]\{-}\$/&ÞtzpURLHcontinuationLineTzp/
+    g/^ÞtzpPossibleUrlhTzp/ -1s/[⋆*][^⋆*]\+\$/&ÞtzpUrlhContinuationLineTzp/
 
-    %s/^ÞtzpPossibleURLHtzp//
+    %s/^ÞtzpPossibleUrlhTzp//
 
-    g/ÞtzpURLHcontinuationLineTzp\$/ .,+1 j
+    g/ÞtzpUrlhContinuationLineTzp\$/ .,+1 j
 
-    %s/ÞtzpURLHcontinuationLineTzp//
+    %s/ÞtzpUrlhContinuationLineTzp//
 
     " ***
 
-    v/^ÞtzpPreformattedTzp/ s/\%(-:\|[᛫‡]\)\S.\{-}ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp//g
+    v/^ÞtzpPreformattedTzp/ s/^[^\[]\+\](ÞtzpUrlBeginTzp/ÞtzpPossibleUrlhTzp&/
 
-    v/^ÞtzpPreformattedTzp/ s/\%(-:\|[᛫‡]\)\s*\(.\{-}\)\s*ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp/\1/g
+    g/^ÞtzpPossibleUrlhTzp/ -1s/\[[^\]]\{-}\$/&ÞtzpUrlhContinuationLineTzp/
 
-    v/^ÞtzpPreformattedTzp/ s:[⋆*]\([^⋆*]\+\)[⋆*]\s\+ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
+    %s/^ÞtzpPossibleUrlhTzp//
 
-    v/^ÞtzpPreformattedTzp/ s:\[\([^\]]\+\)\](ÞtzpURLbeginTzp.\{-}ÞtzpURLendTzp:\1:g
+    g/ÞtzpUrlhContinuationLineTzp\$/ .,+1 j
+
+    %s/ÞtzpUrlhContinuationLineTzp//
+
+    " ***
+
+    v/^ÞtzpPreformattedTzp/ s/\%(-:\|[᛫‡]\)\S.\{-}ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
+
+    v/^ÞtzpPreformattedTzp/ s/\%(-:\|[᛫‡]\)\s*\(.\{-}\)\s*ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp/\1/g
+
+    v/^ÞtzpPreformattedTzp/ s:[⋆*]\([^⋆*]\+\)[⋆*]\s\+ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp:\1:g
+
+    v/^ÞtzpPreformattedTzp/ s:\[\([^\]]\+\)\](ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp:\1:g
 
     " rm Url markers
-    v/^ÞtzpPreformattedTzp/ s:ÞtzpURLbeginTzp\(.\{-}\)ÞtzpURLendTzp:\1:g
+    v/^ÞtzpPreformattedTzp/ s:ÞtzpUrlBeginTzp\(.\{-}\)ÞtzpUrlEndTzp:\1:g
 endfunc
 
 func! TroffPalatable()
@@ -261,13 +261,13 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*\$:\1\r\2:
 
 g/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashETzp:g
 
-v/^ÞtzpPreformattedTzp/ call TroffRecognizeURLs()
+v/^ÞtzpPreformattedTzp/ call TroffRecognizeUrls()
 
 call TroffTables()
 
-call TroffFindURLfootnotes()
+call TroffFindQvUrls()
 
-call TroffFindURLHs()
+call TroffFindUrlhs()
 
 v/^ÞtzpPreformattedTzp/ call TroffPalatable()
 
