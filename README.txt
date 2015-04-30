@@ -6,7 +6,7 @@ free-form plain text into HTML or PDF. groff is needed only for PDF.
   % txt2page filename.txt
 
 creates ‘filename.html’.  Here, txt2page is assumed already placed
-in your PATH, and ‘%’ is your Un⋆x command-line prompt. The
+in your PATH, and ‘%’ is your Un*x command-line prompt. The
 source-file extension doesn’t have to be ‘.txt’: it can be
 anything or nothing.
 
@@ -14,7 +14,7 @@ You can supply groff-like options to txt2page. For HTML, the only
 relevant one is ‘-s’.
 
 For PDF, use the option ‘-Tpdf’ and other usual groff options for
-fonts, layout, etc. E.g.
+fonts, layout, &c. E.g.
 
   % txt2page -Tpdf -r PS=14p -r PI=1.5m -r LL=6i -r PO=1.13i filename.txt
 

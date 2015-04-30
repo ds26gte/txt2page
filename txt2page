@@ -1,4 +1,4 @@
-ver=2015-04-28 # last modified
+ver=2015-04-29 # last modified
 
 # ds26gte@yahoo.com
 
@@ -150,8 +150,8 @@ endfunc
 
 func! FindQvUrls()
   v/^ÞtzpPreformattedTzp/ s_:\s*<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpQvUrlTzp</a>_g
-  "%s/ÞtzpQvUrlTzp/‣‣‣/g
-  %s/ÞtzpQvUrlTzp/(<i>q.v.<\/i>)/g
+  %s/ÞtzpQvUrlTzp/(𝑞.𝑣.)/g
+  " 𝒒.𝒗. 𝓆.𝓋. 𝓺.𝓿. 𝔮.𝔳. 𝕢.𝕧. 𝖖.𝖛. 𝗾.𝘃.
 endfunc
 
 func! FindUrlhs()
@@ -476,8 +476,6 @@ while ln < 100 && ln < lastline
   endif
   let ln+=1
 endwhile
-
-" possible ornaments: * &#x203b &#x2217
 
 "drop cap
 
