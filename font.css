@@ -1,11 +1,17 @@
-/* last modified 2015-04-05 */
+/* last modified 2015-05-01 */
 
-@import url(http://fonts.googleapis.com/css?family=Ubuntu);
-@import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono);
+@import url(http://fonts.googleapis.com/css?family=Inconsolata);
+@import url(http://fonts.googleapis.com/css?family=Cabin:400,500,600,700);
 
 code {
-    font-family: 'ubuntu mono', monospace;
+    font-family: inconsolata, monospace;
 }
+
+/*
+   .url {
+  font-family: inconsolata, monospace;
+}
+ */
 
 h1,
 h2,
@@ -13,5 +19,13 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: ubuntu, sans-serif;
+  font-family:  cabin, sans-serif;
+}
+
+body {
+  /* line-height: 1.35; */
+}
+
+h1 {
+  font-size: 161.8034%;
 }

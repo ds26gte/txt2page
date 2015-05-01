@@ -83,19 +83,19 @@ func! RecognizeUrls()
     s#\%(@\|://\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|[[:lower:]]\{2}\%(js\|ms\|on\|ps\|sh\)\@<!\)\>#FAKEHTTP://&#g
 
     " mailto:addr becomes <a href="mailto:addr">mailto:addr</a>
-    s#\<mailto:\([[:alnum:]]\+@[[:alnum:].]\+[[:alpha:]]\)\>#<a href="&"><code>\1</code></a>#g
+    s#\<mailto:\([[:alnum:]]\+@[[:alnum:].]\+[[:alpha:]]\)\>#<a href="&"><span class=url>\1</span></a>#g
 
     " @twitterhandles
-    s#\%([[:alnum:]]\)\@<!@\([[:alnum:]_]\{1,15}\)#*<code>@\1</code>* https://twitter.com/\1#g
+    s#\%([[:alnum:]]\)\@<!@\([[:alnum:]_]\{1,15}\)#*<span class=url>@\1</span>* https://twitter.com/\1#g
 
     " URL becomes <a href="URL">URL</a>
-    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]»]\)#<a\rÞtzpHrefTzphref="&"\r><code>&</code></a>#g
+    s#\<[[:alpha:]-]\+://[^[:space:]()<>\[\]]\+\%(([[:alnum:]]\+)\|/\|[^[:space:][:punct:]»]\)#<a\rÞtzpHrefTzphref="&"\r><span class=url>&</span></a>#g
 
     " “./sth” becomes <a href="sth">sth</a>
-    s#“\./\(.\{-}\)”#<a href="\1"><code>\1</code></a>#g
+    s#“\./\(.\{-}\)”#<a href="\1"><span class=url>\1</span></a>#g
 
     " ./pathname becomes <a href="pathname">pathname</a>
-    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><code>\1</code></a>#g
+    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><span class=url>\1</span></a>#g
 
     " FAKEHTTP has done its job by now -- remove it
     "s#FAKEHTTP://##g
@@ -115,13 +115,13 @@ func! RecognizeUrls()
 
     s#^\.\s*IMG\s\+-\([leftcnrigh]\+\)\s\+\(\S\+\)\s\+\([0-9]\+\)#<div class=figure align=\1><img src="\2" width="\3%" border="0" alt=""></div>#
 
-    exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '"><code>\(.\{-}\)\.' . g:fileExtension . '</code></a>:<a href="\1.html"><code>\2.html</code></a>:g'
+    exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '"><span class=url>\(.\{-}\)\.' . g:fileExtension . '</span></a>:<a href="\1.html"><span class=url>\2.html</span></a>:g'
 
     exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '">:<a href="\1.html">:g'
 
-    exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '#\(.\{-}\)"><code>\%(.\{-}\)\.' . g:fileExtension . '#\(.\{-}\)</code></a>:<a href="\1.html#\2">\3</a>:g'
+    exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '#\(.\{-}\)"><span class=url>\%(.\{-}\)\.' . g:fileExtension . '#\(.\{-}\)</span></a>:<a href="\1.html#\2">\3</a>:g'
 
-    s:\(<a href="#.\{-}">\)<code>#\(.\{-}\)</code>:\1\2:g
+    s:\(<a href="#.\{-}">\)<span class=url>#\(.\{-}\)</span>:\1\2:g
 
 endfunc
 
@@ -150,7 +150,8 @@ endfunc
 
 func! FindQvUrls()
   v/^ÞtzpPreformattedTzp/ s_:<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpQvUrlTzp</a>_g
-  %s/ÞtzpQvUrlTzp/(𝑞.𝑣.)/g
+  "%s/ÞtzpQvUrlTzp/(𝑞.𝑣.)/g
+  %s/ÞtzpQvUrlTzp/(q.v.)/g
   " 𝒒.𝒗. 𝓆.𝓋. 𝓺.𝓿. 𝔮.𝔳. 𝕢.𝕧. 𝖖.𝖛. 𝗾.𝘃.
 endfunc
 
