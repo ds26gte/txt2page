@@ -1,4 +1,4 @@
-ver=2015-05-01 # last modified
+ver=2015-05-02 # last modified
 
 # ds26gte@yahoo.com
 
@@ -516,9 +516,13 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\((†\|†)\):\1\r\2:g
 
 %s:^(†\s*\(\S\+\)\?\s*\$:ÞtzpFootnoteEnvTzp \10:
 
+%s:^\.FS\s*\(\S\+\)\?\s*\$:ÞtzpFootnoteEnvTzp \10:
+
 " mark its end line
 
 %s:^†)\s*\$:ÞtzpFootnoteEnvTzp1:
+
+%s:^\.FE\s*\$:ÞtzpFootnoteEnvTzp1:
 
 " if footnote text has no symbol, specify a dummy symbol
 
