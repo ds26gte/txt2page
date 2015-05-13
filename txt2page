@@ -1,4 +1,4 @@
-ver=2015-05-02 # last modified
+ver=2015-05-13 # last modified
 
 # ds26gte@yahoo.com
 
@@ -150,8 +150,8 @@ endfunc
 
 func! FindQvUrls()
   v/^ÞtzpPreformattedTzp/ s_:<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpQvUrlTzp</a>_g
-  "%s/ÞtzpQvUrlTzp/(𝑞.𝑣.)/g
-  %s/ÞtzpQvUrlTzp/(q.v.)/g
+  %s/ÞtzpQvUrlTzp/(𝑞.𝑣.)/g
+  "%s/ÞtzpQvUrlTzp/(q.v.)/g
   " 𝒒.𝒗. 𝓆.𝓋. 𝓺.𝓿. 𝔮.𝔳. 𝕢.𝕧. 𝖖.𝖛. 𝗾.𝘃.
 endfunc
 
