@@ -1,0 +1,22 @@
+.== contents
+
+.so se1.txt section one
+.so se2.txt section two
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se1.txt section one
+.so se2.txt section two
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
+.so se3.txt section three
