@@ -1,4 +1,4 @@
-# last modified 2015-05-01
+# last modified 2015-05-15
 # ds26gte@yahoo.com
 
 opts=""
@@ -50,6 +50,7 @@ func! TroffRecognizeUrls()
 endfunc
 
 func! TroffFindQvUrls()
+  v/^ÞtzpPreformattedTzp/ s/\\\*\[:\s\+.\{-}\s*\]//g
   v/^ÞtzpPreformattedTzp/ s/\s*:ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
 endfunc
 
