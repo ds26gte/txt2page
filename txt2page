@@ -1,4 +1,4 @@
-ver=2015-05-15 # last modified
+ver=2015-05-18 # last modified
 
 # ds26gte@yahoo.com
 
@@ -149,7 +149,12 @@ func! UpcaseDigits(x)
 endfunc
 
 func! FindQvUrls()
-  v/^ÞtzpPreformattedTzp/ s_\\\\\*\[:\s\+\(.\{-}\)\s*\]_ :\1_g
+  v/^ÞtzpPreformattedTzp/ s_\(\\\\\*\[:\)\s*\%(\\\\\)\?\s*\$_\1ÞtzpQvUrlContinuedTzp_
+  g/ÞtzpQvUrlContinuedTzp\$/ .,+1 j!
+  %s/ÞtzpQvUrlContinuedTzp/ /
+  v/^ÞtzpPreformattedTzp/ s/\(\S\)\(\\\\\*\[:\)/\1 \2/
+
+  v/^ÞtzpPreformattedTzp/ s_\\\\\*\[:\s\+\(.\{-}\)\s*\]_:\1_g
   v/^ÞtzpPreformattedTzp/ s_:\s*<a href="\(.\{-}\)">.\{-}</a>_<a href="\1">ÞtzpQvUrlTzp</a>_g
   %s/ÞtzpQvUrlTzp/(𝑞.𝑣.)/g
   "%s/ÞtzpQvUrlTzp/(q.v.)/g
