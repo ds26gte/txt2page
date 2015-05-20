@@ -1,4 +1,4 @@
-# last modified 2015-05-15
+# last modified 2015-05-20
 # ds26gte@yahoo.com
 
 opts=""
@@ -50,8 +50,8 @@ func! TroffRecognizeUrls()
 endfunc
 
 func! TroffFindQvUrls()
-  v/^ÞtzpPreformattedTzp/ s/\\\*\[:\s\+.\{-}\s*\]//g
-  v/^ÞtzpPreformattedTzp/ s/\s*:ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
+  v/^ÞtzpPreformattedTzp/ s/ÞtzpDoubleBackslashTzp\(\*\[:\s\+.\{-}\s*\]\)/ÞtzpBackslashTzp\1/
+  v/^ÞtzpPreformattedTzp/ s/\%(\[\)\@<!\s*:\s*ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
 endfunc
 
 func! TroffFindUrlhs()
@@ -216,7 +216,7 @@ g/^ÞtzpDropCapTzp\$/ , /./ j
 
 "
 
-v/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashTzpÞtzpBackslashTzp:g
+v/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpDoubleBackslashTzp:g
 
 " footnotes
 
@@ -271,6 +271,8 @@ call TroffFindQvUrls()
 call TroffFindUrlhs()
 
 v/^ÞtzpPreformattedTzp/ call TroffPalatable()
+
+%s:ÞtzpDoubleBackslashTzp:ÞtzpBackslashTzpÞtzpBackslashTzp:g
 
 %s:ÞtzpBackslashTzp:\\\\:g
 
