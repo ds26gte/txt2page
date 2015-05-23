@@ -3,12 +3,17 @@
 txt2page is a bash/vim/groff script that converts
 free-form plain text into HTML or PDF. groff is needed only for PDF.
 
+Installation: Place the scripts txt2page and txt2page_pdf in your
+PATH, and the Vim files txt2page.vim and tx2page_pdf.vim in your
+‘runtimepath’ (typically ~/.vim or ~/.nvim).
+
   % txt2page filename.txt
 
-creates ‘filename.html’.  Here, txt2page is assumed already placed
-in your PATH, and ‘%’ is your Un*x command-line prompt. The
-source-file extension doesn’t have to be ‘.txt’: it can be
-anything or nothing.
+creates ‘filename.html’.
+
+Here, ‘%’ is your Un*x command-line prompt. The source-file
+extension doesn’t have to be ‘.txt’: it can be anything or
+nothing.
 
 You can supply groff-like options to txt2page. For HTML, the only
 relevant one is ‘-s’.
