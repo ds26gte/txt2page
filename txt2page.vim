@@ -144,8 +144,7 @@ endfunc
 
 func! Txt2page()
 
-  let l:oldfo = &l:fo
-  let &l:fo = 'tcq'
+  setl fo-=j
 
 while 1
   if (!$soelim)
@@ -615,7 +614,5 @@ if exists('g:redirectUrl')
   let @0 = g:redirectUrl
   5,15s/ÞtzpRedirectUrlTzp/\=@0/
 endif
-
-let &l:fo = l:oldfo
 
 endfunc
