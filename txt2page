@@ -1,4 +1,4 @@
-ver=2015-05-23 # last modified
+ver=2015-05-25 # last modified
 
 # ds26gte@yahoo.com
 
@@ -15,6 +15,8 @@ do
     then soelim=1
     elif test "$1" = "-Tpdf"
     then pdf=1
+    elif test "$1" = "-Tdocx"
+    then docx=1
     else opts="$opts $1"
     fi
     shift
@@ -22,6 +24,10 @@ done
 
 if test "$pdf" = 1
 then exec txt2page_pdf $opts; exit
+fi
+
+if test "$docx" = 1
+then exec txt2page_docx $opts; exit
 fi
 
 txt2pageFile() {
