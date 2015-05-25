@@ -19,7 +19,7 @@ You can supply groff-like options to txt2page. For HTML, the only
 relevant one is ‘-s’.
 
 For PDF, use the option ‘-Tpdf’ and other usual groff options for
-fonts, layout, &c. E.g.
+fonts, layout, &c. E.g.,
 
   % txt2page -Tpdf -r PS=14p -r PI=1.5m -r LL=6i -r PO=1.13i filename.txt
 
