@@ -1,5 +1,12 @@
 " last modified 2015-05-25
 
+func! s:txt2page_docx_delete_qv_urls()
+  v/^ÞtzpPreformattedTzp/ s/\(\\\*\[:\)\s*\%(\\\)$/\1ÞtzpQvUrlContinuedTzp/
+  g/ÞtzpQvUrlContinuedTzp$/ .,+1 j!
+  %s/ÞtzpQvUrlContinuedTzp/ /
+  v/^ÞtzpPreformattedTzp/ s/\\\*\[:\s*.\{-}\]//g
+endfunc
+
 func! Txt2docx()
   "remove so spoors
   g/^\.lf\s\d\+\s.*$/d
@@ -29,6 +36,10 @@ func! Txt2docx()
   "italics
 
   v/^ÞtzpPreformattedTzp/ s/\\fI\(.\{-}\)\\fP/*\1*/g
+
+  "qv-type URLs
+
+  call s:txt2page_docx_delete_qv_urls()
 
   "inline code
 

@@ -1,6 +1,6 @@
-" last modified 2015-05-23
+" last modified 2015-05-25
 
-func! RecognizeUrls()
+func! s:recognizeUrls()
 
     " someone@gmail.com becomes mailto:someone@gmail.com
     " -- check not already preceded by mailto:
@@ -53,7 +53,7 @@ func! RecognizeUrls()
 
 endfunc
 
-func! CleanUpUrls()
+func! s:cleanUpUrls()
     s/ÞtzpHrefTzphref/ href/
     s#href="FAKEHTTP://#href="http://#
     -1,+1 jo!
@@ -61,7 +61,7 @@ func! CleanUpUrls()
     s:«\(<a href.\{-}/a>\)»:\1:g
 endfunc
 
-func! UpcaseDigits(x)
+func! s:upcaseDigits(x)
   let l:y = a:x
   let l:y = substitute(l:y, '0', '⁰', 'g')
   let l:y = substitute(l:y, '1', '¹', 'g')
@@ -76,7 +76,7 @@ func! UpcaseDigits(x)
   return l:y
 endfunc
 
-func! FindQvUrls()
+func! s:findQvUrls()
   v/^ÞtzpPreformattedTzp/ s_\(\\\*\[:\)\s*\%(\\\)\?\s*$_\1ÞtzpQvUrlContinuedTzp_
   g/ÞtzpQvUrlContinuedTzp$/ .,+1 j!
   %s/ÞtzpQvUrlContinuedTzp/ /
@@ -89,7 +89,7 @@ func! FindQvUrls()
   " 𝒒.𝒗. 𝓆.𝓋. 𝓺.𝓿. 𝔮.𝔳. 𝕢.𝕧. 𝖖.𝖛. 𝗾.𝘃.
 endfunc
 
-func! FindUrlhs()
+func! s:findUrlhs()
   g/\%(\%(-:\|[᛫‡]\).*\)\@<!<a href="/ s/^/ÞtzpPossibleUrlhTzp/
 
   g/^ÞtzpPossibleUrlhTzp/ -1s/\%(-:\|[᛫‡]\).\{-}$/&ÞtzpUrlhContinuationLineTzp/
@@ -110,7 +110,7 @@ func! FindUrlhs()
 
 endfunc
 
-func! RedirectIfNecessary()
+func! s:redirectIfNecessary()
   v/^ÞtzpPreformattedTzp/ s#<a href="\(.\{-}\)">=REDIRECT=</a>#ÞtzpRedirectTzp{\1}#
   let redirectFoundP = 0
   g/ÞtzpRedirectTzp{.\{-}}/ let redirectFoundP = 1
@@ -122,7 +122,7 @@ func! RedirectIfNecessary()
   endif
 endfunc
 
-func! VerbatimLineAsIsWithContinuation()
+func! s:verbatimLineAsIsWithContinuation()
   s/\s/Ø/g
   s/^[^Ø]/ÞtzpVerbatimContinuationTzp&/
   s/^Ø//
@@ -130,15 +130,15 @@ func! VerbatimLineAsIsWithContinuation()
   s#$#ÞtzpBreakLineTzp#
 endfunc
 
-func! VerbatimLineAsIs()
+func! s:verbatimLineAsIs()
   s/^$/Ø/
   s/\s/Ø/g
   s/\([^Ø]\)Ø\([^Ø]\)/\1 \2/g
   s#$#<br/>#
 endfunc
 
-func! CodeLineAsIs()
-  call VerbatimLineAsIs()
+func! s:codeLineAsIs()
+  call s:verbatimLineAsIs()
   s/^/ÞtzpPreformattedTzp/
 endfunc
 
@@ -239,7 +239,7 @@ if executable('lisphilite')
   g/^\.\s*EX scheme/+1,/^\.\s*EE/-1 !lisphilite
 endif
 
-g/^\.\s*EX/+1, /^\.\s*EE/-1 call CodeLineAsIs()
+g/^\.\s*EX/+1, /^\.\s*EE/-1 call s:codeLineAsIs()
 
 %s#^\.\s*EX\(.*\)#</p>\rÞtzpPreformattedTzp<div class="listing\1"><code>#
 
@@ -257,7 +257,7 @@ g/^\.\s*TOC$/d
 
 %s/^\.\s*\(nf\|fi\)\(\s\+.*\)\?/.\1/
 
-g/^\.\s*nf$/+1,/^\%(\.\s*fi\|ÞtzpFiTzp\)$/-1 call VerbatimLineAsIs()
+g/^\.\s*nf$/+1,/^\%(\.\s*fi\|ÞtzpFiTzp\)$/-1 call s:verbatimLineAsIs()
 
 g/^\.\s*\%(nf\|fi\)$/d
 
@@ -286,7 +286,7 @@ while 1
       break
     endif
     " if not a blank line, verbatimize it
-    call VerbatimLineAsIsWithContinuation()
+    call s:verbatimLineAsIsWithContinuation()
     " break on eof
     if line('.') == lastline
       break
@@ -501,7 +501,7 @@ $ s/^\(ÞtzpFootnoteTzpÞtzpFootnoteEnv.*\)/\1\rÞtzpEndFootnotesTzp/
 
 %s:^ÞtzpFootnoteTzp::
 
-%s:ÞtzpFootnoteMarkTzp\(.\{-}\)ÞtzpFootnoteMarkEndTzp:\=UpcaseDigits(submatch(1)):g
+%s:ÞtzpFootnoteMarkTzp\(.\{-}\)ÞtzpFootnoteMarkEndTzp:\=s:upcaseDigits(submatch(1)):g
 
 "end footnotes
 
@@ -558,15 +558,15 @@ v/^ÞtzpPreformattedTzp/ s#\`\(.\{-1,}\)\`#<code>\1</code>#g
 
 g/^ÞtzpBogusEndOfFileLineTzp/d
 
-v/^ÞtzpPreformattedTzp/ call RecognizeUrls()
+v/^ÞtzpPreformattedTzp/ call s:recognizeUrls()
 
-g/^ÞtzpHrefTzphref=/ call CleanUpUrls()
+g/^ÞtzpHrefTzphref=/ call s:cleanUpUrls()
 
-call FindQvUrls()
+call s:findQvUrls()
 
-call FindUrlhs()
+call s:findUrlhs()
 
-call RedirectIfNecessary()
+call s:redirectIfNecessary()
 
 %s/^ÞtzpPreformattedTzp//
 %s/ÞtzpPreformattedTzp/\r/g

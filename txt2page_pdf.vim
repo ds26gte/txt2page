@@ -1,6 +1,6 @@
-" last modified 2015-05-23
+" last modified 2015-05-25
 
-func! TroffRecognizeUrls()
+func! s:troffRecognizeUrls()
     " evalwhen.com
     " -- check not preceded by @
     s#\%(@\)\@<!\<[[:alnum:].-]\+\.\%(com\|co\.[[:lower:]]\{2}\|edu\|net\|org\|[[:lower:]]\{2}\%(js\|ms\|on\|ps\|sh\)\@<!\)\>#FAKEHTTP://&#g
@@ -17,12 +17,12 @@ func! TroffRecognizeUrls()
 
 endfunc
 
-func! TroffFindQvUrls()
+func! s:troffFindQvUrls()
   v/^ÞtzpPreformattedTzp/ s/ÞtzpDoubleBackslashTzp\(\*\[:\s\+.\{-}\s*\]\)/ÞtzpBackslashTzp\1/
   v/^ÞtzpPreformattedTzp/ s/\%(\[\)\@<!\s*:\s*ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
 endfunc
 
-func! TroffFindUrlhs()
+func! s:troffFindUrlhs()
   g/\%(\%(-:\|[᛫‡]\).*\)\@<!ÞtzpUrlBeginTzp/ s/^/ÞtzpPossibleUrlhTzp/
 
   g/^ÞtzpPossibleUrlhTzp/ -1s/\%(-:\|[᛫‡]\).\{-}$/&ÞtzpUrlhContinuationLineTzp/
@@ -84,7 +84,7 @@ func! TroffFindUrlhs()
     v/^ÞtzpPreformattedTzp/ s:ÞtzpUrlBeginTzp\(.\{-}\)ÞtzpUrlEndTzp:\1:g
 endfunc
 
-func! TroffPalatable()
+func! s:troffPalatable()
     "s:\(.\)†\(\S\+\%([:punct:]\)\@<!\):\1\\\\*{\2\\\\*}:g
 
     s:\`\`\(.\{-1,}\)\`\`:\\fC\1\\fP:g
@@ -94,7 +94,7 @@ func! TroffPalatable()
     s:^\.[/]:\\\&\0:
 endfunc
 
-func! TroffTables()
+func! s:troffTables()
     g/^|\s/,/^[^|]/-1 s#|\s*$##
 
     g/^|\s/,/^[^|]/-1 s#^|\s# ÞtzpTableLineTzp#
@@ -230,15 +230,15 @@ v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*$:\1\r\2:
 
 g/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashETzp:g
 
-v/^ÞtzpPreformattedTzp/ call TroffRecognizeUrls()
+v/^ÞtzpPreformattedTzp/ call s:troffRecognizeUrls()
 
-call TroffTables()
+call s:troffTables()
 
-call TroffFindQvUrls()
+call s:troffFindQvUrls()
 
-call TroffFindUrlhs()
+call s:troffFindUrlhs()
 
-v/^ÞtzpPreformattedTzp/ call TroffPalatable()
+v/^ÞtzpPreformattedTzp/ call s:troffPalatable()
 
 %s:ÞtzpDoubleBackslashTzp:ÞtzpBackslashTzpÞtzpBackslashTzp:g
 
