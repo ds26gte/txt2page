@@ -1,4 +1,5 @@
 " last modified 2015-05-25
+" ds26gte@yahoo.com
 
 func! s:recognizeUrls()
 
