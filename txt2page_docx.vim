@@ -11,6 +11,8 @@ func! Txt2docx()
 
   g/^\.\s*EX/+1, /^\.\s*EE/-1 s/^/ÞtzpPreformattedTzp/
 
+  %s/^\.\s*E[XE].*/```/
+
   "comment
 
   g/^\.\s*\\\*/d
