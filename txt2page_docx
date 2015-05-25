@@ -1,0 +1,30 @@
+# last modified 2015-05-25
+# ds26gte@yahoo.com
+
+if test $# -eq 0
+then echo error: no file argument provided; exit;
+fi
+
+if test $# -ne 1
+then echo error: too many arguments provided; exit;
+fi
+
+f=$1
+
+g=${f##*/}
+
+ext=${g##*.}
+test "$ext" = "$g" && ext=""
+
+g=${g%.*}
+
+h=$g.txt.so
+
+soelim $f > $h
+
+ex -s $h -c "sil! ru txt2page_docx.vim" -c "sil! call Txt2docx()" -c "x"
+
+pandoc -f \
+markdown-line_blocks-raw_html-subscript-superscript+autolink_bare_uris \
+$h \
+-o $g.docx
