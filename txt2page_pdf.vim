@@ -121,6 +121,8 @@ endfunc
 
 func! Txt2pdf()
 
+  setl fo-=j
+
 %s/⋆/*/g
 
 %s/Þ/ÞtzpThornTzp/g
