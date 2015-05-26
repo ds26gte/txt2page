@@ -1,4 +1,4 @@
-ver=2015-05-25 # last modified
+ver=2015-05-26 # last modified
 
 # ds26gte@yahoo.com
 
@@ -71,9 +71,7 @@ txt2pageFile() {
         cssf=default.css
       fi
     fi
-    export soelim
-    export g
-    export ext
+    export ver f g ext soelim cssf
     txt2pageExCommands $h
   fi
 }

@@ -194,7 +194,6 @@ $a
 %s/\s\+$//
 
 let titleText = $g
-let fileStem = $g
 
 let g:fileExtension = $ext
 if g:fileExtension == ""
@@ -590,12 +589,12 @@ call s:redirectIfNecessary()
 <!DOCTYPE html>
 <html lang="en">
 <!--
-Generated from $f by txt2page, version $ver
+Generated from MYSOURCEFILE by txt2page, version MYVERSION
 Copyright (C) 2010-2015 Dorai Sitaram
 -->
 <head>
 <meta charset="utf-8">
-<link rel="stylesheet" href="$cssf" />
+<link rel="stylesheet" href="MYCSSFILE" />
 <title>MYTITLE</title>
 </head>
 <body>
@@ -608,7 +607,13 @@ $a
 </html>
 .
 
-exec '5,10s#^<title>MYTITLE</title>#<title>' . titleText . '</title>#'
+exec '5,10s#MYTITLE#' . $g . '#'
+
+exec '1,5s#MYSOURCEFILE#' . $f . '#'
+
+exec '1,5s#MYVERSION#' . $ver . '#'
+
+exec '5,10s#MYCSSFILE#' . $cssf . '#'
 
 if exists('g:redirectUrl')
   5,15s#</head>#<meta http-equiv="refresh" content="1;ÞtzpRedirectUrlTzp">\r\0#
