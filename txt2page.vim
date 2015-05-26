@@ -1,4 +1,4 @@
-" last modified 2015-05-25
+" last modified 2015-05-26
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -502,7 +502,7 @@ $ s/^\(ÞtzpFootnoteTzpÞtzpFootnoteEnv.*\)/\1\rÞtzpEndFootnotesTzp/
 
 %s:^ÞtzpFootnoteTzp::
 
-%s:ÞtzpFootnoteMarkTzp\(.\{-}\)ÞtzpFootnoteMarkEndTzp:\=s:upcaseDigits(submatch(1)):g
+%s/ÞtzpFootnoteMarkTzp\(.\{-}\)ÞtzpFootnoteMarkEndTzp/\=s:upcaseDigits(submatch(1))/g
 
 "end footnotes
 
