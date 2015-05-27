@@ -1,4 +1,4 @@
-" last modified 2015-05-26
+" last modified 2015-05-27
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -71,8 +71,9 @@ func! Txt2docx()
 
   "footnotes
 
-  %s/^\.FS/\/*/
-  %s/^\.FE/*\//
+  %s:^\.FS\s*\(\S*\):/* (†\1):
+  %s:^\.FS:/*:
+  %s:^\.FE:*/:
 
   %s/^ÞtzpPreformattedTzp//
 

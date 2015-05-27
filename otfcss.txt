@@ -5,7 +5,7 @@ your ‘public_html’.
 
 In the CSS file, refer to the OTF by a relative pathname. E.g.,
 
-.```
+.EX
 @font-face {
     font-family: baskervald;
     src: url('../groffonts/devps/BaskervaldADFStd.otf');
@@ -14,4 +14,4 @@ In the CSS file, refer to the OTF by a relative pathname. E.g.,
 body {
     font-family: baskervald, serif;
 }
-.````
+.EE
