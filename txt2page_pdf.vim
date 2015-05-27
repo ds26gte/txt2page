@@ -193,42 +193,6 @@ v/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpDoubleBackslashTzp:g
 
 v/^ÞtzpPreformattedTzp/ s:(†\([^()[:space:]]\+\)):\\*{\1\\*}:g
 
-"v/^ÞtzpPreformattedTzp/ s:\(.\)\((†\|†)\):\1\r\2:g
-
-"%s:^\((†\s*\S\+\)\s\+\(\S\):\1\r\2:
-
-"%s:^\(†)\)\s*\(\S\):\1\r\2:
-
-"%s:^(†\s*\(\S\+\)\?\s*$:.FS \1:
-
-"%s:^†)\s*$:.FE:
-
-" end footnotes
-
-v/^ÞtzpPreformattedTzp/ s:\(.\)\(‡\)\s*$:\1\r\2:
-
-%s/^\(†\s*\S\+\)\s\+\(\S\)/\1\r\2/
-
-%s/^†\s*\(\S.*\)\?\s*$/.FS \1/
-
-"%s:^※\s*\(.*\)$:.LP\r[\1]\r.br:
-
-"%s:^\.\s*BB\s\+\(.*\)$:.LP\r[\1]\r.br:
-
-"g/^⚓/d
-
-"g/^\.\s*AN\s/d
-
-"g/^\.\s*NAV\s/d
-
-"bullet items
-
-"g/^•\s\+.*/ -1s/^$/ÞtzpDeleteBlankLineTzp/
-
-"g/^ÞtzpDeleteBlankLineTzp$/d
-
-"%s/^•\s\+\(.*\)/.IP • 2\r.nr nextGrafWithoutIndent 1\r\1/
-
 "
 
 g/^ÞtzpPreformattedTzp/ s:\\\\:ÞtzpBackslashETzp:g

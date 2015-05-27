@@ -1,4 +1,4 @@
-# last modified 2015-05-23
+# last modified 2015-05-26
 # ds26gte@yahoo.com
 
 opts=""
@@ -32,7 +32,7 @@ soelim $f > $h
 
 ex -s $h -c "sil! ru txt2page_pdf.vim" -c "sil! call Txt2pdf()" -c "x"
 
-groff -t $opts $h > $g.ps
+groff -U -t $opts $h > $g.ps
 #rm $h
 ps2pdf $g.ps $g.pdf
 rm $g.ps
