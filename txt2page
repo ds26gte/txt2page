@@ -77,7 +77,7 @@ txt2pageFile() {
 }
 
 txt2pageExCommands() {
-  ex -s $1 -c "sil! ru txt2page.vim" -c "sil! call Txt2page()" -c "x"
+  ex -u NONE -s $1 -c "sil! ru txt2page.vim" -c "sil! call Txt2page()" -c "x"
 }
 
 txt2pageFile $opts

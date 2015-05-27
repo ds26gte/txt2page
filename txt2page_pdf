@@ -30,7 +30,7 @@ h=$g.txt.so
 
 soelim $f > $h
 
-ex -s $h -c "sil! ru txt2page_pdf.vim" -c "sil! call Txt2pdf()" -c "x"
+ex -u NONE -s $h -c "sil! ru txt2page_pdf.vim" -c "sil! call Txt2pdf()" -c "x"
 
 groff -U -t $opts $h > $g.ps
 #rm $h

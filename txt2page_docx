@@ -1,4 +1,4 @@
-# last modified 2015-05-25
+# last modified 2015-05-26
 # ds26gte@yahoo.com
 
 if test $# -eq 0
@@ -22,7 +22,7 @@ h=$g.txt.so
 
 soelim $f > $h
 
-ex -s $h -c "sil! ru txt2page_docx.vim" -c "sil! call Txt2docx()" -c "x"
+ex -u NONE -s $h -c "sil! ru txt2page_docx.vim" -c "sil! call Txt2docx()" -c "x"
 
 pandoc -f \
 markdown-line_blocks-raw_html-subscript-superscript+autolink_bare_uris \
