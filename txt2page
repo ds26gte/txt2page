@@ -22,6 +22,11 @@ do
     shift
 done
 
+if test "$(which nvim)"
+then ex="nvim -e"
+else ex=ex
+fi
+
 if test "$pdf" = 1
 then exec txt2page_pdf $opts; exit
 fi
@@ -72,12 +77,8 @@ txt2pageFile() {
       fi
     fi
     export ver f g ext soelim cssf
-    txt2pageExCommands $h
+    $ex -s $h --cmd "set mls=0" -c "sil! ru txt2page.vim" -c "sil! call Txt2page()" -c "x"
   fi
-}
-
-txt2pageExCommands() {
-  ex -s $1 --cmd "set mls=0" -c "sil! ru txt2page.vim" -c "sil! call Txt2page()" -c "x"
 }
 
 txt2pageFile $opts
