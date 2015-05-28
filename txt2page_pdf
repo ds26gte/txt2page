@@ -11,12 +11,12 @@ do
   esac
 done
 
-f=$1
-
 if test $# -gt 1
 then
   f=txt2pageout.tmp
   cat "$@" > $f
+else
+  f=$1
 fi
 
 g=${f##*/}
