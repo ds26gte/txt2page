@@ -1,4 +1,4 @@
-# last modified 2015-05-26
+# last modified 2015-05-28
 # ds26gte@yahoo.com
 
 if test $# -eq 0
@@ -13,16 +13,13 @@ f=$1
 
 g=${f##*/}
 
-ext=${g##*.}
-test "$ext" = "$g" && ext=""
-
 g=${g%.*}
 
 h=$g.txt.so
 
 soelim $f > $h
 
-ex -u NONE -s $h -c "sil! ru txt2page_docx.vim" -c "sil! call Txt2docx()" -c "x"
+ex -s $h --cmd "set mls=0" -c "sil! ru txt2page_docx.vim" -c "sil! call Txt2docx()" -c "x"
 
 pandoc -f \
 markdown-line_blocks-raw_html-subscript-superscript+autolink_bare_uris \
