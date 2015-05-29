@@ -47,7 +47,7 @@ txt2pageFile() {
     if test "$f" = "--version"
     then echo txt2page $ver; exit
     elif test "$f" = "--help"
-    then echo txt2page "[-s] [-Tpdf [groff_options]] [--version|--help|<file> ...]"; exit
+    then echo txt2page "[-s] [-Tpdf [groff_options]|-Tdocx] [--version|--help|<file> ...]"; exit
     else echo error: $f does not exist; exit
     fi
   else
