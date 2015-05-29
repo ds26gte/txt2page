@@ -1,4 +1,4 @@
-" last modified 2015-05-26
+" last modified 2015-05-29
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -146,6 +146,7 @@ endfunc
 func! Txt2page()
 
   setl fo-=j
+  setl bh=wipe
 
 while 1
   if (!$soelim)

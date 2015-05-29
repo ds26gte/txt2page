@@ -1,4 +1,4 @@
-" last modified 2015-05-27
+" last modified 2015-05-29
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -10,6 +10,7 @@ endfunc
 
 func! Txt2docx()
   setl fo-=j
+  setl bh=wipe
 
   "remove so spoors
   g/^\.lf\s\d\+\s.*$/d

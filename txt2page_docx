@@ -1,4 +1,4 @@
-# last modified 2015-05-28
+# last modified 2015-05-29
 # ds26gte@yahoo.com
 
 if test $# -eq 0
@@ -24,7 +24,7 @@ then ex="nvim -e"
 else ex=ex
 fi
 
-$ex -s $h --cmd "set mls=0" -c "sil! ru txt2page_docx.vim" -c "sil! call Txt2docx()" -c "x"
+$ex -s $h -c "sil! ru txt2page_docx.vim" -c "sil! call Txt2docx()" -c x
 
 pandoc -f \
 markdown-line_blocks-raw_html-subscript-superscript+autolink_bare_uris \

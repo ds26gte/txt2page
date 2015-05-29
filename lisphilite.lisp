@@ -1,12 +1,7 @@
-":";if test -z "$LISP"; then
-":";  if test "$USER" = evalwhen; then LISP=ecl
-":";  elif test "$(arch 2>/dev/null)" = ppc; then LISP=clozure
-":";  else LISP=sbcl
-":";  fi; fi
 ":";if test "$LISP" = clisp; then exec clisp -q $0
 ":";elif test "$LISP" = clozure; then exec ccl -b -Q -l $0
 ":";elif test "$LISP" = ecl; then exec ecl -shell $0
-":";elif test "$LISP" = sbcl; then exec sbcl --script $0
+":";else exec sbcl --script $0
 ":";fi
 
 ;Dorai Sitaram
@@ -14,7 +9,7 @@
 ;just the syntax-highlighting code out of tex2page
 
 ;first change 2013-03-15
-;last change 2014-06-16
+;last change 2015-05-29
 
 (defvar *lisphi-token-delims*
   (list #\( #\) #\[ #\] #\{ #\} #\' #\` #\" #\; #\, #\|))
@@ -180,7 +175,6 @@
              (setq esc-p nil))))))
   (lisphi-princ-char #\")
   (princ "</span>"))
-
 
 (defun lisphi-output-comment ()
   (princ "<span class=comment>")

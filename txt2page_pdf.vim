@@ -1,4 +1,4 @@
-" last modified 2015-05-26
+" last modified 2015-05-29
 " ds26gte@yahoo.com
 
 func! s:troffRecognizeUrls()
@@ -123,6 +123,7 @@ endfunc
 func! Txt2pdf()
 
   setl fo-=j
+  setl bh=wipe
 
 %s/⋆/*/g
 
