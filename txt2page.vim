@@ -1,4 +1,4 @@
-" last modified 2015-05-29
+" last modified 2015-06-01
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -24,7 +24,7 @@ func! s:recognizeUrls()
     s#“\./\(.\{-}\)”#<a href="\1"><span class=url>\1</span></a>#g
 
     " ./pathname becomes <a href="pathname">pathname</a>
-    s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><span class=url>\1</span></a>#g
+    s#\%([.]\)\@<!\./\([^[:space:]()<>\[\]&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><span class=url>\1</span></a>#g
 
     " FAKEHTTP has done its job by now -- remove it
     "s#FAKEHTTP://##g
@@ -78,6 +78,7 @@ func! s:upcaseDigits(x)
 endfunc
 
 func! s:findQvUrls()
+
   v/^ÞtzpPreformattedTzp/ s_\(\\\*\[:\)\s*\%(\\\)\?\s*$_\1ÞtzpQvUrlContinuedTzp_
   g/ÞtzpQvUrlContinuedTzp$/ .,+1 j!
   %s/ÞtzpQvUrlContinuedTzp/ /
@@ -91,6 +92,25 @@ func! s:findQvUrls()
 endfunc
 
 func! s:findUrlhs()
+  v/^ÞtzpPreformattedTzp/ s_\(\\\*\[urlh\)\s*\%(\\\)\s*$_\1ÞtzpQQvUrlContinuedTzp_
+  g/ÞtzpQQvUrlContinuedTzp$/ .,+1 j!
+  %s/ÞtzpQQvUrlContinuedTzp/ /
+  v/^ÞtzpPreformattedTzp/ s_\\\*\[urlh\s\+\(.\{-}\)\s*\]_\1_g
+
+  g/\%(<a\s\+href=.*\)\@<!\\Æ/ s/^\%(ÞtzpPreformattedTzp\)\@!/ÞtzpPossibleUrlhTzp/
+
+  g/^ÞtzpPossibleUrlhTzp/ -1s/<a\s\+href=.*$/&ÞtzpUrlhContinuationLineTzp/
+  g/^ÞtzpPossibleUrlhTzp/ -2s/<a\s\+href=.*$/&ÞtzpUrlhContinuationLineTzp/
+
+  g/ÞtzpUrlhContinuationLineTzp$/ -1s/ÞtzpUrlhContinuationLineTzp$//
+
+  g/ÞtzpUrlhContinuationLineTzp$/ .,/^ÞtzpPossibleUrlhTzp/ j
+
+  %s/ÞtzpPossibleUrlhTzp//
+
+  %s/ÞtzpUrlhContinuationLineTzp//
+
+  v/^ÞtzpPreformattedTzp/ s_<a href="\(.\{-}\)">.\{-}</a>\(.\{-}\)\\Æ_<a href="\1">\2</a>_g
   g/\%(\%(-:\|[᛫‡]\).*\)\@<!<a href="/ s/^/ÞtzpPossibleUrlhTzp/
 
   g/^ÞtzpPossibleUrlhTzp/ -1s/\%(-:\|[᛫‡]\).\{-}$/&ÞtzpUrlhContinuationLineTzp/
@@ -163,11 +183,6 @@ while 1
 endwhile
 
 g/^ÞtzpSoDoneTzp/d
-
-"convert all setminuses (U+2216) to backslashes
-"(setminus is used in troff source as a convenient nonactive stand-in for backslash)
-
-%s/∖/\\\\/g
 
 "use unabbreviations for these rare characters if they occur verbatim in the source,
 "as we'll be using these characters as temporary symbols
@@ -386,6 +401,8 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 %s/^#####\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 5 \1/
 %s/^######\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 6 \1/
 
+%s/^\.\s*=\*\s\+\(.*\)$/ÞtzpSectionTzp title \1/
+
 %s/^\.\s*=\{1}\s\+\(\S\)/ÞtzpTroffSectionTzp 1 \1/
 %s/^\.\s*=\{2}\s\+\(\S\)/ÞtzpTroffSectionTzp 2 \1/
 %s/^\.\s*=\{3}\s\+\(\S\)/ÞtzpTroffSectionTzp 3 \1/
@@ -553,6 +570,9 @@ v/./,/./-j
 
 "%s#^<p>\(\%([A-Z0-9]\+\.\)\+\)\s#<p><b>\1</b> #
 
+v/^ÞtzpPreformattedTzp/ s#\\fC#<code>#g
+v/^ÞtzpPreformattedTzp/ s#\\fP#</code>#g
+
 v/^ÞtzpPreformattedTzp/ s#\`\`\(.\{-1,}\)\`\`#<code>\1</code>#g
 
 v/^ÞtzpPreformattedTzp/ s#\`\(.\{-1,}\)\`#<code>\1</code>#g
@@ -571,6 +591,14 @@ call s:redirectIfNecessary()
 
 %s/^ÞtzpPreformattedTzp//
 %s/ÞtzpPreformattedTzp/\r/g
+
+"for troff?
+"convert all setminuses (U+2216) to backslashes
+"(setminus is used in troff source as a convenient nonactive stand-in for backslash)
+
+"%s/∖/\\\\/g
+
+%s/\\Æ//g
 
 %s/«/\&lt;/g
 %s/»/\&gt;/g
