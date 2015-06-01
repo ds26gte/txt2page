@@ -1,3 +1,19 @@
+2015 June 1
+
+\*[urlh URL]LINK TEXT\& becomes <a href="URL">LINK TEXT</a>, as
+in troff2page. (For troff, \*[urlh ...] is defined to be an empty
+string, so the whole expression becomes just LINK TEXT.)
+
+\& is empty string, as in troff[2page].
+
+Automatically recognized filenames don't have [].
+
+.=* is title.
+
+2015 May 31
+
+Added option: -c css_file
+
 2015 Mar 20
 
 .= etc for troff-like headers that allow heading to spill across
