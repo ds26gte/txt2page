@@ -1,4 +1,4 @@
-" last modified 2015-06-01
+" last modified 2015-06-02
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -645,7 +645,7 @@ exec '1,5s#MYVERSION#' . $ver . '#'
 exec '5,10s#MYCSSFILE#' . $cssf . '#'
 
 if exists('g:redirectUrl')
-  5,15s#</head>#<meta http-equiv="refresh" content="1;ÞtzpRedirectUrlTzp">\r\0#
+  5,15s#</head>#<meta http-equiv="refresh" content="0;ÞtzpRedirectUrlTzp">\r\0#
   let @0 = g:redirectUrl
   5,15s/ÞtzpRedirectUrlTzp/\=@0/
 endif
