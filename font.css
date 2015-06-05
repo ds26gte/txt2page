@@ -1,10 +1,18 @@
-/* last modified 2015-05-01 */
+/* last modified 2015-06-05 */
 
 @import url(http://fonts.googleapis.com/css?family=Inconsolata);
 @import url(http://fonts.googleapis.com/css?family=Cabin:400,500,600,700);
 
-code {
-    font-family: inconsolata, monospace;
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.code,code {
+  font-family: inconsolata, monospace;
 }
 
 /*
