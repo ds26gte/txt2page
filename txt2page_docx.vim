@@ -1,4 +1,4 @@
-" last modified 2015-05-29
+" last modified 2015-06-05
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -56,10 +56,12 @@ func! Txt2docx()
   %s/^\.\s*===\s\+/### /
   %s/^\.\s*==\s\+/## /
   %s/^\.\s*=\s\+/# /
+  %s/^\.\s*=\*\s\+/# /
 
   "italics
 
   v/^ÞtzpPreformattedTzp/ s/\\fI\(.\{-}\)\\fP/*\1*/g
+  v/^ÞtzpPreformattedTzp/ s/\\fB\(.\{-}\)\\fP/**\1**/g
 
   "qv-type URLs
 
