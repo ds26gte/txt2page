@@ -1,4 +1,4 @@
-" last modified 2015-06-02
+" last modified 2015-06-05
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -570,8 +570,13 @@ v/./,/./-j
 
 "%s#^<p>\(\%([A-Z0-9]\+\.\)\+\)\s#<p><b>\1</b> #
 
-v/^ÞtzpPreformattedTzp/ s#\\fC#<code>#g
-v/^ÞtzpPreformattedTzp/ s#\\fP#</code>#g
+"v/^ÞtzpPreformattedTzp/ s#\\fC#<code>#g
+"v/^ÞtzpPreformattedTzp/ s#\\fP#</code>#g
+
+v/^ÞtzpPreformattedTzp/ s#\\fB#<span class=bold>#g
+v/^ÞtzpPreformattedTzp/ s#\\fI#<span class=italic>#g
+v/^ÞtzpPreformattedTzp/ s#\\fC#<span class=code>#g
+v/^ÞtzpPreformattedTzp/ s#\\fP#</span>#g
 
 v/^ÞtzpPreformattedTzp/ s#\`\`\(.\{-1,}\)\`\`#<code>\1</code>#g
 
