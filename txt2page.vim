@@ -1,4 +1,4 @@
-" last modified 2015-06-05
+" last modified 2015-06-08
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -454,27 +454,11 @@ g/\\\*\[\%(\^\|::\)\s*[^]]\{-}ÞtzpContinuationLineTzp$/ .,+1 j!
 
 v/^ÞtzpPreformattedTzp/ s:(†\([^()[:space:]]\+\)):<a name="callFootnote_\1" href="#footnote_\1">ÞtzpFootnoteMarkTzp\1ÞtzpFootnoteMarkEndTzp</a>:g
 
-" ensure footnote text start/end is at bol
-
-v/^ÞtzpPreformattedTzp/ s:\(.\)\((†\|†)\):\1\r\2:g
-
-" put footnote text's symbol line on own line
-
-%s:^(†\s*\(\S\+\)\s\+\(\S\):(†\1\r\2:
-
-" move text following footnote text's end to a new line after
-
-%s:^\(†)\)\s*\(\S\):\1\r\2:
-
 " mark footnote text start line
-
-%s:^(†\s*\(\S\+\)\?\s*$:ÞtzpFootnoteEnvTzp \10:
 
 %s:^\.FS\s*\(\S\+\)\?\s*$:ÞtzpFootnoteEnvTzp \10:
 
 " mark its end line
-
-%s:^†)\s*$:ÞtzpFootnoteEnvTzp1:
 
 %s:^\.FE\s*$:ÞtzpFootnoteEnvTzp1:
 
