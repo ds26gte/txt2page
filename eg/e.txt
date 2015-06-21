@@ -1,0 +1,9 @@
+last change 2015-06-05
+
+This is \fBstrong\fP
+
+this is \fIemphasized\fP
+
+this is \fCmonospace\fP
+
+See ds26gte.github.io for more details
