@@ -1,4 +1,4 @@
-" last modified 2015-06-08
+" last modified 2015-09-20
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -216,6 +216,8 @@ if g:fileExtension == ""
     let g:fileExtension = "tzpLetsNotMatchAnythingAgainstThis"
 endif
 
+let g:manPageP = 0
+
 0
 let lastline = line('$')
 while 1
@@ -226,9 +228,11 @@ while 1
     let linestr = getline('.')
     if match(linestr, '^\.\s*TH\s\+".\{-}"') > -1
         s/^\.\s*TH\s\+"\(.\{-}\)".*/.TH \1/
+        let g:manPageP = 1
         break
     elseif match(linestr, '^\.\s*TH\s\+\(\S\+\)\s\+\S') > -1
         s/^\.\s*TH\s\+\(\S\+\).*/.TH \1/
+        let g:manPageP = 1
         break
     endif
     norm j
@@ -382,13 +386,18 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 
 "sections
 
-" troff-friendly .#...
+" troff-friendly .= ...
 
 %s/^\.\s*\(#\+\)/\1/
 
-%s/^\.\s*TH\s\+\(.*\)$/ÞtzpSectionTzp title \1/
-%s/^\.\s*SH\s\+\(.*\)$/ÞtzpSectionTzp 1 \1/
-%s/^\.\s*SS\s\+\(.*\)$/ÞtzpSectionTzp 2 \1/
+if g:manPageP
+  %s/^\.\s*TH\s\+\(.*\)$/ÞtzpSectionTzp title \1/
+  %s/^\.\s*SH\s\+\(.*\)$/ÞtzpSectionTzp 1 \1/
+  %s/^\.\s*SS\s\+\(.*\)$/ÞtzpSectionTzp 2 \1/
+else
+  %s/^\.\s*SH$/ÞtzpTroffSectionTzp 3/
+  %s/^\.\s*SH\s\+\([0-9]\+\)$/ÞtzpTroffSectionTzp \1/
+endif
 
 %s/^#\s\+\(.\{-}\)\s\+#$/ÞtzpSectionTzp title \1/
 %s/^#\s\+\(.\{-}\)\s\+##$/ÞtzpSectionTzp htmltitle \1/
