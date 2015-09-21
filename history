@@ -1,3 +1,7 @@
+2015 Sept 21
+
+Distinguish -man and -ms .SH
+
 2015 June 1
 
 \*[urlh URL]LINK TEXT\& becomes <a href="URL">LINK TEXT</a>, as
@@ -17,7 +21,7 @@ Added option: -c css_file
 2015 Mar 20
 
 .= etc for troff-like headers that allow heading to spill across
-lines. 
+lines.
 
 2015 Mar 1
 
@@ -25,7 +29,7 @@ Determine title-text after headers have all been determined, so
 troff-like headers can contribute a potential multiple-line
 title.
 
-2014 Dec 16 
+2014 Dec 16
 
 ‡ text URL
 
@@ -190,7 +194,7 @@ for greyed-out parts (e.g., for first and last page).
 
 Allow *...* URL to be split across (2 or 3?) lines.
 
-※ (changed 2014 Dec 14) creates visible anchors. 
+※ (changed 2014 Dec 14) creates visible anchors.
 
 2013 Mar 11
 
