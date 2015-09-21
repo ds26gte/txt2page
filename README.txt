@@ -8,7 +8,8 @@ The external program groff is needed for PDF; pandoc for docx.
 Installation: Place the scripts txt2page, txt2page_pdf, and
 txt2page_docx in your PATH, and the Vim files txt2page.vim,
 tx2page_pdf.vim, and txt2page_docx.vim in your ‘runtimepath’
-(typically ~/.vim or ~/.nvim).
+(typically ~/.vim or ~/.nvim, or their ‘after’ subdirectory —
+*not* the ‘plugin’ directories).
 
   % txt2page filename.txt
 
