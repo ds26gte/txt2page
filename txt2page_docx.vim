@@ -1,4 +1,4 @@
-" last modified 2015-06-05
+" last modified 2015-09-20
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -48,15 +48,31 @@ func! Txt2docx()
 
   g/^\.\s*\\\*/d
 
+  "troff sections
+
+  %s/^\.\s*SH$/ÞtzpTroffSectionTzp 3/
+  %s/^\.\s*SH\s\+\([0-9]\+\)$/ÞtzpTroffSectionTzp \1/
+
+  g/^ÞtzpTroffSectionTzp/,/^$/-1 j
+
+  %s/^ÞtzpTroffSectionTzp/ÞtzpSectionTzp/
+
   "sections
 
-  %s/^\.\s*======\s\+/###### /
-  %s/^\.\s*=====\s\+/##### /
-  %s/^\.\s*====\s\+/#### /
-  %s/^\.\s*===\s\+/### /
-  %s/^\.\s*==\s\+/## /
-  %s/^\.\s*=\s\+/# /
-  %s/^\.\s*=\*\s\+/# /
+  %s/^\.\s*======\s\+/ÞtzpSectionTzp 1 /
+  %s/^\.\s*=====\s\+/ÞtzpSectionTzp 2 /
+  %s/^\.\s*====\s\+/ÞtzpSectionTzp 3 /
+  %s/^\.\s*===\s\+/ÞtzpSectionTzp 4 /
+  %s/^\.\s*==\s\+/ÞtzpSectionTzp 5 /
+  %s/^\.\s*=\s\+/ÞtzpSectionTzp 6 /
+  %s/^\.\s*=\*\s\+/ÞtzpSectionTzp 1 /
+
+  %s/^ÞtzpSectionTzp\s\+1\s\+/# /
+  %s/^ÞtzpSectionTzp\s\+2\s\+/## /
+  %s/^ÞtzpSectionTzp\s\+3\s\+/### /
+  %s/^ÞtzpSectionTzp\s\+4\s\+/#### /
+  %s/^ÞtzpSectionTzp\s\+5\s\+/##### /
+  %s/^ÞtzpSectionTzp\s\+6\s\+/###### /
 
   "italics
 
