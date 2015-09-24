@@ -1,4 +1,4 @@
-.= txt2page
+.SH txt2page
 
 txt2page is a bash/vim script that converts
 free-form plain text into HTML, PDF, or docx (LibreOffice).

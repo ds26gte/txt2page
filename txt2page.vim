@@ -1,4 +1,4 @@
-" last modified 2015-09-20
+" last modified 2015-09-24
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -393,11 +393,13 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 if g:manPageP
   %s/^\.\s*TH\s\+\(.*\)$/ÞtzpSectionTzp title \1/
   %s/^\.\s*SH\s\+\(.*\)$/ÞtzpSectionTzp 1 \1/
-  %s/^\.\s*SS\s\+\(.*\)$/ÞtzpSectionTzp 2 \1/
 else
   %s/^\.\s*SH$/ÞtzpTroffSectionTzp 3/
   %s/^\.\s*SH\s\+\([0-9]\+\)$/ÞtzpTroffSectionTzp \1/
+  %s/^\.\s*SH\s\+\(.*\)$/ÞtzpSectionTzp 1 \1/
 endif
+
+%s/^\.\s*SS\s\+\(.*\)$/ÞtzpSectionTzp 2 \1/
 
 %s/^#\s\+\(.\{-}\)\s\+#$/ÞtzpSectionTzp title \1/
 %s/^#\s\+\(.\{-}\)\s\+##$/ÞtzpSectionTzp htmltitle \1/
