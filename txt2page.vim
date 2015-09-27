@@ -1,4 +1,4 @@
-" last modified 2015-09-24
+" last modified 2015-09-27
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -394,6 +394,7 @@ if g:manPageP
   %s/^\.\s*TH\s\+\(.*\)$/ÞtzpSectionTzp title \1/
   %s/^\.\s*SH\s\+\(.*\)$/ÞtzpSectionTzp 1 \1/
 else
+  %s/^\.\s*TL$/ÞtzpTroffSectionTzp title/
   %s/^\.\s*SH$/ÞtzpTroffSectionTzp 3/
   %s/^\.\s*SH\s\+\([0-9]\+\)$/ÞtzpTroffSectionTzp \1/
   %s/^\.\s*SH\s\+\(.*\)$/ÞtzpSectionTzp 1 \1/

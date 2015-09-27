@@ -1,4 +1,4 @@
-# last modified 2015-05-29
+# last modified 2015-09-27
 # ds26gte@yahoo.com
 
 opts=""
@@ -25,7 +25,8 @@ g=${g%.*}
 
 h=$g.txt.so
 
-soelim $f > $h
+cp -p $f $h
+#soelim $f > $h
 
 if test "$(which nvim)"
 then ex="nvim -e"

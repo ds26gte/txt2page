@@ -1,4 +1,4 @@
-" last modified 2015-05-29
+" last modified 2015-09-27
 " ds26gte@yahoo.com
 
 func! s:troffRecognizeUrls()
@@ -238,6 +238,8 @@ g/^ÞtzpBogusEndOfFileLineTzp/d
 
 0i
 .mso pca.tmac
+.mso pca-sec.tmac
+.mso pca-so.tmac
 .
 
 endfunc
