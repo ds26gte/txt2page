@@ -1,7 +1,8 @@
 .SH txt2page
 
 txt2page is a bash/vim script that converts
-free-form plain text into HTML, PDF, or docx (LibreOffice).
+plain text into HTML, PDF, or docx (LibreOffice). A small amount
+of groff markup is also tolerated.
 
 The external program groff is needed for PDF; pandoc for docx.
 
