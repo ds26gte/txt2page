@@ -1,4 +1,4 @@
-" last modified 2015-09-27
+" last modified 2015-09-29
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -242,8 +242,6 @@ endwhile
 
 "code display
 
-" troff-friendly triple-backquote env
-
 %s/^\s*\(\`\`\`\+\)/.\1/
 
 %s/^\.\s*\`\`\`\`\+/.EE/
@@ -385,8 +383,6 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 %s:^\.\s*AN\s\+\([^[:space:]()<>&#]\+\)$:<a name="\1"></a>:
 
 "sections
-
-" troff-friendly .= ...
 
 %s/^\.\s*\(#\+\)/\1/
 
