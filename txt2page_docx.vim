@@ -1,4 +1,4 @@
-" last modified 2015-09-29
+" last modified 2015-10-23
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -51,6 +51,9 @@ func! Txt2docx()
   "troff sections
 
   %s/^\.\s*TL$/ÞtzpTroffSectionTzp 1/
+
+  %s/^\.\s*TH\s\+"\(.\{-}\)".*/ÞtzpTroffSectionTzp 1 \1/
+
   %s/^\.\s*SH$/ÞtzpTroffSectionTzp 3/
   %s/^\.\s*SH\s\+\([0-9]\+\)$/ÞtzpTroffSectionTzp \1/
   %s/^\.\s*SH\s\+\(.*\)$/ÞtzpSectionTzp 1 \1/
@@ -61,14 +64,6 @@ func! Txt2docx()
   %s/^ÞtzpTroffSectionTzp/ÞtzpSectionTzp/
 
   "sections
-
-  %s/^\.\s*======\s\+/ÞtzpSectionTzp 1 /
-  %s/^\.\s*=====\s\+/ÞtzpSectionTzp 2 /
-  %s/^\.\s*====\s\+/ÞtzpSectionTzp 3 /
-  %s/^\.\s*===\s\+/ÞtzpSectionTzp 4 /
-  %s/^\.\s*==\s\+/ÞtzpSectionTzp 5 /
-  %s/^\.\s*=\s\+/ÞtzpSectionTzp 6 /
-  %s/^\.\s*=\*\s\+/ÞtzpSectionTzp 1 /
 
   %s/^ÞtzpSectionTzp\s\+1\s\+/# /
   %s/^ÞtzpSectionTzp\s\+2\s\+/## /
