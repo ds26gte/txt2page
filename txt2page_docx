@@ -1,4 +1,4 @@
-# last modified 2015-05-29
+# last modified 2015-10-25
 # ds26gte@yahoo.com
 
 if test $# -eq 0
@@ -20,7 +20,7 @@ h=$g.txt.so
 soelim $f > $h
 
 if test "$(which nvim)"
-then ex="nvim -e"
+then ex="nvim -e -u NONE"
 else ex=ex
 fi
 
