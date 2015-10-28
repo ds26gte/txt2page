@@ -1,4 +1,4 @@
-" last modified 2015-09-29
+" last modified 2015-10-27
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -92,10 +92,10 @@ func! s:findQvUrls()
 endfunc
 
 func! s:findUrlhs()
-  v/^ÞtzpPreformattedTzp/ s_\(\\\*\[urlh\)\s*\%(\\\)\s*$_\1ÞtzpQQvUrlContinuedTzp_
+  v/^ÞtzpPreformattedTzp/ s_\(\\\*\[url\)\s*\%(\\\)\s*$_\1ÞtzpQQvUrlContinuedTzp_
   g/ÞtzpQQvUrlContinuedTzp$/ .,+1 j!
   %s/ÞtzpQQvUrlContinuedTzp/ /
-  v/^ÞtzpPreformattedTzp/ s_\\\*\[urlh\s\+\(.\{-}\)\s*\]_\1_g
+  v/^ÞtzpPreformattedTzp/ s_\\\*\[url\s\+\(.\{-}\)\s*\]_\1_g
 
   g/\%(<a\s\+href=.*\)\@<!\\Æ/ s/^\%(ÞtzpPreformattedTzp\)\@!/ÞtzpPossibleUrlhTzp/
 
@@ -397,26 +397,6 @@ else
 endif
 
 %s/^\.\s*SS\s\+\(.*\)$/ÞtzpSectionTzp 2 \1/
-
-%s/^#\s\+\(.\{-}\)\s\+#$/ÞtzpSectionTzp title \1/
-%s/^#\s\+\(.\{-}\)\s\+##$/ÞtzpSectionTzp htmltitle \1/
-%s/^###\s\+###$/ÞtzpSectionTzp dropcap x/
-
-%s/^#\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 1 \1/
-%s/^##\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 2 \1/
-%s/^###\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 3 \1/
-%s/^####\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 4 \1/
-%s/^#####\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 5 \1/
-%s/^######\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 6 \1/
-
-%s/^\.\s*=\*\s\+\(.*\)$/ÞtzpSectionTzp title \1/
-
-%s/^\.\s*=\{1}\s\+\(\S\)/ÞtzpTroffSectionTzp 1 \1/
-%s/^\.\s*=\{2}\s\+\(\S\)/ÞtzpTroffSectionTzp 2 \1/
-%s/^\.\s*=\{3}\s\+\(\S\)/ÞtzpTroffSectionTzp 3 \1/
-%s/^\.\s*=\{4}\s\+\(\S\)/ÞtzpTroffSectionTzp 4 \1/
-%s/^\.\s*=\{5}\s\+\(\S\)/ÞtzpTroffSectionTzp 5 \1/
-%s/^\.\s*=\{6}\s\+\(\S\)/ÞtzpTroffSectionTzp 6 \1/
 
 g/^ÞtzpTroffSectionTzp/,/^$/-1 j
 
