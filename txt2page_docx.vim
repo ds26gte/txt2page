@@ -1,4 +1,4 @@
-" last modified 2015-10-23
+" last modified 2015-10-29
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -6,6 +6,28 @@ func! s:txt2page_docx_delete_qv_urls()
   g/ÞtzpQvUrlContinuedTzp$/ .,+1 j!
   %s/ÞtzpQvUrlContinuedTzp/ /
   v/^ÞtzpPreformattedTzp/ s/\\\*\[:\s*.\{-}\]//g
+endfunc
+
+func! s:troffRecognizeUrls()
+  v/^ÞtzpPreformattedTzp/ s_\(\\\*\[url\)\s*\%(\\\)\s*$_\1ÞtzpQvUrlContinuedTzp_
+  g/ÞtzpQvUrlContinuedTzp$/ .,+1 j!
+  %s/ÞtzpQvUrlContinuedTzp/ /
+
+  g/\%(\\\*\[url\s\+.*\)\@<!\\Æ/ s/^\%(ÞtzpPreformattedTzp\)\@!/ÞtzpPossibleUrlhTzp/
+
+  g/^ÞtzpPossibleUrlhTzp/ -1s/\\\*\[url\s.*$/&ÞtzpUrlhContinuationLineTzp/
+  g/^ÞtzpPossibleUrlhTzp/ -2s/\\\*\[url\s.*$/&ÞtzpUrlhContinuationLineTzp/
+
+  g/ÞtzpUrlhContinuationLineTzp$/ -1s/ÞtzpUrlhContinuationLineTzp$//
+
+  g/ÞtzpUrlhContinuationLineTzp$/ .,/^ÞtzpPossibleUrlhTzp/ j
+
+  %s/ÞtzpPossibleUrlhTzp//
+
+  %s/ÞtzpUrlhContinuationLineTzp//
+
+  v/ÞtzpPreformattedTzp/ s_\\\*\[url\s\+\(.\{-}\)\]\(.\{-}\)\\Æ_[\2](\1)_g
+
 endfunc
 
 func! Txt2docx()
@@ -17,6 +39,9 @@ func! Txt2docx()
 
   "remember original big thorns
   %s/Þ/ÞtzpThornTzp/g
+  %s/Æ/ÞtzpAEligTzp/g
+
+  %s/&/Æ/g
 
   "code display
 
@@ -92,7 +117,13 @@ func! Txt2docx()
   %s:^\.FS:/*:
   %s:^\.FE:*/:
 
+  call s:troffRecognizeUrls()
+
   %s/^ÞtzpPreformattedTzp//
 
+  %s/\\Æ//g
+  %s/Æ/\&/g
+
   %s/ÞtzpThornTzp/Þ/g
+  %s/ÞtzpAEligTzp/Æ/g
 endfunc
