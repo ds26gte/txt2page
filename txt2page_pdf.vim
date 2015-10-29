@@ -1,4 +1,4 @@
-" last modified 2015-09-27
+" last modified 2015-10-29
 " ds26gte@yahoo.com
 
 func! s:troffRecognizeUrls()
@@ -16,11 +16,13 @@ func! s:troffRecognizeUrls()
 
     s:\(ÞtzpUrlBeginTzp\)[^#]\{-}#\([^#]\{-}\)\(ÞtzpUrlEndTzp\):\1[\2]\3:g
 
+    " rm Url markers
+    s:ÞtzpUrlBeginTzp\(.\{-}\)ÞtzpUrlEndTzp:\1:g
 endfunc
 
 func! s:troffFindQvUrls()
   v/^ÞtzpPreformattedTzp/ s/ÞtzpDoubleBackslashTzp\(\*\[:\s\+.\{-}\s*\]\)/ÞtzpBackslashTzp\1/
-  v/^ÞtzpPreformattedTzp/ s/\%(\[\)\@<!\s*:\s*ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
+  "v/^ÞtzpPreformattedTzp/ s/\%(\[\)\@<!\s*:\s*ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
 endfunc
 
 func! s:troffFindUrlhs()
@@ -204,7 +206,7 @@ call s:troffTables()
 
 call s:troffFindQvUrls()
 
-call s:troffFindUrlhs()
+"call s:troffFindUrlhs()
 
 v/^ÞtzpPreformattedTzp/ call s:troffPalatable()
 
@@ -238,7 +240,6 @@ g/^ÞtzpBogusEndOfFileLineTzp/d
 
 0i
 .mso pca.tmac
-.mso pca-sec.tmac
 .mso pca-so.tmac
 .
 

@@ -1,4 +1,4 @@
-" last modified 2015-10-27
+" last modified 2015-10-29
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -111,23 +111,6 @@ func! s:findUrlhs()
   %s/ÞtzpUrlhContinuationLineTzp//
 
   v/^ÞtzpPreformattedTzp/ s_<a href="\(.\{-}\)">.\{-}</a>\(.\{-}\)\\Æ_<a href="\1">\2</a>_g
-  g/\%(\%(-:\|[᛫‡]\).*\)\@<!<a href="/ s/^/ÞtzpPossibleUrlhTzp/
-
-  g/^ÞtzpPossibleUrlhTzp/ -1s/\%(-:\|[᛫‡]\).\{-}$/&ÞtzpUrlhContinuationLineTzp/
-
-  g/^ÞtzpPossibleUrlhTzp/ -2s/\%(-:\|[᛫‡]\).\{-}$/&ÞtzpUrlhContinuationLineTzp/
-
-  g/ÞtzpUrlhContinuationLineTzp$/ -1s/ÞtzpUrlhContinuationLineTzp$//
-
-  g/ÞtzpUrlhContinuationLineTzp$/ .,/^ÞtzpPossibleUrlhTzp/ j
-
-  %s/ÞtzpPossibleUrlhTzp//
-
-  "g/ÞtzpUrlhContinuationLineTzp$/ .,+1 j
-
-  %s/ÞtzpUrlhContinuationLineTzp//
-
-  v/^ÞtzpPreformattedTzp/ s#\%(-:\|[᛫‡]\)\s*\(.\{-}\)\s*<a href="\(.\{-}\)">.\{-}</a>#<a href="\2">\1</a>#g
 
 endfunc
 
