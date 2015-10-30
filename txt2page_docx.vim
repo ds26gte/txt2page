@@ -1,4 +1,4 @@
-" last modified 2015-10-29
+" last modified 2015-10-30
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -117,6 +117,8 @@ func! Txt2docx()
   %s:^\.FS:/*:
   %s:^\.FE:*/:
 
+  %s:^\([0-9]\+\.\) :\1 :
+
   call s:troffRecognizeUrls()
 
   %s/^ÞtzpPreformattedTzp//
@@ -126,4 +128,8 @@ func! Txt2docx()
 
   %s/ÞtzpThornTzp/Þ/g
   %s/ÞtzpAEligTzp/Æ/g
+
+  0i
+  <!-- Generated from troff source -->
+.
 endfunc
