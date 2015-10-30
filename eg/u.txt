@@ -4,3 +4,9 @@ Baskervald is a Baskerville-like free font available from
 file and add four of the OTF files, viz.
 
 Go to \*[url http://github.ds26gte.io]ds26gte’s home page\&.
+
+Go to \*[url \
+http://github.ds26gte.io]ds26gte’s home page\&.
+
+Go to \*[url\
+http://github.ds26gte.io]ds26gte’s home page\&.
