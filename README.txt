@@ -1,16 +1,17 @@
 .SH txt2page
 
-txt2page is a bash/vim script that converts
-plain text into HTML, PDF, or docx (LibreOffice). A small amount
-of groff markup is also tolerated.
+txt2page is a bash/vim script that implements the basic
+functionality of the larger Common Lisp program troff2page.
+txt2page converts plain text marked up with a modest amount of
+groff markup into HTML, PDF, or docx (LibreOffice).
 
 The external program groff is needed for PDF; pandoc for docx.
 
 Installation: Place the scripts txt2page, txt2page_pdf, and
 txt2page_docx in your PATH, and the Vim files txt2page.vim,
 tx2page_pdf.vim, and txt2page_docx.vim in your ‘runtimepath’
-(typically ~/.vim or ~/.nvim, or their ‘after’ subdirectory —
-*not* the ‘plugin’ directories).
+(typically ~/.vim or ~/.config/nvim, or their ‘after’ subdirectory —
+*not* the ‘plugin’ subdirectory).
 
   % txt2page filename.txt
 
