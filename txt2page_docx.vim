@@ -1,4 +1,4 @@
-" last modified 2015-10-30
+" last modified 2015-11-01
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -47,7 +47,8 @@ func! Txt2docx()
 
   g/^\.\s*EX/+1, /^\.\s*EE/-1 s/^/ÞtzpPreformattedTzp/
 
-  %s/^\.\s*E[XE].*/```/
+  %s/^\.\s*EX.*/```/
+  %s/^\.\s*EE.*/````/
 
   "remove trailing spaces (incl u+00a0)
 
@@ -108,7 +109,7 @@ func! Txt2docx()
 
   "inline code
 
-  v/^ÞtzpPreformattedTzp/ s/\\fC\([^`]\{-1}\)\\fP/`\1`/g
+  v/^ÞtzpPreformattedTzp/ s/\\fC\([^`]\{-}\)\\fP/`\1`/g
   v/^ÞtzpPreformattedTzp/ s/\\fC\(.\{-}\)\\fP/``\1``/g
 
   "footnotes
