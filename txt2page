@@ -1,4 +1,4 @@
-ver=2015-05-31 # last modified
+ver=2015-11-03 # last modified
 
 # ds26gte@yahoo.com
 
@@ -47,7 +47,7 @@ txt2pageFile() {
   if test ! -f "$f"
   then
     if test "$f" = "--version"
-    then echo txt2page $ver; exit
+    then echo txt2page version $ver; exit
     elif test "$f" = "--help"
     then
     echo txt2page "[--version|--help]"
