@@ -1,4 +1,4 @@
-" last modified 2015-11-11
+" last modified 2015-11-27
 " ds26gte@yahoo.com
 
 func! s:troffRecognizeUrls()
@@ -14,10 +14,14 @@ func! s:troffRecognizeUrls()
     " ./pathname
     s#\%([.]\)\@<!\./\([^[:space:]()<>&]\+\)\%([[:punct:]]\)\@<!#ÞtzpUrlBeginTzp\1ÞtzpUrlEndTzp#g
 
+    s;link:\(.\{-}\)\[\];\1;g
+
+    s;link:.\{-}\[\(.\{-}\)\];\1;g
+
     s:\(ÞtzpUrlBeginTzp\)[^#]\{-}#\([^#]\{-}\)\(ÞtzpUrlEndTzp\):\1[\2]\3:g
 
     " rm Url markers
-    s:ÞtzpUrlBeginTzp\(.\{-}\)ÞtzpUrlEndTzp:\1:g
+    "s:ÞtzpUrlBeginTzp\(.\{-}\)ÞtzpUrlEndTzp:\1:g
 endfunc
 
 func! s:troffFindQvUrls()
@@ -26,65 +30,22 @@ func! s:troffFindQvUrls()
 endfunc
 
 func! s:troffFindUrlhs()
-  g/\%(\%(-:\|[᛫‡]\).*\)\@<!ÞtzpUrlBeginTzp/ s/^/ÞtzpPossibleUrlhTzp/
 
-  g/^ÞtzpPossibleUrlhTzp/ -1s/\%(-:\|[᛫‡]\).\{-}$/&ÞtzpUrlhContinuationLineTzp/
+  v:^ÞtzpPreformattedTzp: s:ÞtzpUrlEndTzp\[[^\]]*$:&ÞtzpUrlhFirstLineTzp:
 
-  %s/^ÞtzpPossibleUrlhTzp//
+  g:ÞtzpUrlhFirstLineTzp$: +1s:^[^\]]*$:&ÞtzpUrlhContinuationLineTzp:
+  g:ÞtzpUrlhFirstLineTzp$: +2s:^[^\]]*$:&ÞtzpUrlhContinuationLineTzp:
 
-  g/^ÞtzpUrlhContinuationLineTzp$/ .,+1 j
+  g:ÞtzpUrlhContinuationLineTzp: +1s:ÞtzpUrlhContinuationLineTzp$::
 
-  %s/ÞtzpUrlhContinuationLineTzp//
+  g:ÞtzpUrlhFirstLineTzp: .,/ÞtzpUrlhContinuationLineTzp$/ j
 
-  " ***
-
-    " a line that starts with ÞtzpUrlBeginTzp is a possible urlh
-    %s/^ÞtzpUrlBeginTzp/ÞtzpPossibleUrlhTzp&/
-
-    g/^ÞtzpPossibleUrlhTzp/ -1s/⋆$/&ÞtzpUrlhContinuationLineTzp/
-
-    %s/^ÞtzpPossibleUrlhTzp//
-
-    g/ÞtzpUrlhContinuationLineTzp$/ .,+1 j
-
-    %s/ÞtzpUrlhContinuationLineTzp//
-
-    " ***
-
-    v/^ÞtzpPreformattedTzp/ s/^[^⋆*]\+[⋆*]\s\+ÞtzpUrlBeginTzp/ÞtzpPossibleUrlhTzp&/
-
-    g/^ÞtzpPossibleUrlhTzp/ -1s/[⋆*][^⋆*]\+$/&ÞtzpUrlhContinuationLineTzp/
-
-    %s/^ÞtzpPossibleUrlhTzp//
-
-    g/ÞtzpUrlhContinuationLineTzp$/ .,+1 j
-
-    %s/ÞtzpUrlhContinuationLineTzp//
-
-    " ***
-
-    v/^ÞtzpPreformattedTzp/ s/^[^\[]\+\](ÞtzpUrlBeginTzp/ÞtzpPossibleUrlhTzp&/
-
-    g/^ÞtzpPossibleUrlhTzp/ -1s/\[[^\]]\{-}$/&ÞtzpUrlhContinuationLineTzp/
-
-    %s/^ÞtzpPossibleUrlhTzp//
-
-    g/ÞtzpUrlhContinuationLineTzp$/ .,+1 j
-
-    %s/ÞtzpUrlhContinuationLineTzp//
-
-    " ***
-
-    v/^ÞtzpPreformattedTzp/ s/\%(-:\|[᛫‡]\)\S.\{-}ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp//g
-
-    v/^ÞtzpPreformattedTzp/ s/\%(-:\|[᛫‡]\)\s*\(.\{-}\)\s*ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp/\1/g
-
-    v/^ÞtzpPreformattedTzp/ s:[⋆*]\([^⋆*]\+\)[⋆*]\s\+ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp:\1:g
-
-    v/^ÞtzpPreformattedTzp/ s:\[\([^\]]\+\)\](ÞtzpUrlBeginTzp.\{-}ÞtzpUrlEndTzp:\1:g
+  %s:ÞtzpUrlh\%(First\|Continuation\)LineTzp::
 
     " rm Url markers
-    v/^ÞtzpPreformattedTzp/ s:ÞtzpUrlBeginTzp\(.\{-}\)ÞtzpUrlEndTzp:\1:g
+    v:^ÞtzpPreformattedTzp: s:ÞtzpUrlBeginTzp\%(.\{-}\)ÞtzpUrlEndTzp\[\(.\{-}\)\]:\1:g
+
+    v:^ÞtzpPreformattedTzp: s:ÞtzpUrl\%(Begin\|End\)Tzp::g
 endfunc
 
 func! s:troffPalatable()
@@ -138,11 +99,24 @@ $a
 
 "code display
 
-%s/^\s*\(\`\`\`\+\)/.\1/
+func! Toggle01(...)
+  if a:0
+    let b:toggle01Value = 1
+  else
+    let b:toggle01Value = !b:toggle01Value
+    return b:toggle01Value
+  endif
+endfunc
 
-%s/^\.\s*\`\`\`\`\+/.EE/
+%s:^----$:ÞtzpListingTzp:
 
-%s/^\.\s*\`\`\`/.EX /
+call Toggle01(0)
+
+g:^ÞtzpListingTzp: s:^ÞtzpListingTzp:\=submatch(0) . Toggle01():
+
+%s:^ÞtzpListingTzp0:.EX:
+
+%s:^ÞtzpListingTzp1:.EE:
 
 g/^\.\s*EX/+1, /^\.\s*EE/-1 s/^/ÞtzpPreformattedTzp/
 
@@ -156,18 +130,22 @@ g/^\.\s*\\\"/d
 
 "%s:\\\\":ÞtzpBackslashTzpÞtzpDoubleQuoteTzp:g
 
+"bullet items
+
+%s;^-\s;\r• ;
+
 "sections
 
-%s/^#\s\+\(.\{-}\)\s\+#$/ÞtzpSectionTzp title \1/
-%s/^#\s\+\(.\{-}\)\s\+##$/ÞtzpSectionTzp htmltitle \1/
-%s/^###\s\+###$/ÞtzpSectionTzp dropcap x/
+"%s/^#\s\+\(.\{-}\)\s\+#$/ÞtzpSectionTzp title \1/
+"%s/^#\s\+\(.\{-}\)\s\+##$/ÞtzpSectionTzp htmltitle \1/
+"%s/^###\s\+###$/ÞtzpSectionTzp dropcap x/
 
-%s/^#\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 1 \1/
-%s/^##\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 2 \1/
-%s/^###\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 3 \1/
-%s/^####\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 4 \1/
-%s/^#####\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 5 \1/
-%s/^######\s\+\(.\{-}\)\s*#*$/ÞtzpSectionTzp 6 \1/
+%s/^=\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 1 \1/
+%s/^==\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 2 \1/
+%s/^===\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 3 \1/
+%s/^====\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 4 \1/
+%s/^=====\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 5 \1/
+%s/^======\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 6 \1/
 
 "g/^ÞtzpSectionTzp/,/./-1 j!
 
@@ -177,7 +155,7 @@ g/^ÞtzpSectionTzp\s\+htmltitle\s/d
 
 %s/^ÞtzpSectionTzp\s\+title\s\+\(.*\)$/.Title \1/
 
-%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)$/.Section \1 \2/
+%s/^ÞtzpSectionTzp\s\+\([1-6]\)\s\+\(.*\)$/.SH \1\r\2/
 
 "drop cap
 
@@ -203,9 +181,9 @@ v/^ÞtzpPreformattedTzp/ call s:troffRecognizeUrls()
 
 call s:troffTables()
 
-call s:troffFindQvUrls()
+"call s:troffFindQvUrls()
 
-"call s:troffFindUrlhs()
+call s:troffFindUrlhs()
 
 v/^ÞtzpPreformattedTzp/ call s:troffPalatable()
 

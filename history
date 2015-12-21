@@ -1,3 +1,11 @@
+2015 Nov 27
+
+Some adoc-isms: link:, -, url[...], ----, =
+
+2015 Nov 26
+
+Use .REDIRECT <url> to redirect (as in troff2page).
+
 2015 Sept 21
 
 Distinguish -man and -ms .SH

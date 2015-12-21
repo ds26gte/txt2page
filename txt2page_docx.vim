@@ -1,4 +1,4 @@
-" last modified 2015-11-11
+" last modified 2015-11-27
 " ds26gte@yahoo.com
 
 func! s:txt2page_docx_delete_qv_urls()
@@ -89,6 +89,13 @@ func! Txt2docx()
   %s/^ÞtzpTroffSectionTzp/ÞtzpSectionTzp/
 
   "sections
+
+  %s/^=\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 1 \1/
+  %s/^==\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 2 \1/
+  %s/^===\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 3 \1/
+  %s/^====\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 4 \1/
+  %s/^=====\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 5 \1/
+  %s/^======\s\+\(.\{-}\)\s*=*$/ÞtzpSectionTzp 6 \1/
 
   %s/^ÞtzpSectionTzp\s\+1\s\+/# /
   %s/^ÞtzpSectionTzp\s\+2\s\+/## /

@@ -3,7 +3,10 @@
 txt2page converts plain text marked up with a modest amount of
 groff markup into HTML. It is a small bash/vim script that
 implements a usable subset of the larger Common Lisp program
-troff2page. With the help of the external programs groff and
+\*[: github.com/ds26gte/troff2page]troff2page\&. Useful when on a
+system where I can't or don't want to install troff2page.
+
+With the help of the external programs groff and
 pandoc, txt2page can also convert its input to PDF and docx
 respectively.
 

@@ -1,4 +1,4 @@
-" last modified 2015-11-11
+" last modified 2015-11-27
 " ds26gte@yahoo.com
 
 func! s:recognizeUrls()
@@ -26,6 +26,12 @@ func! s:recognizeUrls()
     " ./pathname becomes <a href="pathname">pathname</a>
     s#\%([.]\)\@<!\./\([^[:space:]()<>\[\]&]\+\)\%([[:punct:]]\)\@<!#<a href="\1"><span class=url>\1</span></a>#g
 
+    " link:sth[] becomes <a href="sth">sth</a>
+    s;link:\(.\{-}\)\[\];<a href="\1"><span class=url>\1</span></a>;g
+
+    " link:sth1[sth2] becomes <a href="sth1">sth2</a>
+    s;link:\(.\{-}\)\[\(.\{-}\)\];<a href="\1"><span class=url>\2</span></a>;g
+
     " FAKEHTTP has done its job by now -- remove it
     "s#FAKEHTTP://##g
 
@@ -51,6 +57,8 @@ func! s:recognizeUrls()
     exec 's:<a href="\(.\{-}\)\.' . g:fileExtension . '#\(.\{-}\)"><span class=url>\%(.\{-}\)\.' . g:fileExtension . '#\(.\{-}\)</span></a>:<a href="\1.html#\2">\3</a>:g'
 
     s:\(<a href="#.\{-}">\)<span class=url>#\(.\{-}\)</span>:\1\2:g
+
+    s:^\.REDIRECT\s\+<a href=\(".\{-}"\)>.\{-}</a>\s*$:<a href=\1>ÞtzpRedirectUrlTzp</a>:
 
 endfunc
 
@@ -92,30 +100,49 @@ func! s:findQvUrls()
 endfunc
 
 func! s:findUrlhs()
-  v/^ÞtzpPreformattedTzp/ s_\(\\\*\[url\)\s*\%(\\\)\s*$_\1ÞtzpQQvUrlContinuedTzp_
-  g/ÞtzpQQvUrlContinuedTzp$/ .,+1 j!
-  %s/ÞtzpQQvUrlContinuedTzp/ /
-  v/^ÞtzpPreformattedTzp/ s_\\\*\[url\s\+\(.\{-}\)\s*\]_\1_g
+  " \*[url  followed by \  followed by newline
+  v:^ÞtzpPreformattedTzp: s_\(\\\*\[url\)\s*\%(\\\)\s*$_\1ÞtzpQQvUrlContinuedTzp_
 
-  g/\%(<a\s\+href=.*\)\@<!\\Æ/ s/^\%(ÞtzpPreformattedTzp\)\@!/ÞtzpPossibleUrlhTzp/
+  g:ÞtzpQQvUrlContinuedTzp$: .,+1 j!
+  %s:ÞtzpQQvUrlContinuedTzp: :
+  v:^ÞtzpPreformattedTzp: s_\\\*\[url\s\+\(.\{-}\)\s*\]_\1_g
 
-  g/^ÞtzpPossibleUrlhTzp/ -1s/<a\s\+href=.*$/&ÞtzpUrlhContinuationLineTzp/
-  g/^ÞtzpPossibleUrlhTzp/ -2s/<a\s\+href=.*$/&ÞtzpUrlhContinuationLineTzp/
+  " line with \& probably is a urlh continuation
+  g:\%(<a\s\+href=.*\)\@<!\\Æ: s:^\%(ÞtzpPreformattedTzp\)\@!:ÞtzpUrlhContinuationLineTzp:
 
-  g/ÞtzpUrlhContinuationLineTzp$/ -1s/ÞtzpUrlhContinuationLineTzp$//
+  " line(s) above urlh continuation with href are possible urlh first lines
+  g:^ÞtzpUrlhContinuationLineTzp: -1s:<a\s\+href=.*$:&ÞtzpUrlhFirstLineTzp:
+  g:^ÞtzpUrlhContinuationLineTzp: -2s:<a\s\+href=.*$:&ÞtzpUrlhFirstLineTzp:
 
-  g/ÞtzpUrlhContinuationLineTzp$/ .,/^ÞtzpPossibleUrlhTzp/ j
+  " choose the closest to be _the_ urlh first line
+  g:ÞtzpUrlhFirstLineTzp$: -1s:ÞtzpUrlhFirstLineTzp$::
 
-  %s/ÞtzpPossibleUrlhTzp//
+  " join from urlh first line to continuation line
+  g:ÞtzpUrlhFirstLineTzp$: .,/^ÞtzpUrlhContinuationLineTzp/ j
 
-  %s/ÞtzpUrlhContinuationLineTzp//
+  %s:ÞtzpUrlh\%(First\|Continuation\)LineTzp$::
 
-  v/^ÞtzpPreformattedTzp/ s_<a href="\(.\{-}\)">.\{-}</a>\(.\{-}\)\\Æ_<a href="\1">\2</a>_g
+  v:^ÞtzpPreformattedTzp: s:<a href="\(.\{-}\)">.\{-}</a>\(.\{-}\)\\Æ:<a href="\1">\2</a>:g
+
+  " href[ is a urlh first line
+
+  v/^ÞtzpPreformattedTzp/ s:<a href="\(.\{-}\)">.\{-}</a>\[[^\]]*$:&ÞtzpUrlhFirstLineTzp:
+
+  g:ÞtzpUrlhFirstLineTzp$: +1s:^[^\]]*$:&ÞtzpUrlhContinuationLineTzp:
+  g:ÞtzpUrlhFirstLineTzp$: +2s:^[^\]]*$:&ÞtzpUrlhContinuationLineTzp:
+
+  g:ÞtzpUrlhContinuationLineTzp$: +1s:ÞtzpUrlhContinuationLineTzp$::
+
+  g:ÞtzpUrlhFirstLineTzp$: .,/ÞtzpUrlhContinuationLineTzp$/ j
+
+  %s:ÞtzpUrlh\%(First\|Continuation\)LineTzp$::
+
+  v:ÞtzpPreformattedTzp: s:<a href="\(.\{-}\)">.\{-}</a>\[\(.\{-}\)\]:<a href="\1">\2</a>:g
 
 endfunc
 
 func! s:redirectIfNecessary()
-  v/^ÞtzpPreformattedTzp/ s#<a href="\(.\{-}\)">=REDIRECT=</a>#ÞtzpRedirectTzp{\1}#
+  v/^ÞtzpPreformattedTzp/ s#<a href="\(.\{-}\)">ÞtzpRedirectUrlTzp</a>#ÞtzpRedirectTzp{\1}#
   let redirectFoundP = 0
   g/ÞtzpRedirectTzp{.\{-}}/ let redirectFoundP = 1
   if redirectFoundP
@@ -148,6 +175,7 @@ endfunc
 
 func! Txt2page()
 
+  "no cleveness with comments when joining lines
   setl fo-=j
 
 while 1
@@ -223,6 +251,25 @@ endwhile
 "calc titleText here?
 
 "code display
+
+func! Toggle01(...)
+  if a:0
+    let b:toggle01Value = 1
+  else
+    let b:toggle01Value = !b:toggle01Value
+    return b:toggle01Value
+  endif
+endfunc
+
+%s:^----$:ÞtzpListingTzp:
+
+call Toggle01(0)
+
+g:^ÞtzpListingTzp: s:^ÞtzpListingTzp:\=submatch(0) . Toggle01():
+
+%s:^ÞtzpListingTzp0:.EX:
+
+%s:^ÞtzpListingTzp1:.EE:
 
 %s/^\s*\(\`\`\`\+\)/.\1/
 
@@ -318,7 +365,9 @@ g/^\.\s*\\\"/d
 
 "bullet items
 
-%s:^•\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
+%s:^-\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
+
+"%s:^•\s\+:</p><p class=bulleted><span class=bullet>•Ø</span>:
 
 "Tables
 
@@ -366,7 +415,12 @@ g/^ÞtzpTableLineTzp/ s#\s|\s#</td><td>#g
 
 "sections
 
-%s/^\.\s*\(#\+\)/\1/
+%s/^=\s/ÞtzpSectionTzp 1 /
+%s/^==\s/ÞtzpSectionTzp 2 /
+%s/^===\s/ÞtzpSectionTzp 3 /
+%s/^====\s/ÞtzpSectionTzp 4 /
+%s/^=====\s/ÞtzpSectionTzp 5 /
+%s/^======\s/ÞtzpSectionTzp 6 /
 
 if g:manPageP
   %s/^\.\s*TH\s\+\(.*\)$/ÞtzpSectionTzp title \1/
